@@ -7,30 +7,26 @@ interface ProgressIndicatorProps {
   labels?: string[];
 }
 
-/**
- * A component to show progress through the finance calculator
- */
-const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ 
-  steps, 
+const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
+  steps,
   currentStep,
   labels
 }) => {
   const percentage = (currentStep / steps) * 100;
-  
+
   return (
-    <div className="mb-6">
+    <div className="mb-6 font-bold text-base">
       <div className="flex justify-between items-center mb-1">
-        <span className="text-sm font-medium text-finance-purple">
+        <span className="text-[#1EAEDB]">
           {labels && labels[currentStep - 1]}
         </span>
-        <span className="text-xs text-finance-gray-neutral">
+        <span className="text-xs text-[#8E9196] font-normal">
           {currentStep} of {steps} completed
         </span>
       </div>
-      
-      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-        <div 
-          className="h-full bg-finance-purple transition-all duration-500 ease-out"
+      <div className="h-2 bg-[#E9F6FB] rounded-full overflow-hidden">
+        <div
+          className="h-full bg-[#1EAEDB] transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
         ></div>
       </div>

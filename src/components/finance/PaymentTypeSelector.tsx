@@ -1,12 +1,16 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { PaymentType } from '../../types/financeTypes';
-import PaymentOptionCard from './PaymentOptionCard';
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 
-/**
- * Component for selecting payment type (dealer financing, outside loan, cash)
- */
+const paymentOptions = [
+  { value: 'dealer', label: 'Dealer', icon: 'credit-card' },
+  { value: 'outside', label: 'Outside Loan', icon: 'wallet' },
+  { value: 'cash', label: 'Cash', icon: 'tag' }
+] as const;
+
 const PaymentTypeSelector: React.FC = () => {
   const { state, dispatch } = useFinance();
   const { paymentType } = state;
@@ -16,58 +20,51 @@ const PaymentTypeSelector: React.FC = () => {
     dispatch({ type: 'SET_PAYMENT_TYPE', payload: type });
   };
 
-  // Add a slight animation delay on first load
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimationDelay(false);
-    }, 500);
-    
+    }, 400);
     return () => clearTimeout(timer);
   }, []);
 
-  const paymentOptions = [
-    { value: 'dealer', label: 'Dealer Financing', description: 'Finance through the dealership' },
-    { value: 'outside', label: 'Outside Loan', description: 'Use your own bank or credit union' },
-    { value: 'cash', label: 'Cash', description: 'Pay the full amount upfront' }
-  ] as const;
-
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 mb-6 animate-scale-in">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">How Are You Paying?</h2>
-      
-      <div className="grid grid-cols-1 gap-3">
-        {paymentOptions.map((option, index) => (
-          <div 
+    <div className="bg-white rounded-xl shadow p-6 mb-6 animate-scale-in">
+      <h2 className="text-xl font-bold mb-4 text-[#1EAEDB]">How Are You Paying?</h2>
+      <ToggleGroup type="single" value={paymentType} onValueChange={(v) => v && handlePaymentTypeChange(v as PaymentType)} className="flex w-full gap-2">
+        {paymentOptions.map((option, idx) => (
+          <ToggleGroupItem
             key={option.value}
-            className={`transition-all duration-500 ${
-              animationDelay ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
-            }`}
-            style={{ transitionDelay: `${animationDelay ? 100 + (index * 100) : 0}ms` }}
+            value={option.value}
+            aria-label={option.label}
+            className={`
+              flex-1 flex flex-col items-center justify-center gap-2 px-0 py-4
+              rounded-xl text-base font-semibold cursor-pointer border-2
+              ${paymentType === option.value
+                ? 'bg-[#1EAEDB] text-white border-[#1EAEDB] scale-105 shadow'
+                : 'bg-[#F5F7F9] text-[#222] border-[#E6E8EB] hover:bg-[#E9F6FB]'
+              }
+              transition-all duration-300
+              ${animationDelay ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}
+            `}
+            style={{ transitionDelay: `${animationDelay ? 90 + idx * 70 : 0}ms` }}
           >
-            <PaymentOptionCard
-              value={option.value}
-              label={option.label}
-              description={option.description}
-              isSelected={paymentType === option.value}
-              onChange={handlePaymentTypeChange}
-            />
-          </div>
+            <span className="mb-1 text-2xl">
+              {option.icon === 'credit-card' && <span>💳</span>}
+              {option.icon === 'wallet' && <span>👛</span>}
+              {option.icon === 'tag' && <span>🏷️</span>}
+            </span>
+            {option.label}
+          </ToggleGroupItem>
         ))}
-      </div>
-      
-      <div className="mt-4 text-sm text-finance-gray-neutral">
-        <div className={`flex items-center ${paymentType !== 'cash' ? 'text-finance-purple' : ''}`}>
-          <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>
-            {paymentType === 'dealer' 
-              ? 'Dealer financing may offer special rates and incentives'
-              : paymentType === 'outside'
-                ? 'Outside loans often have competitive rates'
-                : 'Cash payment simplifies the purchase process'}
-          </span>
-        </div>
+      </ToggleGroup>
+      <div className="mt-4 text-sm text-[#1EAEDB] flex items-center">
+        <span>
+          {paymentType === 'dealer'
+            ? 'Dealer financing may offer special rates'
+            : paymentType === 'outside'
+              ? 'Outside loans often have competitive rates'
+              : 'Cash payment simplifies the process'}
+        </span>
       </div>
     </div>
   );
