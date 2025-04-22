@@ -7,9 +7,6 @@ interface SectionFeedbackProps {
   onHide?: () => void;
 }
 
-/**
- * Component for showing feedback when completing sections
- */
 const SectionFeedback: React.FC<SectionFeedbackProps> = ({ 
   message, 
   visible, 
@@ -22,7 +19,7 @@ const SectionFeedback: React.FC<SectionFeedbackProps> = ({
       setIsVisible(true);
       const timer = setTimeout(() => {
         setIsVisible(false);
-        if (onHide) onHide();
+        onHide && onHide();
       }, 3000);
       
       return () => clearTimeout(timer);
