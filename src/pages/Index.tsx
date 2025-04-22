@@ -1,7 +1,7 @@
 
-
 import React from 'react';
 import FinanceCalculator from '../components/finance/FinanceCalculator';
+import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
   return (
@@ -66,6 +66,9 @@ const Index = () => {
           </button>
         </div>
       </nav>
+      
+      {/* Add the Toaster component here */}
+      <Toaster />
     </div>
   );
 };
