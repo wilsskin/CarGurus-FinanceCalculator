@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 const Index = () => {
   return (
     <div className="min-h-screen bg-[#F7F8FB] flex flex-col font-sans max-w-md mx-auto w-full">
-      <header className="bg-white shadow-sm py-3 px-4 fixed top-0 left-0 right-0 z-40 bg-opacity-95 backdrop-blur-sm">
+      <header className="bg-white shadow-sm py-3 px-4 fixed top-0 left-0 right-0 z-50 bg-opacity-95 backdrop-blur-sm">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center">
             <button
@@ -32,8 +32,8 @@ const Index = () => {
           </div>
         </div>
       </header>
-      {/* Padding for sticky header */}
-      <div className="pt-16 flex-1 pb-20">
+      {/* Main content without the pt-16 padding as it's now handled in SummaryBanner */}
+      <div className="flex-1 pb-20">
         <FinanceCalculator />
       </div>
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#E6E8EB] shadow-lg">

@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { formatCurrency } from '../../utils/financeCalculator';
@@ -17,7 +16,7 @@ const SummaryBanner: React.FC = () => {
   const showRange = estimateAccuracy < 85;
 
   return (
-    <div className="sticky top-0 z-30 bg-[#F7F8FB] shadow-sm rounded-b-xl border-b border-[#1EAEDB] animate-fade-in font-semibold">
+    <div className="sticky top-16 z-30 bg-[#F7F8FB] shadow-sm rounded-b-xl border-b border-[#1EAEDB] animate-fade-in font-semibold mt-16">
       <div className="max-w-md mx-auto px-4 py-3">
         <div className="flex flex-col gap-1">
           <div className="flex justify-between items-center font-bold text-[#1EAEDB] text-lg">

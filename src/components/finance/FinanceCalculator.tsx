@@ -180,7 +180,7 @@ const FinanceCalculator: React.FC = () => {
           onHide={() => setFeedback(prev => ({ ...prev, visible: false }))}
         />
         
-        {/* Sticky summary banner */}
+        {/* No longer need vertical padding here since the banner has its own spacing */}
         <SummaryBanner />
         
         {/* Main content */}
