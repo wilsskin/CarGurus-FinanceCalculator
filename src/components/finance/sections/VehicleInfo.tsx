@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useFinance } from '@/context/FinanceContext';
+import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
 import { ChevronDown } from 'lucide-react';
 

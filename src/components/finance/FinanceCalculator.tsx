@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { FinanceProvider } from '../../context/FinanceContext';
+import { FinanceProvider } from '../../context/finance';
 import SummaryBanner from './SummaryBanner';
 import PaymentTypeSelector from './PaymentTypeSelector';
 import VehicleInfo from './sections/VehicleInfo';

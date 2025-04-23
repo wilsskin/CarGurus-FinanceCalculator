@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { useFinance } from '../../context/FinanceContext';
+import { useFinance } from '../../context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
 import TipCard from './TipCard';
 import { Info } from 'lucide-react';

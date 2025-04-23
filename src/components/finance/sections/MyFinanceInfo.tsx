@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useFinance } from '@/context/FinanceContext';
+import { useFinance } from '@/context/finance';
 import { 
   Select,
   SelectContent,

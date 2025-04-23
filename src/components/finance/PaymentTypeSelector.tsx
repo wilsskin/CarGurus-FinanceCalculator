@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from "react";
-import { useFinance } from "../../context/FinanceContext";
+import { useFinance } from "../../context/finance";
 import { PaymentType } from "../../types/financeTypes";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
 
