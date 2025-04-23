@@ -25,32 +25,41 @@ const SummaryBanner: React.FC = () => {
     <div
       className={`
         w-full transition-all duration-300 border-b border-[#E6E8EB] shadow-sm bg-white z-30
-        ${compact ? "py-1" : "py-2"}
-        ${compact ? "animate-fade-in" : ""}
+        ${compact ? "py-0.5" : "py-2"}
         ${compact ? "fixed top-0 left-0 right-0" : "relative"}
       `}
       style={{ fontWeight: 600 }}
       data-testid="SummaryBanner"
     >
-      <div className={`max-w-md mx-auto flex flex-col px-3 items-center`}>
-        <span className={`font-extrabold text-[#101325] ${compact ? 'text-sm' : 'text-lg'} mb-0.5 leading-none`}>
+      <div className="max-w-md mx-auto flex flex-row items-center justify-between px-3">
+        {/* Left: Label */}
+        <span
+          className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}
+          style={{ minWidth: "0" }}
+        >
           Finance Calculator
         </span>
-        <div className="flex flex-col items-center w-full">
-          <span className={`text-[10px] text-[#8E9196] font-semibold ${compact ? "mb-0.5" : "mb-0.5"}`}>
-            Monthly Payment
-          </span>
-          <span className={`font-extrabold text-[#1EAEDB] leading-tight ${compact ? "text-base" : "text-xl"}`}>
-            {formatCurrency(monthlyPayment)}
-          </span>
-        </div>
-        <div className="flex flex-col items-center mt-0.5 w-full">
-          <span className="text-[10px] text-[#8E9196] font-semibold">
-            Total Cost
-          </span>
-          <span className={`font-extrabold text-[#101325] leading-tight ${compact ? "text-sm" : "text-base"}`}>
-            {formatCurrency(totalCost)}
-          </span>
+
+        {/* Right: Payment Info */}
+        <div className="flex gap-4 items-center">
+          {/* Monthly Payment */}
+          <div className="flex flex-col items-end min-w-[75px]">
+            <span className={`text-[10px] text-[#8E9196] font-semibold leading-tight`}>
+              Monthly
+            </span>
+            <span className={`font-extrabold text-[#1EAEDB] ${compact ? "text-base" : "text-lg"} leading-tight`}>
+              {formatCurrency(monthlyPayment)}
+            </span>
+          </div>
+          {/* Total Cost */}
+          <div className="flex flex-col items-end min-w-[75px]">
+            <span className="text-[10px] text-[#8E9196] font-semibold leading-tight">
+              Total
+            </span>
+            <span className={`font-extrabold text-[#101325] ${compact ? "text-xs" : "text-sm"} leading-tight`}>
+              {formatCurrency(totalCost)}
+            </span>
+          </div>
         </div>
       </div>
     </div>
