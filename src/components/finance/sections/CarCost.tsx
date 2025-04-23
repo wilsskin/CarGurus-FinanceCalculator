@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
 import { ChevronDown } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const CarCost: React.FC = () => {
-  const { state } = useFinance();
+  const { state, dispatch } = useFinance();
   const [isTaxesOpen, setIsTaxesOpen] = useState(false);
   
   const subtotal = state.carPrice + 
@@ -13,12 +15,17 @@ const CarCost: React.FC = () => {
     state.taxesAndFees.taxAmount + 
     state.taxesAndFees.totalFees;
 
+  const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.max(0, Number(e.target.value) || 0);
+    dispatch({ type: 'UPDATE_DISCOUNTS', payload: value });
+  };
+
   return (
     <section className="bg-white rounded-xl shadow-sm p-6 mb-8 animate-fade-in">
       <h2 className="text-2xl font-bold text-[#1EAEDB] mb-8">Car Cost</h2>
       
       {/* Base Price & Add-ons */}
-      <div className="space-y-4 mb-6">
+      <div className="space-y-6 mb-6">
         <div className="flex justify-between">
           <span className="text-sm font-semibold text-gray-700">Base Price</span>
           <span className="font-medium">{formatCurrency(state.carPrice)}</span>
@@ -31,12 +38,27 @@ const CarCost: React.FC = () => {
           </div>
         )}
         
-        {state.discounts > 0 && (
-          <div className="flex justify-between text-green-600">
-            <span className="text-sm font-semibold">Discounts</span>
-            <span className="font-medium">-{formatCurrency(state.discounts)}</span>
+        {/* Dealer Discount Field */}
+        <div className="space-y-2">
+          <Label htmlFor="discount" className="text-sm font-semibold text-gray-700">
+            Dealer Discount
+          </Label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span className="text-gray-500 sm:text-sm">$</span>
+            </div>
+            <Input
+              id="discount"
+              type="number"
+              value={state.discounts || ''}
+              onChange={handleDiscountChange}
+              className="pl-7"
+              placeholder="0"
+              min="0"
+            />
           </div>
-        )}
+          <p className="text-sm text-[#8E9196]">Any negotiated discount or dealership incentives.</p>
+        </div>
       </div>
       
       {/* Taxes & Fees Dropdown */}

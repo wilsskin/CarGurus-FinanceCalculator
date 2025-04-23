@@ -50,6 +50,12 @@ export const financeReducer = (
     case 'LOCK_FIELD':
       return lockFieldReducer(state, action.payload);
     
+    case 'UPDATE_DISCOUNTS':
+      return {
+        ...state,
+        discounts: action.payload
+      };
+    
     default:
       return state;
   }
