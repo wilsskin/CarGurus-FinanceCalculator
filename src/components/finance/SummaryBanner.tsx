@@ -5,7 +5,7 @@ import { formatCurrency } from '../../utils/financeCalculator';
 
 const SummaryBanner: React.FC = () => {
   const { state } = useFinance();
-  const { monthlyPayment, totalCost, paymentType, estimateAccuracy } = state;
+  const { monthlyPayment, totalCost, paymentType } = state;
 
   const [compact, setCompact] = useState(false);
 
@@ -34,7 +34,7 @@ const SummaryBanner: React.FC = () => {
       <div className="max-w-md mx-auto flex flex-row items-center justify-between px-3">
         {/* Left: Label */}
         <span
-          className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-sm' : 'text-base'}`}
+          className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}
           style={{ minWidth: "0" }}
         >
           Finance Calculator
@@ -47,11 +47,8 @@ const SummaryBanner: React.FC = () => {
             <span className={`text-[10px] text-[#8E9196] font-semibold leading-tight`}>
               Monthly
             </span>
-            <span className={`font-extrabold text-[#1EAEDB] ${compact ? "text-lg" : "text-xl"} leading-tight`}>
+            <span className={`font-extrabold text-[#1EAEDB] ${compact ? "text-base" : "text-lg"} leading-tight`}>
               {formatCurrency(monthlyPayment)}
-            </span>
-            <span className="text-[8px] text-[#8E9196] font-semibold leading-tight mt-0.5">
-              Estimate: {estimateAccuracy}% Accurate
             </span>
           </div>
           {/* Total Cost */}
@@ -59,7 +56,7 @@ const SummaryBanner: React.FC = () => {
             <span className="text-[10px] text-[#8E9196] font-semibold leading-tight">
               Total
             </span>
-            <span className={`font-extrabold text-[#101325] ${compact ? "text-base" : "text-lg"} leading-tight`}>
+            <span className={`font-extrabold text-[#101325] ${compact ? "text-xs" : "text-sm"} leading-tight`}>
               {formatCurrency(totalCost)}
             </span>
           </div>
