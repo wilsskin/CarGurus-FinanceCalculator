@@ -45,7 +45,7 @@ const SummaryBanner: React.FC = () => {
           {/* Monthly Payment */}
           <div className="flex flex-col items-end min-w-[75px]">
             <span className={`text-[10px] text-[#8E9196] font-semibold leading-tight`}>
-              Monthly
+              Estimated Payment
             </span>
             <span className={`font-extrabold text-[#1EAEDB] ${compact ? "text-base" : "text-lg"} leading-tight`}>
               {formatCurrency(monthlyPayment)}
