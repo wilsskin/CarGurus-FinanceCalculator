@@ -1,8 +1,7 @@
-
 import React from 'react';
 import FinanceCalculator from '../components/finance/FinanceCalculator';
 import { Toaster } from "@/components/ui/toaster";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, ArrowLeft } from "lucide-react";
 
 const Index = () => {
   return (
@@ -14,9 +13,7 @@ const Index = () => {
               className="p-2 rounded-full hover:bg-[#E9F6FB] mr-2"
               aria-label="Back"
             >
-              <svg className="w-5 h-5 text-[#1EAEDB]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
+              <ArrowLeft className="w-5 h-5 text-[#1EAEDB]" />
             </button>
             <h1 className="text-xl font-extrabold text-[#1EAEDB] tracking-tight">Finance Calculator</h1>
           </div>
@@ -35,7 +32,6 @@ const Index = () => {
       </div>
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#E6E8EB] shadow-lg">
         <div className="flex justify-around max-w-md mx-auto py-2">
-          {/* Simple icons for nav, as placeholder */}
           <button className="flex flex-col items-center text-[#1EAEDB] px-2">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a2 2 0 012 2v6a2 2 0 002 2h2a2 2 0 002-2v-6m-7 7a2 2 0 11-4 0 2 2 0 014 0z" />
