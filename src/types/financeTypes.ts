@@ -32,5 +32,8 @@ export interface FinanceCalculatorState {
   zipCode: string;
   monthlyPayment: number;
   totalCost: number;
-  estimateAccuracy: number; // 0-100 percentage of how accurate the estimate is based on filled fields
+  estimateAccuracy: number;
+  addonsTotal: number;
+  discounts: number;
+  creditScore?: number;
 }
