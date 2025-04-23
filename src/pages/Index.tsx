@@ -1,3 +1,4 @@
+
 import React from 'react';
 import FinanceCalculator from '../components/finance/FinanceCalculator';
 import { Toaster } from "@/components/ui/toaster";
@@ -8,9 +9,9 @@ const Index = () => {
     <div className="min-h-screen bg-[#F7F8FB] flex flex-col font-sans max-w-md mx-auto w-full">
       <header className="bg-white shadow-sm py-3 px-4">
         <div className="max-w-md mx-auto flex items-center justify-between">
-          <div className="flex items-center">
+          <div className="flex items-center space-x-2 ml-[-8px]"> {/* Added negative margin and space-x-2 */}
             <button
-              className="p-2 rounded-full hover:bg-[#E9F6FB] mr-2"
+              className="p-2 rounded-full hover:bg-[#E9F6FB]"
               aria-label="Back"
             >
               <ArrowLeft className="w-5 h-5 text-[#1EAEDB]" />
