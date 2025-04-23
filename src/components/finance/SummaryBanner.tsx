@@ -2,11 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { formatCurrency } from '../../utils/financeCalculator';
-import { Car } from 'lucide-react';
 
 const SummaryBanner: React.FC = () => {
   const { state } = useFinance();
-  const { monthlyPayment, totalCost, estimateAccuracy, paymentType } = state;
+  const { monthlyPayment, totalCost, paymentType } = state;
 
   const [compact, setCompact] = useState(false);
 
@@ -26,51 +25,34 @@ const SummaryBanner: React.FC = () => {
   return (
     <div
       className={`
-        w-full transition-all duration-300 border-b border-[#E6E8EB] shadow-sm bg-white z-10
+        w-full transition-all duration-300 border-b border-[#E6E8EB] shadow-sm bg-white z-30
         ${compact ? "py-2" : "py-4"}
         ${compact ? "animate-fade-in" : ""}
+        ${compact ? "fixed top-0 left-0 right-0" : "relative"}
       `}
-      style={{
-        position: 'relative',
-        top: 0,
-        left: 0,
-        right: 0,
-        fontWeight: 600,
-      }}
+      style={{ fontWeight: 600 }}
       data-testid="SummaryBanner"
     >
-      <div className={`max-w-md mx-auto flex items-center gap-3 px-4 ${compact ? 'py-1' : 'py-2'}`}>
-        <span className={compact ? "text-[#1EAEDB]" : "text-[#1EAEDB]"}>
-          <Car
-            className={compact ? "w-5 h-5" : "w-7 h-7"}
-            strokeWidth={2.3}
-          />
-        </span>
-        <span className={`font-extrabold ${compact ? 'text-lg' : 'text-2xl'} text-[#101325]`}>
+      <div className={`max-w-md mx-auto flex flex-col px-4 ${compact ? 'py-1' : 'py-2'} items-center`}>
+        <span className={`font-extrabold ${compact ? 'text-lg' : 'text-2xl'} text-[#101325] mb-0.5`}>
           Finance Calculator
         </span>
-        <div className="flex-1" />
-        <div className="flex flex-row gap-7 items-center">
-          <div className="flex flex-col items-end">
-            <span className={`text-xs ${compact ? "text-[#8E9196]" : "text-[#8E9196]"} font-semibold`}>
-              Monthly Payment
-            </span>
-            <span className={`font-extrabold ${compact ? "text-xl" : "text-3xl"} text-[#1EAEDB] leading-tight`}>
-              {formatCurrency(monthlyPayment)}
-            </span>
-          </div>
-          <div className="flex flex-col items-end">
-            <span className={`text-xs ${compact ? "text-[#8E9196]" : "text-[#8E9196]"} font-semibold`}>
-              Total Cost
-            </span>
-            <span className={`font-extrabold ${compact ? "text-lg" : "text-xl"} text-[#101325] leading-tight`}>
-              {formatCurrency(totalCost)}
-            </span>
-          </div>
+        <div className="flex flex-col gap-0 items-center w-full">
+          <span className={`text-xs text-[#8E9196] font-semibold ${compact ? "mb-0.5" : "mb-1"}`}>
+            Monthly Payment
+          </span>
+          <span className={`font-extrabold ${compact ? "text-xl" : "text-3xl"} text-[#1EAEDB] leading-tight`}>
+            {formatCurrency(monthlyPayment)}
+          </span>
         </div>
-      </div>
-      <div className={`text-xs text-[#8E9196] italic px-4 ${compact ? "pb-0 pt-1" : "pb-1 pt-2"}`}>
-        Estimated — Actual numbers may vary.
+        <div className="flex flex-col items-center mt-1 w-full">
+          <span className={`text-xs text-[#8E9196] font-semibold`}>
+            Total Cost
+          </span>
+          <span className={`font-extrabold ${compact ? "text-lg" : "text-xl"} text-[#101325] leading-tight`}>
+            {formatCurrency(totalCost)}
+          </span>
+        </div>
       </div>
     </div>
   );
