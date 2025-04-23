@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { 
   FinanceCalculatorState, 
@@ -49,7 +48,9 @@ const initialState: FinanceCalculatorState = {
   zipCode: DEFAULT_ZIP_CODE,
   monthlyPayment: 0,
   totalCost: 0,
-  estimateAccuracy: 60 // Starting estimate accuracy
+  estimateAccuracy: 60, // Starting estimate accuracy
+  addonsTotal: 0,       // Initialize addonsTotal
+  discounts: 0          // Initialize discounts
 };
 
 // Action types
@@ -60,6 +61,8 @@ type ActionType =
   | { type: 'SET_TRADE_IN'; payload: Partial<TradeInInfo> }
   | { type: 'SET_TAXES_AND_FEES'; payload: Partial<TaxesAndFees> }
   | { type: 'SET_ZIP_CODE'; payload: string }
+  | { type: 'SET_CREDIT_SCORE'; payload: number }
+  | { type: 'UPDATE_ADDONS_TOTAL'; payload: number }
   | { type: 'UPDATE_CALCULATIONS' }
   | { type: 'RESET_FORM' };
 
@@ -140,13 +143,27 @@ const financeReducer = (state: FinanceCalculatorState, action: ActionType): Fina
         }
       };
     
+    case 'SET_CREDIT_SCORE':
+      // Handle the credit score action
+      return {
+        ...state,
+        creditScore: action.payload
+      };
+      
+    case 'UPDATE_ADDONS_TOTAL':
+      // Handle the addons total action
+      return {
+        ...state,
+        addonsTotal: action.payload
+      };
+    
     case 'UPDATE_CALCULATIONS':
       // Skip detailed calculations if payment type is cash
       if (state.paymentType === 'cash') {
         return {
           ...state,
           monthlyPayment: 0,
-          totalCost: state.carPrice + state.taxesAndFees.taxAmount + state.taxesAndFees.totalFees - state.tradeIn.netValue,
+          totalCost: state.carPrice + state.taxesAndFees.taxAmount + state.taxesAndFees.totalFees - state.tradeIn.netValue + (state.addonsTotal || 0) - (state.discounts || 0),
           estimateAccuracy: 95 // Cash is pretty accurate
         };
       }
