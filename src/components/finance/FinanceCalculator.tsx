@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { FinanceProvider } from '../../context/finance';
 import SummaryBanner from './SummaryBanner';
@@ -13,7 +14,13 @@ const FinanceCalculator: React.FC = () => {
   return (
     <FinanceProvider>
       <div className="min-h-screen bg-finance-gray-soft pb-10">
-        <div className="max-w-md mx-auto px-4 pt-20">
+        <div className="py-4 bg-white border-b border-[#E6E8EB] mb-4">
+          <h1 className="text-2xl font-extrabold text-[#1EAEDB] text-center">
+            Finance Calculator
+          </h1>
+          <SummaryBanner />
+        </div>
+        <div className="max-w-md mx-auto px-4">
           <VehicleInfo />
           <PaymentTypeSelector />
           <MyFinanceInfo />
@@ -22,7 +29,6 @@ const FinanceCalculator: React.FC = () => {
           <SummaryAndSave />
           <SaveAndExport />
         </div>
-        <SummaryBanner />
       </div>
     </FinanceProvider>
   );

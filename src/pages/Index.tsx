@@ -9,7 +9,7 @@ const Index = () => {
     <div className="min-h-screen bg-[#F7F8FB] flex flex-col font-sans max-w-md mx-auto w-full">
       <header className="bg-white shadow-sm py-3 px-4">
         <div className="max-w-md mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-2 ml-[-8px]"> {/* Added negative margin and space-x-2 */}
+          <div className="flex items-center space-x-2 ml-[-8px]">
             <button
               className="p-2 rounded-full hover:bg-[#E9F6FB]"
               aria-label="Back"
@@ -28,7 +28,7 @@ const Index = () => {
           </div>
         </div>
       </header>
-      <div className="flex-1 pb-20">
+      <div className="flex-1">
         <FinanceCalculator />
       </div>
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#E6E8EB] shadow-lg">
