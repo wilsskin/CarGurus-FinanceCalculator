@@ -1,4 +1,5 @@
-import { PaymentType, LoanDetails, TradeInInfo, TaxesAndFees } from '../../types/financeTypes';
+
+import { PaymentType, LoanDetails, TradeInInfo, TaxesAndFees, LockableField } from '../../types/financeTypes';
 
 export type FinanceAction = 
   | { type: 'SET_CAR_PRICE'; payload: number }

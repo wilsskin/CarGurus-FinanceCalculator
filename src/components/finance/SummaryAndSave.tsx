@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useFinance } from '../../context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
@@ -7,9 +8,21 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import LockButton from './LockButton';
+import { LockableField } from '../../types/financeTypes';
 
 const SummaryAndSave: React.FC = () => {
   const { state, dispatch } = useFinance();
+  const { 
+    carPrice, 
+    paymentType, 
+    loanDetails,
+    tradeIn,
+    taxesAndFees,
+    addonsTotal,
+    discounts,
+    monthlyPayment,
+    totalCost
+  } = state;
   
   const handleLockToggle = (field: LockableField, value: number) => {
     if (state.lockedField === field) {

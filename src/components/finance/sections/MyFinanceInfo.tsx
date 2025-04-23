@@ -3,6 +3,7 @@ import { useFinance } from '@/context/finance';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import LockButton from '../LockButton';
 import AdjustmentSuggestions from '../AdjustmentSuggestions';
+import { LockableField } from '@/types/financeTypes';
 
 const creditScoreRanges = [
   { label: 'Excellent (720+)', value: '720' },
