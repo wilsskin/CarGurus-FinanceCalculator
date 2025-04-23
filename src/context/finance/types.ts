@@ -1,4 +1,3 @@
-
 import { PaymentType, LoanDetails, TradeInInfo, TaxesAndFees } from '../../types/financeTypes';
 
 export type FinanceAction = 
@@ -11,4 +10,5 @@ export type FinanceAction =
   | { type: 'SET_CREDIT_SCORE'; payload: number }
   | { type: 'UPDATE_ADDONS_TOTAL'; payload: number }
   | { type: 'UPDATE_CALCULATIONS' }
-  | { type: 'RESET_FORM' };
+  | { type: 'RESET_FORM' }
+  | { type: 'LOCK_FIELD'; payload: { field: LockableField; value: number; } | null };

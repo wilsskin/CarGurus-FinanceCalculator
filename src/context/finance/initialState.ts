@@ -1,4 +1,3 @@
-
 import { FinanceCalculatorState } from '../../types/financeTypes';
 
 // Default values
@@ -36,5 +35,7 @@ export const initialState: FinanceCalculatorState = {
   totalCost: 0,
   estimateAccuracy: 60, // Starting estimate accuracy
   addonsTotal: 0,       // Initialize addonsTotal
-  discounts: 0          // Initialize discounts
+  discounts: 0,          // Initialize discounts
+  lockedField: null,
+  lockedValue: null
 };

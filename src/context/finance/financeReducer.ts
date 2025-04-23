@@ -1,4 +1,3 @@
-
 import { FinanceCalculatorState } from '../../types/financeTypes';
 import { FinanceAction } from './types';
 import { carPriceReducer } from './reducers/carPriceReducer';
@@ -11,8 +10,8 @@ import { creditScoreReducer } from './reducers/creditScoreReducer';
 import { addonsReducer } from './reducers/addonsReducer';
 import { calculationsReducer } from './reducers/calculationsReducer';
 import { resetFormReducer } from './reducers/resetFormReducer';
+import { lockFieldReducer } from './reducers/lockFieldReducer';
 
-// Main reducer
 export const financeReducer = (
   state: FinanceCalculatorState, 
   action: FinanceAction
@@ -47,6 +46,9 @@ export const financeReducer = (
     
     case 'RESET_FORM':
       return resetFormReducer(state);
+    
+    case 'LOCK_FIELD':
+      return lockFieldReducer(state, action.payload);
     
     default:
       return state;

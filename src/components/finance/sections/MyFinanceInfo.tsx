@@ -1,13 +1,8 @@
-
 import React from 'react';
 import { useFinance } from '@/context/finance';
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import LockButton from '../LockButton';
+import AdjustmentSuggestions from '../AdjustmentSuggestions';
 
 const creditScoreRanges = [
   { label: 'Excellent (720+)', value: '720' },
@@ -18,6 +13,14 @@ const creditScoreRanges = [
 
 const MyFinanceInfo: React.FC = () => {
   const { state, dispatch } = useFinance();
+  
+  const handleLockToggle = (field: LockableField, value: number) => {
+    if (state.lockedField === field) {
+      dispatch({ type: 'LOCK_FIELD', payload: null });
+    } else {
+      dispatch({ type: 'LOCK_FIELD', payload: { field, value } });
+    }
+  };
 
   const handleCreditScoreChange = (value: string) => {
     dispatch({ 
@@ -30,14 +33,21 @@ const MyFinanceInfo: React.FC = () => {
     <section className="bg-white rounded-xl shadow-sm p-6 mb-6 animate-fade-in">
       <h2 className="text-xl font-bold text-[#1EAEDB] mb-6">My Finance Info</h2>
       
-      {/* Credit Score Field */}
-      <div className="mb-8">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Estimated Credit Score
-        </label>
+      {/* Credit Score Field with Lock */}
+      <div className="mb-8 relative">
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Estimated Credit Score
+          </label>
+          <LockButton
+            isLocked={state.lockedField === 'creditScore'}
+            onToggle={() => handleLockToggle('creditScore', state.creditScore || 0)}
+          />
+        </div>
         <Select
           value={state.creditScore?.toString()}
           onValueChange={handleCreditScoreChange}
+          disabled={state.lockedField === 'creditScore'}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select your credit score range" />
@@ -105,6 +115,9 @@ const MyFinanceInfo: React.FC = () => {
           </div>
         </>
       )}
+      
+      {/* Show suggestions if any field is locked */}
+      <AdjustmentSuggestions />
     </section>
   );
 };

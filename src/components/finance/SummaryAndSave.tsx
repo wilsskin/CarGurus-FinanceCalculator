@@ -6,20 +6,18 @@ import { Info } from 'lucide-react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import LockButton from './LockButton';
 
 const SummaryAndSave: React.FC = () => {
   const { state, dispatch } = useFinance();
-  const {
-    carPrice,
-    paymentType,
-    loanDetails,
-    tradeIn,
-    taxesAndFees,
-    monthlyPayment,
-    totalCost,
-    addonsTotal,
-    discounts
-  } = state;
+  
+  const handleLockToggle = (field: LockableField, value: number) => {
+    if (state.lockedField === field) {
+      dispatch({ type: 'LOCK_FIELD', payload: null });
+    } else {
+      dispatch({ type: 'LOCK_FIELD', payload: { field, value } });
+    }
+  };
 
   const [isExpanded, setIsExpanded] = useState(true);
   const [showToast, setShowToast] = useState(false);
@@ -138,15 +136,31 @@ const SummaryAndSave: React.FC = () => {
           <p className="text-sm text-[#8E9196] -mt-2">What you'll repay over the life of your loan.</p>
         </div>
 
-        {/* Highlighted Values */}
+        {/* Highlighted Values with Lock Buttons */}
         <div className="border-t p-4 bg-[#F7F8FB] space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-lg font-bold text-[#222]">Monthly Payment</span>
-            <span className="text-xl font-extrabold text-[#1EAEDB]">{formatCurrency(monthlyPayment)}</span>
+            <div className="flex items-center gap-2">
+              <span className="text-xl font-extrabold text-[#1EAEDB]">
+                {formatCurrency(monthlyPayment)}
+              </span>
+              <LockButton
+                isLocked={state.lockedField === 'monthlyPayment'}
+                onToggle={() => handleLockToggle('monthlyPayment', monthlyPayment)}
+              />
+            </div>
           </div>
           <div className="flex justify-between items-center pt-2">
             <span className="text-lg font-bold text-[#222]">Total Cost</span>
-            <span className="text-xl font-extrabold text-[#1EAEDB]">{formatCurrency(totalCost)}</span>
+            <div className="flex items-center gap-2">
+              <span className="text-xl font-extrabold text-[#1EAEDB]">
+                {formatCurrency(totalCost)}
+              </span>
+              <LockButton
+                isLocked={state.lockedField === 'totalCost'}
+                onToggle={() => handleLockToggle('totalCost', totalCost)}
+              />
+            </div>
           </div>
         </div>
       </div>
