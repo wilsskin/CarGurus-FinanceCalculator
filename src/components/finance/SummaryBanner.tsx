@@ -1,65 +1,76 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { formatCurrency } from '../../utils/financeCalculator';
-import ZipTooltip from './ZipTooltip';
+import { Car } from 'lucide-react';
 
 const SummaryBanner: React.FC = () => {
   const { state } = useFinance();
-  const { monthlyPayment, totalCost, estimateAccuracy, paymentType, zipCode } = state;
-  const accuracyAdjustment = (100 - estimateAccuracy) / 100;
-  const rangePercentage = accuracyAdjustment * 0.11;
-  const lowerMonthly = monthlyPayment * (1 - rangePercentage);
-  const upperMonthly = monthlyPayment * (1 + rangePercentage);
-  const lowerTotal = totalCost * (1 - rangePercentage);
-  const upperTotal = totalCost * (1 + rangePercentage);
-  const showRange = estimateAccuracy < 85;
+  const { monthlyPayment, totalCost, estimateAccuracy, paymentType } = state;
+
+  const [compact, setCompact] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setCompact(window.scrollY > 24); // compact after 24px of scroll
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Only show the banner if there are loan details (if payment type isn't cash)
+  const showBanner = paymentType !== 'cash';
+
+  if (!showBanner) return null;
 
   return (
-    <div className="sticky top-16 z-30 bg-[#F7F8FB] shadow-sm rounded-b-xl border-b border-[#1EAEDB] animate-fade-in font-semibold mt-16">
-      <div className="max-w-md mx-auto px-4 py-3">
-        <div className="flex flex-col gap-1">
-          <div className="flex justify-between items-center font-bold text-[#1EAEDB] text-lg">
-            <span>Estimated Payment</span>
-            <span>
-              <ZipTooltip zip={zipCode} />
+    <div
+      className={`
+        w-full transition-all duration-300 border-b border-[#E6E8EB] shadow-sm bg-white z-10
+        ${compact ? "py-2" : "py-4"}
+        ${compact ? "animate-fade-in" : ""}
+      `}
+      style={{
+        position: 'relative',
+        top: 0,
+        left: 0,
+        right: 0,
+        fontWeight: 600,
+      }}
+      data-testid="SummaryBanner"
+    >
+      <div className={`max-w-md mx-auto flex items-center gap-3 px-4 ${compact ? 'py-1' : 'py-2'}`}>
+        <span className={compact ? "text-[#1EAEDB]" : "text-[#1EAEDB]"}>
+          <Car
+            className={compact ? "w-5 h-5" : "w-7 h-7"}
+            strokeWidth={2.3}
+          />
+        </span>
+        <span className={`font-extrabold ${compact ? 'text-lg' : 'text-2xl'} text-[#101325]`}>
+          Finance Calculator
+        </span>
+        <div className="flex-1" />
+        <div className="flex flex-row gap-7 items-center">
+          <div className="flex flex-col items-end">
+            <span className={`text-xs ${compact ? "text-[#8E9196]" : "text-[#8E9196]"} font-semibold`}>
+              Monthly Payment
+            </span>
+            <span className={`font-extrabold ${compact ? "text-xl" : "text-3xl"} text-[#1EAEDB] leading-tight`}>
+              {formatCurrency(monthlyPayment)}
             </span>
           </div>
-          <div className="flex justify-between items-end pt-1">
-            <div>
-              {paymentType !== 'cash' && (
-                <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-extrabold text-[#1EAEDB]">
-                    {showRange
-                      ? `${formatCurrency(lowerMonthly)}–${formatCurrency(upperMonthly)}`
-                      : formatCurrency(monthlyPayment)}
-                  </span>
-                  <span className="text-base text-[#8E9196]">/mo</span>
-                </div>
-              )}
-              <div className="flex items-baseline gap-1 mt-1">
-                <span className="text-lg font-bold">
-                  {showRange
-                    ? `${formatCurrency(lowerTotal)}–${formatCurrency(upperTotal)}`
-                    : formatCurrency(totalCost)}
-                </span>
-                <span className="text-xs text-[#8E9196]">total</span>
-              </div>
-            </div>
-            {/* Accuracy bar */}
-            <div className="flex flex-col items-end">
-              <div className="h-2 w-16 bg-[#E6E8EB] rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-[#1EAEDB] transition-all duration-500 ease-out"
-                  style={{ width: `${estimateAccuracy}%` }}
-                ></div>
-              </div>
-              <span className="text-xs text-[#8E9196] mt-1">
-                {estimateAccuracy < 75 ? 'Keep adding details' : 'Good estimate'}
-              </span>
-            </div>
+          <div className="flex flex-col items-end">
+            <span className={`text-xs ${compact ? "text-[#8E9196]" : "text-[#8E9196]"} font-semibold`}>
+              Total Cost
+            </span>
+            <span className={`font-extrabold ${compact ? "text-lg" : "text-xl"} text-[#101325] leading-tight`}>
+              {formatCurrency(totalCost)}
+            </span>
           </div>
         </div>
+      </div>
+      <div className={`text-xs text-[#8E9196] italic px-4 ${compact ? "pb-0 pt-1" : "pb-1 pt-2"}`}>
+        Estimated — Actual numbers may vary.
       </div>
     </div>
   );
