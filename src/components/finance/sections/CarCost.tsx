@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
@@ -15,26 +14,26 @@ const CarCost: React.FC = () => {
     state.taxesAndFees.totalFees;
 
   return (
-    <section className="bg-white rounded-xl shadow-sm p-6 mb-6 animate-fade-in">
-      <h2 className="text-xl font-bold text-[#1EAEDB] mb-6">Car Cost</h2>
+    <section className="bg-white rounded-xl shadow-sm p-6 mb-8 animate-fade-in">
+      <h2 className="text-2xl font-bold text-[#1EAEDB] mb-8">Car Cost</h2>
       
       {/* Base Price & Add-ons */}
       <div className="space-y-4 mb-6">
         <div className="flex justify-between">
-          <span className="text-gray-600">Base Price</span>
+          <span className="text-sm font-semibold text-gray-700">Base Price</span>
           <span className="font-medium">{formatCurrency(state.carPrice)}</span>
         </div>
         
         {state.addonsTotal > 0 && (
           <div className="flex justify-between">
-            <span className="text-gray-600">Add-ons & Packages</span>
+            <span className="text-sm font-semibold text-gray-700">Add-ons & Packages</span>
             <span className="font-medium">+{formatCurrency(state.addonsTotal)}</span>
           </div>
         )}
         
         {state.discounts > 0 && (
           <div className="flex justify-between text-green-600">
-            <span>Discounts</span>
+            <span className="text-sm font-semibold">Discounts</span>
             <span className="font-medium">-{formatCurrency(state.discounts)}</span>
           </div>
         )}

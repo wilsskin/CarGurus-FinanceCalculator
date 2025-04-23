@@ -31,13 +31,13 @@ const MyFinanceInfo: React.FC = () => {
   };
 
   return (
-    <section className="bg-white rounded-xl shadow-sm p-6 mb-6 animate-fade-in">
-      <h2 className="text-xl font-bold text-[#1EAEDB] mb-6">My Finance Info</h2>
+    <section className="bg-white rounded-xl shadow-sm p-6 mb-8 animate-fade-in">
+      <h2 className="text-2xl font-bold text-[#1EAEDB] mb-8">My Finance Info</h2>
       
       {/* Credit Score Field with Lock */}
       <div className="mb-8 relative">
-        <div className="flex items-center justify-between mb-2">
-          <label className="block text-sm font-medium text-gray-700">
+        <div className="flex items-center justify-between mb-3">
+          <label className="text-sm font-semibold text-gray-700">
             Estimated Credit Score
           </label>
           <LockButton
@@ -50,7 +50,7 @@ const MyFinanceInfo: React.FC = () => {
           onValueChange={handleCreditScoreChange}
           disabled={state.lockedField === 'creditScore'}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full font-medium">
             <SelectValue placeholder="Select your credit score range" />
           </SelectTrigger>
           <SelectContent>
@@ -61,14 +61,17 @@ const MyFinanceInfo: React.FC = () => {
             ))}
           </SelectContent>
         </Select>
+        <p className="mt-2 text-sm text-gray-500">
+          Your credit score helps estimate your interest rate
+        </p>
       </div>
       
-      {/* Loan Details (only show if not paying cash) */}
+      {/* Loan Details */}
       {state.paymentType !== 'cash' && (
         <>
           {/* Loan Term */}
           <div className="mb-8">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-700 mb-3">
               Loan Term
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -91,11 +94,14 @@ const MyFinanceInfo: React.FC = () => {
                 </button>
               ))}
             </div>
+            <p className="mt-2 text-sm text-gray-500">
+              A longer term means lower monthly payments but more interest
+            </p>
           </div>
           
           {/* Down Payment */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-700 mb-3">
               Down Payment
             </label>
             <div className="relative">
@@ -109,10 +115,13 @@ const MyFinanceInfo: React.FC = () => {
                   type: 'SET_LOAN_DETAILS',
                   payload: { downPayment: parseFloat(e.target.value) || 0 }
                 })}
-                className="block w-full pl-7 py-3 border border-gray-300 rounded-lg focus:ring-[#1EAEDB] focus:border-[#1EAEDB]"
+                className="block w-full pl-7 py-3 border border-gray-300 rounded-lg focus:ring-[#1EAEDB] focus:border-[#1EAEDB] font-medium"
                 placeholder="Enter down payment"
               />
             </div>
+            <p className="mt-2 text-sm text-gray-500">
+              A larger down payment reduces your monthly payments
+            </p>
           </div>
         </>
       )}

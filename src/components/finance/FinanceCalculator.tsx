@@ -15,7 +15,9 @@ const FinanceCalculator: React.FC = () => {
     <FinanceProvider>
       <div className="min-h-screen bg-finance-gray-soft pb-10">
         <div className="max-w-md mx-auto px-4">
-          <h1 className="text-2xl font-bold text-[#1EAEDB] py-6">Finance Calculator</h1>
+          <h1 className="text-3xl font-extrabold text-[#1EAEDB] py-8">
+            Finance Calculator
+          </h1>
           
           <VehicleInfo />
           <PaymentTypeSelector />
