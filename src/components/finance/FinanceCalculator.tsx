@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { FinanceProvider, useFinance } from '../../context/FinanceContext';
 import SummaryBanner from './SummaryBanner';
@@ -15,35 +14,39 @@ import ProgressIndicator from './ProgressIndicator';
  * Main Finance Calculator component that assembles all the sections
  */
 const FinanceCalculator: React.FC = () => {
-  const [feedback, setFeedback] = useState({ message: '', visible: false });
+  const [feedback, setFeedback] = useState({
+    message: '',
+    visible: false
+  });
   const [showIntro, setShowIntro] = useState(true);
   const [completedSections, setCompletedSections] = useState(1); // Start with 1 (car price)
-  
+
   // Track if sections are filled out
   const [sectionState, setSectionState] = useState({
-    carPrice: true, // Always true as it's pre-filled
-    paymentType: true, // Always true as it's pre-selected
+    carPrice: true,
+    // Always true as it's pre-filled
+    paymentType: true,
+    // Always true as it's pre-selected
     loanDetails: false,
     tradeIn: false,
     taxesAndFees: false,
     summary: false
   });
-  
+
   // Hide intro animation after first render
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowIntro(false);
     }, 2000);
-    
     return () => clearTimeout(timer);
   }, []);
-  
+
   // Monitor completed sections
   useEffect(() => {
     const totalSections = Object.values(sectionState).filter(Boolean).length;
     if (totalSections !== completedSections) {
       setCompletedSections(totalSections);
-      
+
       // Show feedback if a new section was completed
       if (totalSections > completedSections) {
         const sectionNames = {
@@ -52,28 +55,30 @@ const FinanceCalculator: React.FC = () => {
           taxesAndFees: 'Taxes & fees updated',
           summary: 'Summary complete'
         };
-        
+
         // Find the newly completed section
-        const newSection = Object.entries(sectionState).find(
-          ([key, completed]) => 
-            !completed && key in sectionNames
-        )?.[0];
-        
+        const newSection = Object.entries(sectionState).find(([key, completed]) => !completed && key in sectionNames)?.[0];
         if (newSection && newSection in sectionNames) {
           showFeedback(sectionNames[newSection as keyof typeof sectionNames]);
         }
       }
     }
   }, [sectionState, completedSections]);
-  
+
   // Function to show feedback messages when sections are completed
   const showFeedback = (message: string) => {
-    setFeedback({ message, visible: true });
+    setFeedback({
+      message,
+      visible: true
+    });
     setTimeout(() => {
-      setFeedback(prev => ({ ...prev, visible: false }));
+      setFeedback(prev => ({
+        ...prev,
+        visible: false
+      }));
     }, 3000);
   };
-  
+
   // Function to mark a section as completed
   const completeSection = (section: keyof typeof sectionState) => {
     setSectionState(prev => ({
@@ -81,67 +86,42 @@ const FinanceCalculator: React.FC = () => {
       [section]: true
     }));
   };
-  
+
   // Create section labels for the progress indicator
-  const sectionLabels = [
-    'Car Price',
-    'Payment Type',
-    'Loan Details',
-    'Trade-In',
-    'Taxes & Fees',
-    'Summary'
-  ];
-  
+  const sectionLabels = ['Car Price', 'Payment Type', 'Loan Details', 'Trade-In', 'Taxes & Fees', 'Summary'];
+
   // Section completion effect with staggered animations
   const FinanceCalculatorContent: React.FC = () => {
-    const { state } = useFinance();
+    const {
+      state
+    } = useFinance();
     const prevStateRef = useRef(state);
-    
+
     // Watch for changes in state to determine when sections are completed
     useEffect(() => {
       const prevState = prevStateRef.current;
-      
+
       // Check if loan details were filled out
-      if (
-        state.paymentType !== 'cash' &&
-        (prevState.loanDetails.downPayment !== state.loanDetails.downPayment ||
-         prevState.loanDetails.termMonths !== state.loanDetails.termMonths ||
-         prevState.loanDetails.interestRate !== state.loanDetails.interestRate)
-      ) {
+      if (state.paymentType !== 'cash' && (prevState.loanDetails.downPayment !== state.loanDetails.downPayment || prevState.loanDetails.termMonths !== state.loanDetails.termMonths || prevState.loanDetails.interestRate !== state.loanDetails.interestRate)) {
         completeSection('loanDetails');
       }
-      
+
       // Check if trade-in was added
-      if (
-        (prevState.tradeIn.value === 0 && state.tradeIn.value > 0) ||
-        (prevState.tradeIn.owedAmount === 0 && state.tradeIn.owedAmount > 0)
-      ) {
+      if (prevState.tradeIn.value === 0 && state.tradeIn.value > 0 || prevState.tradeIn.owedAmount === 0 && state.tradeIn.owedAmount > 0) {
         completeSection('tradeIn');
       }
-      
+
       // Check if taxes & fees were modified
-      if (
-        prevState.zipCode !== state.zipCode ||
-        prevState.taxesAndFees.taxRate !== state.taxesAndFees.taxRate ||
-        prevState.taxesAndFees.totalFees !== state.taxesAndFees.totalFees
-      ) {
+      if (prevState.zipCode !== state.zipCode || prevState.taxesAndFees.taxRate !== state.taxesAndFees.taxRate || prevState.taxesAndFees.totalFees !== state.taxesAndFees.totalFees) {
         completeSection('taxesAndFees');
       }
-      
+
       // Update the reference
       prevStateRef.current = state;
     }, [state]);
-    
-    return (
-      <>
+    return <>
         {/* Progress indicator */}
-        <div className="pt-4 pb-2">
-          <ProgressIndicator 
-            steps={6} 
-            currentStep={completedSections} 
-            labels={sectionLabels.slice(0, completedSections)}
-          />
-        </div>
+        
         
         <CarPrice />
         <PaymentTypeSelector />
@@ -149,16 +129,12 @@ const FinanceCalculator: React.FC = () => {
         <TradeIn />
         <TaxesAndFees />
         <SummaryAndSave />
-      </>
-    );
+      </>;
   };
-  
-  return (
-    <FinanceProvider>
+  return <FinanceProvider>
       <div className="min-h-screen bg-finance-gray-soft pb-10">
         {/* Introduction overlay - shown only on first load */}
-        {showIntro && (
-          <div className="fixed inset-0 bg-white z-50 flex items-center justify-center animate-fade-out">
+        {showIntro && <div className="fixed inset-0 bg-white z-50 flex items-center justify-center animate-fade-out">
             <div className="text-center p-6 max-w-sm">
               <div className="w-16 h-16 mx-auto bg-finance-purple rounded-full flex items-center justify-center mb-4">
                 <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -170,15 +146,13 @@ const FinanceCalculator: React.FC = () => {
                 Explore your financing options and get a transparent estimate of your car payments.
               </p>
             </div>
-          </div>
-        )}
+          </div>}
         
         {/* Feedback toast for section completion */}
-        <SectionFeedback
-          message={feedback.message}
-          visible={feedback.visible}
-          onHide={() => setFeedback(prev => ({ ...prev, visible: false }))}
-        />
+        <SectionFeedback message={feedback.message} visible={feedback.visible} onHide={() => setFeedback(prev => ({
+        ...prev,
+        visible: false
+      }))} />
         
         {/* No longer need vertical padding here since the banner has its own spacing */}
         <SummaryBanner />
@@ -188,8 +162,6 @@ const FinanceCalculator: React.FC = () => {
           <FinanceCalculatorContent />
         </div>
       </div>
-    </FinanceProvider>
-  );
+    </FinanceProvider>;
 };
-
 export default FinanceCalculator;
