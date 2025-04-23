@@ -122,9 +122,9 @@ const FinanceCalculator: React.FC = () => {
     return <>
         {/* Progress indicator */}
         
-        
-        <CarPrice />
+        {/* Moved PaymentTypeSelector above CarPrice */}
         <PaymentTypeSelector />
+        <CarPrice />
         <LoanDetails />
         <TradeIn />
         <TaxesAndFees />
