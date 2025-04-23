@@ -51,19 +51,21 @@ const VehicleInfo: React.FC = () => {
     <section className="bg-white rounded-xl shadow-sm p-6 mb-6 animate-fade-in">
       <h2 className="text-xl font-bold text-[#1EAEDB] mb-4">Vehicle Info</h2>
       
-      {/* Vehicle Image Placeholder */}
-      <div className="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
-        <span className="text-gray-400">Vehicle Image</span>
-      </div>
-      
-      {/* Vehicle Details */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">2024 Sample Vehicle</h3>
-        <div className="text-sm text-gray-500 mb-2">
-          VIN: 1HGCM82633A123456
+      <div className="flex gap-4 mb-4">
+        {/* Vehicle Image - Now smaller and to the left */}
+        <div className="w-1/3 aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+          <span className="text-gray-400">Vehicle Image</span>
         </div>
-        <div className="text-xl font-bold text-[#1EAEDB]">
-          {formatCurrency(state.carPrice)}
+        
+        {/* Vehicle Details - Now to the right of the image */}
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold text-gray-900">2024 Sample Vehicle</h3>
+          <div className="text-sm text-gray-500 mb-2">
+            25,000 miles
+          </div>
+          <div className="text-xl font-bold text-[#1EAEDB]">
+            {formatCurrency(state.carPrice)}
+          </div>
         </div>
       </div>
       
