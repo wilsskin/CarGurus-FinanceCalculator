@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
@@ -42,17 +43,26 @@ const CarCost: React.FC = () => {
         
         {state.addonsTotal > 0 && (
           <div className="border-l-2 border-[#1EAEDB] pl-4 py-2 space-y-3 bg-[#F7F8FB] rounded-r-lg">
-            <div className="flex justify-between">
-              <span className="text-sm font-semibold text-gray-700">Selected Add-ons</span>
+            <div className="flex justify-between items-center">
+              <div>
+                <span className="text-sm font-semibold text-gray-700">Selected Add-ons</span>
+                <span className="ml-2 text-xs text-[#1EAEDB] font-medium">(see vehicle info)</span>
+              </div>
               <span className="font-medium text-[#1EAEDB]">+{formatCurrency(state.addonsTotal)}</span>
             </div>
-            {/* Add-ons detail will be populated from VehicleInfo component */}
+          </div>
+        )}
+        
+        {state.discounts > 0 && (
+          <div className="flex justify-between text-green-600">
+            <span className="text-sm font-semibold">Dealer Discount</span>
+            <span className="font-medium">-{formatCurrency(state.discounts)}</span>
           </div>
         )}
         
         <div className="space-y-2">
           <Label htmlFor="discount" className="text-sm font-semibold text-gray-700">
-            Dealer Discount
+            Add Dealer Discount
           </Label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
