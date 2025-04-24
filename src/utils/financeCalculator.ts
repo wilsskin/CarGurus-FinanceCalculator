@@ -1,4 +1,3 @@
-
 /**
  * Finance calculator utility functions
  */
@@ -56,7 +55,7 @@ export const formatCurrency = (amount: number): string => {
   }).format(amount);
   
   // Ensure we don't have double dollar signs ($$)
-  return formatted.replace(/\$\$/g, '$');
+  return formatted.replace(/\$\$+/g, '$');
 };
 
 // Calculate average tax rate based on location (simplified)
