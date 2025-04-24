@@ -26,7 +26,8 @@ const CostBreakdownChart: React.FC = () => {
     {
       name: 'Add-ons',
       amount: addonsTotal,
-      fill: '#9b87f5'
+      fill: '#9b87f5',
+      display: addonsTotal > 0
     },
     {
       name: 'Taxes & Fees',
@@ -37,17 +38,19 @@ const CostBreakdownChart: React.FC = () => {
       name: 'Interest',
       amount: financeCharge,
       fill: '#C8C8C9',
-      display: paymentType !== 'cash'
+      display: paymentType !== 'cash' && financeCharge > 0
     },
     {
       name: 'Discounts',
       amount: -discounts,
-      fill: '#33C3F0'
+      fill: '#33C3F0',
+      display: discounts > 0
     },
     {
       name: 'Trade-in',
       amount: -tradeIn.netValue,
-      fill: '#0FA0CE'
+      fill: '#0FA0CE',
+      display: tradeIn.netValue > 0
     }
   ].filter(item => item.amount !== 0 && (item.display !== false));
 
@@ -65,22 +68,28 @@ const CostBreakdownChart: React.FC = () => {
     return null;
   };
 
-  // Use full cost value for data to make the bar visible
-  const data = costComponents.map(component => ({
+  // Make sure we have visible data
+  const data = costComponents.length > 0 ? costComponents.map(component => ({
     name: component.name,
     value: Math.abs(component.amount),
     fill: component.fill,
     isNegative: component.amount < 0
-  }));
+  })) : [
+    {
+      name: 'Vehicle Price',
+      value: carPrice,
+      fill: '#1EAEDB',
+      isNegative: false
+    }
+  ];
 
   return (
-    <div className="w-full h-[150px] mt-4 mb-8">
+    <div className="w-full h-[200px] mt-6 mb-8 border border-gray-200 rounded-lg p-4 bg-white">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
           layout="horizontal"
-          margin={{ top: 20, right: 20, left: 20, bottom: 5 }}
-          stackOffset="sign"
+          margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
           barGap={0}
           barCategoryGap={0}
         >
@@ -119,7 +128,7 @@ const CostBreakdownChart: React.FC = () => {
               className="w-4 h-4 mr-1" 
               style={{ backgroundColor: component.fill }}
             />
-            <span className="text-xs text-gray-600">{component.name}</span>
+            <span className="text-xs font-medium text-gray-600">{component.name}</span>
           </div>
         ))}
       </div>

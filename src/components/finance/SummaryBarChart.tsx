@@ -52,19 +52,34 @@ const SimpleBarChart: React.FC = () => {
     }
   ].filter(component => component.show !== false && component.value !== 0);
 
-  const maxValue = components.reduce((sum, component) => sum + Math.abs(component.value), 0);
+  // Make sure we have a visible chart even if there's only one component
+  const maxValue = Math.max(
+    components.reduce((sum, component) => sum + Math.abs(component.value), 0),
+    1  // Ensure we don't divide by zero
+  );
+
+  // Ensure the chart is visible even when there are no components
+  if (components.length === 0) {
+    components.push({
+      label: 'Vehicle Price',
+      value: carPrice,
+      color: '#1EAEDB',
+      isNegative: false
+    });
+  }
 
   return (
-    <Card className="p-4 bg-[#F7F8FB] border-[#E6E8EB]">
+    <Card className="p-4 bg-[#F7F8FB] border-[#E6E8EB] mb-4">
       <div className="space-y-4">
-        <div className="h-8 flex rounded-lg overflow-hidden">
+        <div className="h-12 flex rounded-lg overflow-hidden border border-gray-200">
           {components.map((component, index) => (
             <div
               key={component.label}
               style={{
                 width: `${(Math.abs(component.value) / maxValue) * 100}%`,
                 backgroundColor: component.color,
-                transition: 'width 0.3s ease-in-out'
+                transition: 'width 0.3s ease-in-out',
+                minWidth: '10px' // Ensure each segment is at least somewhat visible
               }}
               className="h-full relative group"
             >
@@ -79,10 +94,10 @@ const SimpleBarChart: React.FC = () => {
           {components.map((component, index) => (
             <div key={index} className="flex items-center gap-1.5">
               <div 
-                className="w-3 h-3 rounded-sm" 
+                className="w-4 h-4 rounded-sm" 
                 style={{ backgroundColor: component.color }}
               />
-              <span className="text-[#222]">
+              <span className="text-[#222] font-medium">
                 {component.label} {component.isNegative ? '(-)' : ''}
               </span>
             </div>
