@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/
 
 const SummaryBanner: React.FC = () => {
   const { state } = useFinance();
-  const { monthlyPayment, totalCost, paymentType, taxesAndFees } = state;
+  const { monthlyPayment, totalCost, paymentType, loanDetails, tradeIn } = state;
   const [compact, setCompact] = useState(false);
   
   useEffect(() => {
@@ -25,9 +25,24 @@ const SummaryBanner: React.FC = () => {
     `}>
       <div className="max-w-md mx-auto flex flex-row items-center justify-between px-3 py-2">
         {/* Left: Label */}
-        <span className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}>
-          {paymentType === 'cash' ? 'Estimated Taxes & Fees' : 'Estimated Payment'}
-        </span>
+        <div className="flex flex-col">
+          <span className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}>
+            {paymentType === 'cash' ? 'Estimated Taxes & Fees' : 'Estimated Payment'}
+          </span>
+          {paymentType !== 'cash' && !compact && (
+            <div className="text-xs text-[#8E9196] mt-1 space-x-2">
+              <span>{loanDetails.termMonths / 12} years</span>
+              <span>•</span>
+              <span>${formatCurrency(loanDetails.downPayment)} down</span>
+              {tradeIn.netValue > 0 && (
+                <>
+                  <span>•</span>
+                  <span>${formatCurrency(tradeIn.netValue)} trade-in</span>
+                </>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Right: Payment Info */}
         <div className="flex items-center gap-4">
