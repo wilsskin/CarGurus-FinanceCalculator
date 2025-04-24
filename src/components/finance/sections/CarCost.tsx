@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Edit } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { animateValue } from '@/utils/animateValue';
 
 const CarCost: React.FC = () => {
   const { state, dispatch } = useFinance();
   const [isTaxesOpen, setIsTaxesOpen] = useState(false);
   const [isAddonsOpen, setIsAddonsOpen] = useState(false);
+  const [isEditingTaxes, setIsEditingTaxes] = useState(false);
   const [prevTotal, setPrevTotal] = useState(0);
+  const [editedTaxes, setEditedTaxes] = useState(state.taxesAndFees);
   
   const subtotal = state.carPrice + 
     (state.addonsTotal || 0) - 
@@ -26,9 +30,29 @@ const CarCost: React.FC = () => {
     }
   }, [subtotal, prevTotal]);
 
+  useEffect(() => {
+    setEditedTaxes(state.taxesAndFees);
+  }, [state.taxesAndFees]);
+
   const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.max(0, Number(e.target.value) || 0);
     dispatch({ type: 'UPDATE_DISCOUNTS', payload: value });
+  };
+
+  const handleTaxesChange = (field: keyof typeof editedTaxes) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.max(0, Number(e.target.value) || 0);
+    setEditedTaxes(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSaveTaxes = () => {
+    dispatch({
+      type: 'SET_TAXES_AND_FEES',
+      payload: editedTaxes
+    });
+    setIsEditingTaxes(false);
   };
 
   const selectedAddonsCount = Object.keys(state.selectedAddons).length;
@@ -141,9 +165,79 @@ const CarCost: React.FC = () => {
               <span className="text-gray-600">Other Fees</span>
               <span className="font-medium">{formatCurrency(state.taxesAndFees.otherFees)}</span>
             </div>
+            <Button 
+              variant="secondary"
+              size="sm"
+              className="w-full mt-3"
+              onClick={() => setIsEditingTaxes(true)}
+            >
+              <Edit className="w-4 h-4 mr-2" />
+              Edit Taxes & Fees
+            </Button>
           </div>
         )}
       </div>
+      
+      <Dialog open={isEditingTaxes} onOpenChange={setIsEditingTaxes}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Taxes & Fees</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Registration Fee</Label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <Input
+                  type="number"
+                  value={editedTaxes.registrationFee}
+                  onChange={handleTaxesChange('registrationFee')}
+                  className="pl-7"
+                  min="0"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <Label>Documentation Fee</Label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <Input
+                  type="number"
+                  value={editedTaxes.documentFee}
+                  onChange={handleTaxesChange('documentFee')}
+                  className="pl-7"
+                  min="0"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <Label>Other Fees</Label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <Input
+                  type="number"
+                  value={editedTaxes.otherFees}
+                  onChange={handleTaxesChange('otherFees')}
+                  className="pl-7"
+                  min="0"
+                />
+              </div>
+            </div>
+            
+            <Button onClick={handleSaveTaxes} className="w-full">
+              Save Changes
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
       
       <div className="flex justify-between pt-4 border-t">
         <span className="text-lg font-bold text-gray-900">Subtotal</span>
