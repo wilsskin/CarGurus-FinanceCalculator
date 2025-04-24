@@ -68,33 +68,36 @@ const CostBreakdownChart: React.FC = () => {
   const data = [{ total: totalCost }];
 
   return (
-    <div className="w-full h-[200px] mt-4">
+    <div className="w-full h-[100px] mt-4">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
-          margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
+          layout="horizontal"
+          margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
         >
           <XAxis 
+            type="number"
             dataKey="total"
-            tickFormatter={() => 'Total Cost'}
-            interval={0}
-            tick={{ fontSize: 14, fontWeight: 'bold' }}
-          />
-          <YAxis
             tickFormatter={(value) => formatCurrency(Math.abs(value))}
             tick={{ fontSize: 12 }}
           />
+          <YAxis 
+            type="category"
+            tickFormatter={() => 'Total Cost'}
+            width={80}
+            tick={{ fontSize: 14, fontWeight: 'bold' }}
+          />
           <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="total" width={50}>
+          <Bar dataKey="total" barSize={40}>
             {costComponents.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
             ))}
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-      <div className="flex justify-center mt-2 space-x-2">
+      <div className="flex justify-center mt-2 space-x-2 flex-wrap">
         {costComponents.map((component, index) => (
-          <div key={index} className="flex items-center">
+          <div key={index} className="flex items-center mr-2 mb-1">
             <div 
               className="w-4 h-4 mr-1" 
               style={{ backgroundColor: component.fill }}
