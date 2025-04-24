@@ -10,6 +10,7 @@ import CarCost from './sections/CarCost';
 import SummaryAndSave from './SummaryAndSave';
 import SaveAndExport from './sections/SaveAndExport';
 import EditButton from './EditButton';
+import FinancialSummary from './FinancialSummary';
 
 const FinanceCalculator: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const FinanceCalculator: React.FC = () => {
           <MyFinanceInfo />
           <TradeIn />
           <CarCost />
+          <FinancialSummary />
           <SummaryAndSave />
           <SaveAndExport />
         </div>
@@ -34,4 +36,3 @@ const FinanceCalculator: React.FC = () => {
 };
 
 export default FinanceCalculator;
-
