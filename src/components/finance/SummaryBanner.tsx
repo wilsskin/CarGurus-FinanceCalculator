@@ -29,16 +29,17 @@ const SummaryBanner: React.FC = () => {
           <span className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}>
             {paymentType === 'cash' ? 'Estimated Taxes & Fees' : 'Estimated Payment'}
           </span>
-          {/* Financial details - show even in compact mode for better visibility */}
+          
+          {/* Financial details - always show for non-cash payment types, with enhanced styling */}
           {paymentType !== 'cash' && (
-            <div className="text-xs text-[#8E9196] mt-1 space-x-2">
-              <span>{loanDetails.termMonths / 12} years</span>
-              <span>•</span>
-              <span>${formatCurrency(loanDetails.downPayment)} down</span>
+            <div className="text-xs text-[#8E9196] mt-0.5 flex flex-wrap gap-1">
+              <span className="whitespace-nowrap">{loanDetails.termMonths / 12} years</span>
+              <span className="hidden sm:inline">•</span>
+              <span className="whitespace-nowrap">${formatCurrency(loanDetails.downPayment)} down</span>
               {tradeIn.netValue > 0 && (
                 <>
-                  <span>•</span>
-                  <span>${formatCurrency(tradeIn.netValue)} trade-in</span>
+                  <span className="hidden sm:inline">•</span>
+                  <span className="whitespace-nowrap">${formatCurrency(tradeIn.netValue)} trade-in</span>
                 </>
               )}
             </div>
