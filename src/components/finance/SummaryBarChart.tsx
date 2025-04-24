@@ -13,40 +13,40 @@ const SimpleBarChart: React.FC = () => {
     { 
       label: 'Vehicle Price', 
       value: carPrice, 
-      color: '#1EAEDB',
+      color: '#1EAEDB',  // Primary blue
       isNegative: false 
     },
     { 
       label: 'Add-ons', 
       value: addonsTotal, 
-      color: '#9b87f5',
+      color: '#33C3F0',  // Light blue
       isNegative: false,
       show: addonsTotal > 0
     },
     { 
       label: 'Taxes & Fees', 
       value: taxesAndFees.taxAmount + taxesAndFees.totalFees, 
-      color: '#F97316',
+      color: '#555555',  // Dark gray
       isNegative: false 
     },
     { 
       label: 'Interest', 
       value: paymentType !== 'cash' ? (monthlyPayment * loanDetails.termMonths) - (carPrice - loanDetails.downPayment - tradeIn.netValue) : 0,
-      color: '#D946EF',
+      color: '#888888',  // Medium gray
       isNegative: false,
       show: paymentType !== 'cash'
     },
     { 
       label: 'Discounts', 
       value: -discounts, 
-      color: '#0EA5E9',
+      color: '#ea384c',  // Red for negative values
       isNegative: true,
       show: discounts > 0
     },
     { 
       label: 'Trade-in', 
       value: -tradeIn.netValue, 
-      color: '#8B5CF6',
+      color: '#C8C8C9',  // Light gray for trade-in
       isNegative: true,
       show: tradeIn.netValue > 0
     }
@@ -81,10 +81,13 @@ const SimpleBarChart: React.FC = () => {
                 transition: 'width 0.3s ease-in-out',
                 minWidth: '10px' // Ensure each segment is at least somewhat visible
               }}
-              className="h-full relative group"
+              className="h-full relative group cursor-pointer"
             >
-              <div className="opacity-0 group-hover:opacity-100 absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-white px-2 py-1 rounded shadow-lg text-xs whitespace-nowrap z-10 transition-opacity">
-                {component.label}: {formatCurrency(Math.abs(component.value))}
+              <div className="opacity-0 group-hover:opacity-100 absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-white px-3 py-2 rounded-lg shadow-lg text-sm whitespace-nowrap z-10 transition-opacity border border-gray-100">
+                <div className="font-medium text-gray-800">{component.label}</div>
+                <div className="text-[#1EAEDB] font-bold">
+                  {formatCurrency(Math.abs(component.value))}
+                </div>
               </div>
             </div>
           ))}
@@ -98,7 +101,7 @@ const SimpleBarChart: React.FC = () => {
                 style={{ backgroundColor: component.color }}
               />
               <span className="text-[#222] font-medium">
-                {component.label} {component.isNegative ? '(-)' : ''}: {formatCurrency(Math.abs(component.value))}
+                {component.label} {component.isNegative ? '(-)' : ''}
               </span>
             </div>
           ))}
@@ -109,3 +112,4 @@ const SimpleBarChart: React.FC = () => {
 };
 
 export default SimpleBarChart;
+
