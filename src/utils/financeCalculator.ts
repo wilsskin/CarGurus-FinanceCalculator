@@ -48,12 +48,15 @@ export const calculateLoanAmount = (
 
 // Format currency with appropriate symbol and decimal places
 export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
+  const formatted = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(amount).replace('$$', '$');
+  }).format(amount);
+  
+  // Ensure we don't have double dollar signs ($$)
+  return formatted.replace(/\$\$/g, '$');
 };
 
 // Calculate average tax rate based on location (simplified)
