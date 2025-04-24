@@ -1,48 +1,95 @@
 
 import React from 'react';
-import { useFinance } from '../../context/FinanceContext';
+import { useFinance } from '@/context/finance';
+import { formatCurrency } from '@/utils/financeCalculator';
+import { Card } from '../ui/card';
 
 const SimpleBarChart: React.FC = () => {
   const { state } = useFinance();
-  const { loanDetails, tradeIn, taxesAndFees, carPrice, monthlyPayment, totalCost, paymentType } = state;
-  // Build breakdown for car gurus: Principal, Interest, Fees/Taxes, less Trade-In
-  // Only break down if not cash
-  const principal = carPrice - loanDetails.downPayment - tradeIn.netValue;
-  const interest = paymentType !== 'cash'
-    ? (monthlyPayment * loanDetails.termMonths - principal)
-    : 0;
-  const taxesFees = taxesAndFees.taxAmount + taxesAndFees.totalFees;
-  const trade = tradeIn.netValue;
+  const { loanDetails, tradeIn, taxesAndFees, carPrice, monthlyPayment, totalCost, addonsTotal, discounts, paymentType } = state;
+  
+  // Calculate components for the stacked bar
+  const components = [
+    { 
+      label: 'Vehicle Price', 
+      value: carPrice, 
+      color: '#1EAEDB',
+      isNegative: false 
+    },
+    { 
+      label: 'Add-ons', 
+      value: addonsTotal, 
+      color: '#9b87f5',
+      isNegative: false,
+      show: addonsTotal > 0
+    },
+    { 
+      label: 'Taxes & Fees', 
+      value: taxesAndFees.taxAmount + taxesAndFees.totalFees, 
+      color: '#8E9196',
+      isNegative: false 
+    },
+    { 
+      label: 'Interest', 
+      value: paymentType !== 'cash' ? (monthlyPayment * loanDetails.termMonths) - (carPrice - loanDetails.downPayment - tradeIn.netValue) : 0,
+      color: '#C8C8C9',
+      isNegative: false,
+      show: paymentType !== 'cash'
+    },
+    { 
+      label: 'Discounts', 
+      value: -discounts, 
+      color: '#33C3F0',
+      isNegative: true,
+      show: discounts > 0
+    },
+    { 
+      label: 'Trade-in', 
+      value: -tradeIn.netValue, 
+      color: '#0FA0CE',
+      isNegative: true,
+      show: tradeIn.netValue > 0
+    }
+  ].filter(component => component.show !== false && component.value !== 0);
 
-  const data = [
-    { label: 'Principal', value: Math.max(principal, 0), color: '#1EAEDB' },
-    { label: 'Interest', value: paymentType !== 'cash' ? Math.max(interest, 0) : 0, color: '#9b87f5' },
-    { label: 'Taxes/Fees', value: taxesFees, color: '#8E9196' },
-    { label: 'Trade-In', value: -trade, color: '#C8C8C9' }
-  ];
+  const maxValue = components.reduce((sum, component) => sum + Math.abs(component.value), 0);
 
-  const total = data.reduce((sum, d) => sum + Math.abs(d.value), 0) || 1;
   return (
-    <div className="w-full h-12 flex flex-col">
-      <div className="w-full flex h-4 rounded overflow-hidden">
-        {data.map(d => d.value !== 0 && (
-          <div
-            key={d.label}
-            style={{
-              width: `${Math.abs(d.value) / total * 100}%`,
-              background: d.color
-            }}
-            className="h-full"
-            title={d.label}
-          />
-        ))}
+    <Card className="p-4 bg-[#F7F8FB] border-[#E6E8EB]">
+      <div className="space-y-4">
+        <div className="h-8 flex rounded-lg overflow-hidden">
+          {components.map((component, index) => (
+            <div
+              key={component.label}
+              style={{
+                width: `${(Math.abs(component.value) / maxValue) * 100}%`,
+                backgroundColor: component.color,
+                transition: 'width 0.3s ease-in-out'
+              }}
+              className="h-full relative group"
+            >
+              <div className="opacity-0 group-hover:opacity-100 absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-white px-2 py-1 rounded shadow-lg text-xs whitespace-nowrap z-10 transition-opacity">
+                {component.label}: {formatCurrency(Math.abs(component.value))}
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div className="flex flex-wrap gap-4 justify-center text-xs">
+          {components.map((component, index) => (
+            <div key={index} className="flex items-center gap-1.5">
+              <div 
+                className="w-3 h-3 rounded-sm" 
+                style={{ backgroundColor: component.color }}
+              />
+              <span className="text-[#222]">
+                {component.label} {component.isNegative ? '(-)' : ''}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="mt-2 flex justify-between text-xs text-[#8E9196] px-1">
-        {data.map(d => d.value !== 0 && (
-          <span key={d.label}>{d.label}</span>
-        ))}
-      </div>
-    </div>
+    </Card>
   );
 };
 

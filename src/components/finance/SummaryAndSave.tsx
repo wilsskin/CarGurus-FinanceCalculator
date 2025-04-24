@@ -9,6 +9,7 @@ import { Card } from '../ui/card';
 import { cn } from '@/lib/utils';
 import LockButton from './LockButton';
 import { LockableField } from '../../types/financeTypes';
+import SimpleBarChart from './SummaryBarChart';
 
 const SummaryAndSave: React.FC = () => {
   const { state, dispatch } = useFinance();
@@ -132,6 +133,12 @@ const SummaryAndSave: React.FC = () => {
           </Button>
         )}
         <p className="text-sm text-[#8E9196] mt-1">Ask your lender or use a rough estimate.</p>
+      </div>
+
+      {/* Cost Breakdown Chart */}
+      <div className="mb-6">
+        <h3 className="text-sm font-semibold text-[#222] mb-2">Cost Breakdown</h3>
+        <SimpleBarChart />
       </div>
 
       {/* Receipt Block */}
