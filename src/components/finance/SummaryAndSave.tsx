@@ -1,14 +1,13 @@
-
 import React, { useState } from 'react';
 import { useFinance } from '../../context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
 import TipCard from './TipCard';
-import { Info } from 'lucide-react';
+import { Info, Clock, PiggyBank, WalletIcon } from 'lucide-react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { Card } from '../ui/card';
 import { cn } from '@/lib/utils';
 import LockButton from './LockButton';
-import { LockableField } from '../../types/financeTypes';
 
 const SummaryAndSave: React.FC = () => {
   const { state, dispatch } = useFinance();
@@ -75,6 +74,38 @@ const SummaryAndSave: React.FC = () => {
     <div className="bg-white rounded-xl shadow-md p-6 mb-28 animate-slide-in font-sans">
       <h2 className="text-xl font-extrabold mb-4 text-[#1EAEDB]">Finance Summary</h2>
       
+      {/* Summary Cards */}
+      <div className="mb-6">
+        <Card className="bg-[#F7F8FB] border-none">
+          <div className="p-4">
+            <div className="grid grid-cols-3 gap-4">
+              {/* Loan Term */}
+              <div className="flex flex-col items-center p-3 bg-white rounded-lg">
+                <Clock className="w-5 h-5 text-[#1EAEDB] mb-1" />
+                <span className="text-xs text-gray-500">Term</span>
+                <span className="font-semibold text-sm">{loanDetails.termMonths / 12} years</span>
+              </div>
+
+              {/* Down Payment */}
+              <div className="flex flex-col items-center p-3 bg-white rounded-lg">
+                <PiggyBank className="w-5 h-5 text-[#1EAEDB] mb-1" />
+                <span className="text-xs text-gray-500">Down</span>
+                <span className="font-semibold text-sm">${formatCurrency(loanDetails.downPayment)}</span>
+              </div>
+
+              {/* Trade-in Value */}
+              <div className="flex flex-col items-center p-3 bg-white rounded-lg">
+                <WalletIcon className="w-5 h-5 text-[#1EAEDB] mb-1" />
+                <span className="text-xs text-gray-500">Trade-in</span>
+                <span className="font-semibold text-sm">
+                  {tradeIn.netValue > 0 ? `$${formatCurrency(tradeIn.netValue)}` : '-'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
       {/* APR Input */}
       <div className="mb-6">
         <label className="block text-sm font-semibold text-[#222] mb-2">
