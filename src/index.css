@@ -107,3 +107,16 @@
     font-weight: 700;
   }
 }
+
+@keyframes highlight {
+  0% {
+    background-color: #E9F6FB;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.animate-highlight {
+  animation: highlight 2s ease-out;
+}

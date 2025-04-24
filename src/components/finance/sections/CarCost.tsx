@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
 import { ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { animateValue } from '@/utils/animateValue';
 
 const CarCost: React.FC = () => {
   const { state, dispatch } = useFinance();
   const [isTaxesOpen, setIsTaxesOpen] = useState(false);
+  const [prevTotal, setPrevTotal] = useState(0);
   
   const subtotal = state.carPrice + 
     (state.addonsTotal || 0) - 
     (state.discounts || 0) + 
     state.taxesAndFees.taxAmount + 
     state.taxesAndFees.totalFees;
+
+  useEffect(() => {
+    if (prevTotal !== subtotal) {
+      const element = document.getElementById('subtotal-amount');
+      animateValue(element);
+      setPrevTotal(subtotal);
+    }
+  }, [subtotal, prevTotal]);
 
   const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.max(0, Number(e.target.value) || 0);
@@ -24,7 +34,6 @@ const CarCost: React.FC = () => {
     <section className="bg-white rounded-xl shadow-sm p-6 mb-8 animate-fade-in">
       <h2 className="text-2xl font-bold text-[#1EAEDB] mb-8">Car Cost</h2>
       
-      {/* Base Price & Add-ons */}
       <div className="space-y-6 mb-6">
         <div className="flex justify-between">
           <span className="text-sm font-semibold text-gray-700">Base Price</span>
@@ -32,13 +41,15 @@ const CarCost: React.FC = () => {
         </div>
         
         {state.addonsTotal > 0 && (
-          <div className="flex justify-between">
-            <span className="text-sm font-semibold text-gray-700">Add-ons & Packages</span>
-            <span className="font-medium">+{formatCurrency(state.addonsTotal)}</span>
+          <div className="border-l-2 border-[#1EAEDB] pl-4 py-2 space-y-3 bg-[#F7F8FB] rounded-r-lg">
+            <div className="flex justify-between">
+              <span className="text-sm font-semibold text-gray-700">Selected Add-ons</span>
+              <span className="font-medium text-[#1EAEDB]">+{formatCurrency(state.addonsTotal)}</span>
+            </div>
+            {/* Add-ons detail will be populated from VehicleInfo component */}
           </div>
         )}
         
-        {/* Dealer Discount Field */}
         <div className="space-y-2">
           <Label htmlFor="discount" className="text-sm font-semibold text-gray-700">
             Dealer Discount
@@ -61,7 +72,6 @@ const CarCost: React.FC = () => {
         </div>
       </div>
       
-      {/* Taxes & Fees Dropdown */}
       <div className="border rounded-lg mb-6">
         <button
           onClick={() => setIsTaxesOpen(!isTaxesOpen)}
@@ -98,10 +108,11 @@ const CarCost: React.FC = () => {
         )}
       </div>
       
-      {/* Pre-financing Subtotal */}
       <div className="flex justify-between pt-4 border-t">
         <span className="text-lg font-bold text-gray-900">Subtotal</span>
-        <span className="text-xl font-bold text-[#1EAEDB]">{formatCurrency(subtotal)}</span>
+        <span id="subtotal-amount" className="text-xl font-bold text-[#1EAEDB] transition-all">
+          {formatCurrency(subtotal)}
+        </span>
       </div>
     </section>
   );
