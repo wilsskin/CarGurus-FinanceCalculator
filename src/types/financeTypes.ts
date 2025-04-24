@@ -1,3 +1,4 @@
+
 export type PaymentType = 'dealer' | 'outside' | 'cash';
 
 export interface TradeInInfo {
@@ -22,6 +23,13 @@ export interface LoanDetails {
   interestRate: number;
 }
 
+export interface AddonItem {
+  id: string;
+  name: string;
+  price: number;
+  included?: boolean;
+}
+
 export type LockableField = 'monthlyPayment' | 'totalCost' | 'carPrice' | 'creditScore' | 'downPayment' | 'termMonths';
 
 export interface FinanceCalculatorState {
@@ -39,4 +47,5 @@ export interface FinanceCalculatorState {
   creditScore?: number;
   lockedField: LockableField | null;
   lockedValue: number | null;
+  selectedAddons: Record<string, AddonItem>;
 }
