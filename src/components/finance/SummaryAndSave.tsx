@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useFinance } from '../../context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
@@ -109,7 +110,7 @@ const SummaryAndSave: React.FC = () => {
       </div>
 
       {/* Cost Breakdown Chart */}
-      <div className="mb-6">
+      <div className="mb-10">
         <h3 className="text-lg font-semibold text-gray-700 mb-4">Cost Breakdown</h3>
         <CostBreakdownChart />
       </div>

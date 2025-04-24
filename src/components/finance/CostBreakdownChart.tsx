@@ -65,37 +65,54 @@ const CostBreakdownChart: React.FC = () => {
     return null;
   };
 
-  const data = [{ total: totalCost }];
+  // Use full cost value for data to make the bar visible
+  const data = costComponents.map(component => ({
+    name: component.name,
+    value: Math.abs(component.amount),
+    fill: component.fill,
+    isNegative: component.amount < 0
+  }));
 
   return (
-    <div className="w-full h-[100px] mt-4">
+    <div className="w-full h-[150px] mt-4 mb-8">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
           layout="horizontal"
-          margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+          margin={{ top: 20, right: 20, left: 20, bottom: 5 }}
+          stackOffset="sign"
+          barGap={0}
+          barCategoryGap={0}
         >
           <XAxis 
             type="number"
-            dataKey="total"
-            tickFormatter={(value) => formatCurrency(Math.abs(value))}
+            domain={[0, 'dataMax']}
+            tickFormatter={(value) => formatCurrency(value)}
             tick={{ fontSize: 12 }}
           />
           <YAxis 
             type="category"
-            tickFormatter={() => 'Total Cost'}
-            width={80}
-            tick={{ fontSize: 14, fontWeight: 'bold' }}
+            dataKey="name"
+            width={100}
+            tick={{ fontSize: 12 }}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="total" barSize={40}>
-            {costComponents.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.fill} />
+          <Bar 
+            dataKey="value" 
+            barSize={30}
+          >
+            {data.map((entry, index) => (
+              <Cell 
+                key={`cell-${index}`} 
+                fill={entry.fill} 
+                stroke={entry.fill}
+                strokeWidth={1}
+              />
             ))}
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-      <div className="flex justify-center mt-2 space-x-2 flex-wrap">
+      <div className="flex justify-center mt-4 space-x-2 flex-wrap">
         {costComponents.map((component, index) => (
           <div key={index} className="flex items-center mr-2 mb-1">
             <div 
