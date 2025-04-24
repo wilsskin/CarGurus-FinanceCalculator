@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
@@ -10,6 +9,7 @@ import { animateValue } from '@/utils/animateValue';
 const CarCost: React.FC = () => {
   const { state, dispatch } = useFinance();
   const [isTaxesOpen, setIsTaxesOpen] = useState(false);
+  const [isAddonsOpen, setIsAddonsOpen] = useState(false);
   const [prevTotal, setPrevTotal] = useState(0);
   
   const subtotal = state.carPrice + 
@@ -43,13 +43,30 @@ const CarCost: React.FC = () => {
         
         {state.addonsTotal > 0 && (
           <div className="border-l-2 border-[#1EAEDB] pl-4 py-2 space-y-3 bg-[#F7F8FB] rounded-r-lg">
-            <div className="flex justify-between items-center">
+            <button
+              onClick={() => setIsAddonsOpen(!isAddonsOpen)}
+              className="w-full flex justify-between items-center"
+            >
               <div>
                 <span className="text-sm font-semibold text-gray-700">Selected Add-ons</span>
-                <span className="ml-2 text-xs text-[#1EAEDB] font-medium">(see vehicle info)</span>
+                <span className="ml-2 text-xs text-[#1EAEDB] font-medium">({Object.values(state.selectedAddons || {}).length} items)</span>
               </div>
-              <span className="font-medium text-[#1EAEDB]">+{formatCurrency(state.addonsTotal)}</span>
-            </div>
+              <div className="flex items-center">
+                <span className="font-medium text-[#1EAEDB] mr-2">+{formatCurrency(state.addonsTotal)}</span>
+                <ChevronDown className={`w-4 h-4 text-[#1EAEDB] transition-transform ${isAddonsOpen ? 'rotate-180' : ''}`} />
+              </div>
+            </button>
+            
+            {isAddonsOpen && (
+              <div className="pt-2 space-y-2 border-t border-[#E6E8EB] mt-2">
+                {Object.entries(state.selectedAddons || {}).map(([id, addon]) => (
+                  <div key={id} className="flex justify-between text-sm">
+                    <span className="text-gray-600">{addon.name}</span>
+                    <span className="font-medium text-[#1EAEDB]">{formatCurrency(addon.price)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
         
