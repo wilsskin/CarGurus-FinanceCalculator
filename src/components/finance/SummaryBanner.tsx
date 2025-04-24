@@ -29,7 +29,8 @@ const SummaryBanner: React.FC = () => {
           <span className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}>
             {paymentType === 'cash' ? 'Estimated Taxes & Fees' : 'Estimated Payment'}
           </span>
-          {paymentType !== 'cash' && !compact && (
+          {/* Financial details - show even in compact mode for better visibility */}
+          {paymentType !== 'cash' && (
             <div className="text-xs text-[#8E9196] mt-1 space-x-2">
               <span>{loanDetails.termMonths / 12} years</span>
               <span>•</span>
