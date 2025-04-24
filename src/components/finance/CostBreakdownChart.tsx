@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useFinance } from '@/context/finance';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { formatCurrency } from '@/utils/financeCalculator';
 
 const CostBreakdownChart: React.FC = () => {
@@ -14,7 +14,10 @@ const CostBreakdownChart: React.FC = () => {
       (carPrice + addonsTotal - discounts + taxesAndFees.taxAmount + taxesAndFees.totalFees - loanDetails.downPayment - tradeIn.netValue)
     : 0;
 
-  const data = [
+  // Total cost calculation
+  const totalCost = carPrice + addonsTotal + taxesAndFees.taxAmount + taxesAndFees.totalFees + financeCharge - discounts - tradeIn.netValue;
+
+  const costComponents = [
     {
       name: 'Vehicle Price',
       amount: carPrice,
@@ -53,7 +56,7 @@ const CostBreakdownChart: React.FC = () => {
       return (
         <div className="bg-white p-2 shadow-lg rounded-lg border">
           <p className="text-sm font-medium text-gray-700">{payload[0].payload.name}</p>
-          <p className="text-sm font-bold text-[#1EAEDB]">
+          <p className="text-sm font-bold" style={{ color: payload[0].payload.fill }}>
             {formatCurrency(Math.abs(payload[0].value))}
           </p>
         </div>
@@ -62,30 +65,44 @@ const CostBreakdownChart: React.FC = () => {
     return null;
   };
 
+  const data = [{ total: totalCost }];
+
   return (
     <div className="w-full h-[200px] mt-4">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
           margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
-          barSize={32}
         >
-          <XAxis
-            dataKey="name"
-            angle={-45}
-            textAnchor="end"
-            height={60}
-            tick={{ fontSize: 12 }}
+          <XAxis 
+            dataKey="total"
+            tickFormatter={() => 'Total Cost'}
             interval={0}
+            tick={{ fontSize: 14, fontWeight: 'bold' }}
           />
           <YAxis
             tickFormatter={(value) => formatCurrency(Math.abs(value))}
             tick={{ fontSize: 12 }}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="amount" />
+          <Bar dataKey="total" width={50}>
+            {costComponents.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.fill} />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
+      <div className="flex justify-center mt-2 space-x-2">
+        {costComponents.map((component, index) => (
+          <div key={index} className="flex items-center">
+            <div 
+              className="w-4 h-4 mr-1" 
+              style={{ backgroundColor: component.fill }}
+            />
+            <span className="text-xs text-gray-600">{component.name}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
