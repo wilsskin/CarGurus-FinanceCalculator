@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useFinance } from '../../context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
@@ -8,6 +9,7 @@ import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { cn } from '@/lib/utils';
 import LockButton from './LockButton';
+import { LockableField } from '../../types/financeTypes';
 
 const SummaryAndSave: React.FC = () => {
   const { state, dispatch } = useFinance();
