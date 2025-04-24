@@ -26,27 +26,27 @@ const SimpleBarChart: React.FC = () => {
     { 
       label: 'Taxes & Fees', 
       value: taxesAndFees.taxAmount + taxesAndFees.totalFees, 
-      color: '#8E9196',
+      color: '#F97316',
       isNegative: false 
     },
     { 
       label: 'Interest', 
       value: paymentType !== 'cash' ? (monthlyPayment * loanDetails.termMonths) - (carPrice - loanDetails.downPayment - tradeIn.netValue) : 0,
-      color: '#C8C8C9',
+      color: '#D946EF',
       isNegative: false,
       show: paymentType !== 'cash'
     },
     { 
       label: 'Discounts', 
       value: -discounts, 
-      color: '#33C3F0',
+      color: '#0EA5E9',
       isNegative: true,
       show: discounts > 0
     },
     { 
       label: 'Trade-in', 
       value: -tradeIn.netValue, 
-      color: '#0FA0CE',
+      color: '#8B5CF6',
       isNegative: true,
       show: tradeIn.netValue > 0
     }
@@ -98,7 +98,7 @@ const SimpleBarChart: React.FC = () => {
                 style={{ backgroundColor: component.color }}
               />
               <span className="text-[#222] font-medium">
-                {component.label} {component.isNegative ? '(-)' : ''}
+                {component.label} {component.isNegative ? '(-)' : ''}: {formatCurrency(Math.abs(component.value))}
               </span>
             </div>
           ))}
