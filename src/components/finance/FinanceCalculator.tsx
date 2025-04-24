@@ -9,6 +9,7 @@ import TradeIn from './TradeIn';
 import CarCost from './sections/CarCost';
 import SummaryAndSave from './SummaryAndSave';
 import SaveAndExport from './sections/SaveAndExport';
+import ScrollToTop from './ScrollToTop';
 import EditButton from './EditButton';
 
 const FinanceCalculator: React.FC = () => {
@@ -27,6 +28,7 @@ const FinanceCalculator: React.FC = () => {
           <CarCost />
           <SummaryAndSave />
           <SaveAndExport />
+          <ScrollToTop />
         </div>
       </div>
     </FinanceProvider>
