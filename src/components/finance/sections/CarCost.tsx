@@ -31,6 +31,8 @@ const CarCost: React.FC = () => {
     dispatch({ type: 'UPDATE_DISCOUNTS', payload: value });
   };
 
+  const selectedAddonsCount = Object.keys(state.selectedAddons).length;
+
   return (
     <section className="bg-white rounded-xl shadow-sm p-6 mb-8 animate-fade-in">
       <h2 className="text-2xl font-bold text-[#1EAEDB] mb-8">Car Cost</h2>
@@ -41,34 +43,42 @@ const CarCost: React.FC = () => {
           <span className="font-medium">{formatCurrency(state.carPrice)}</span>
         </div>
         
-        {state.addonsTotal > 0 && (
-          <div className="border-l-2 border-[#1EAEDB] pl-4 py-2 space-y-3 bg-[#F7F8FB] rounded-r-lg">
-            <button
-              onClick={() => setIsAddonsOpen(!isAddonsOpen)}
-              className="w-full flex justify-between items-center"
-            >
-              <div>
-                <span className="text-sm font-semibold text-gray-700">Selected Add-ons</span>
-                <span className="ml-2 text-xs text-[#1EAEDB] font-medium">({Object.values(state.selectedAddons || {}).length} items)</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-[#1EAEDB] mr-2">+{formatCurrency(state.addonsTotal)}</span>
-                <ChevronDown className={`w-4 h-4 text-[#1EAEDB] transition-transform ${isAddonsOpen ? 'rotate-180' : ''}`} />
-              </div>
-            </button>
-            
-            {isAddonsOpen && (
-              <div className="pt-2 space-y-2 border-t border-[#E6E8EB] mt-2">
-                {Object.entries(state.selectedAddons || {}).map(([id, addon]) => (
-                  <div key={id} className="flex justify-between text-sm">
+        <div className="border-l-2 border-[#1EAEDB] pl-4 py-2 space-y-3 bg-[#F7F8FB] rounded-r-lg">
+          <button
+            onClick={() => setIsAddonsOpen(!isAddonsOpen)}
+            className="w-full flex justify-between items-center"
+          >
+            <div>
+              <span className="text-sm font-semibold text-gray-700">Selected Add-ons</span>
+              <span className="ml-2 text-xs text-[#1EAEDB] font-medium">
+                ({selectedAddonsCount} items)
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className="font-medium text-[#1EAEDB] mr-2">
+                {state.addonsTotal > 0 ? `+${formatCurrency(state.addonsTotal)}` : '$0'}
+              </span>
+              <ChevronDown 
+                className={`w-4 h-4 text-[#1EAEDB] transition-transform ${isAddonsOpen ? 'rotate-180' : ''}`} 
+              />
+            </div>
+          </button>
+          
+          {isAddonsOpen && (
+            <div className="pt-2 space-y-2 border-t border-[#E6E8EB] mt-2">
+              {selectedAddonsCount === 0 ? (
+                <div className="text-sm text-gray-500 italic">No add-ons selected</div>
+              ) : (
+                Object.values(state.selectedAddons).map((addon) => (
+                  <div key={addon.id} className="flex justify-between text-sm">
                     <span className="text-gray-600">{addon.name}</span>
                     <span className="font-medium text-[#1EAEDB]">{formatCurrency(addon.price)}</span>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+                ))
+              )}
+            </div>
+          )}
+        </div>
         
         {state.discounts > 0 && (
           <div className="flex justify-between text-green-600">

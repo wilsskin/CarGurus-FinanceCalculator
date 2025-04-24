@@ -11,6 +11,7 @@ export type FinanceAction =
   | { type: 'SET_CREDIT_SCORE'; payload: number }
   | { type: 'UPDATE_ADDONS_TOTAL'; payload: number }
   | { type: 'UPDATE_DISCOUNTS'; payload: number }
+  | { type: 'UPDATE_SELECTED_ADDONS'; payload: Record<string, AddonItem> }
   | { type: 'UPDATE_CALCULATIONS' }
   | { type: 'RESET_FORM' }
   | { type: 'LOCK_FIELD'; payload: { field: LockableField; value: number; } | null };

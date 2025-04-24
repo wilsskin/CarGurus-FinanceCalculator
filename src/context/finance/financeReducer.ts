@@ -56,6 +56,12 @@ export const financeReducer = (
         discounts: action.payload
       };
     
+    case 'UPDATE_SELECTED_ADDONS':
+      return {
+        ...state,
+        selectedAddons: action.payload
+      };
+    
     default:
       return state;
   }
