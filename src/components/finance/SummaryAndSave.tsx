@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useFinance } from '../../context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
@@ -10,7 +9,6 @@ import { Card } from '../ui/card';
 import { cn } from '@/lib/utils';
 import LockButton from './LockButton';
 import { LockableField } from '../../types/financeTypes';
-import CostBreakdownChart from './CostBreakdownChart';
 
 const SummaryAndSave: React.FC = () => {
   const { state, dispatch } = useFinance();
@@ -107,12 +105,6 @@ const SummaryAndSave: React.FC = () => {
             </div>
           </div>
         </Card>
-      </div>
-
-      {/* Cost Breakdown Chart */}
-      <div className="mb-10">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">Cost Breakdown</h3>
-        <CostBreakdownChart />
       </div>
 
       {/* APR Input */}
