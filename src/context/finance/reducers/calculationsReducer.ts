@@ -19,9 +19,12 @@ export const calculationsReducer = (state: FinanceCalculatorState): FinanceCalcu
     };
   }
   
+  // Calculate loan amount - include add-ons in base price for financing
+  const vehiclePriceWithAddons = state.carPrice + (state.addonsTotal || 0) - (state.discounts || 0);
+  
   // Calculate loan amount
   const loanAmount = calculateLoanAmount(
-    state.carPrice,
+    vehiclePriceWithAddons,
     state.loanDetails.downPayment,
     state.tradeIn.value,
     state.tradeIn.owedAmount,
