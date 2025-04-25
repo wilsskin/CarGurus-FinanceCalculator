@@ -20,6 +20,7 @@ const optionalAddOns: AddonItem[] = [
 const VehicleInfo: React.FC = () => {
   const { state, dispatch } = useFinance();
   const [isAddOnsOpen, setIsAddOnsOpen] = useState(false);
+  const [customAddons, setCustomAddons] = useState<AddonItem[]>([]);
   
   const selectedAddonsCount = Object.keys(state.selectedAddons).length;
   const selectedAddonsTotal = Object.values(state.selectedAddons).reduce((sum, item) => sum + item.price, 0);
@@ -45,6 +46,7 @@ const VehicleInfo: React.FC = () => {
   };
 
   const handleCustomAddonAdd = (addon: AddonItem) => {
+    setCustomAddons([...customAddons, addon]);
     handleAddOnToggle(addon);
   };
 
@@ -104,7 +106,7 @@ const VehicleInfo: React.FC = () => {
             
             <div>
               <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Available Add-ons</h4>
-              {optionalAddOns.map(addOn => (
+              {[...optionalAddOns, ...customAddons].map(addOn => (
                 <label key={addOn.id} className="flex items-center py-2 px-1 cursor-pointer group">
                   <input
                     type="checkbox"
