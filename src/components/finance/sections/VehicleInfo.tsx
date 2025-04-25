@@ -51,7 +51,7 @@ const VehicleInfo: React.FC = () => {
   };
 
   return (
-    <section className="bg-white rounded-xl shadow-sm p-6 mb-6 animate-fade-in">
+    <section className="mb-6">
       <h2 className="text-xl font-bold text-[#1EAEDB] mb-4">Vehicle Info</h2>
       
       <div className="flex gap-4 mb-4">

@@ -1,249 +1,209 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
-import { ChevronDown, Edit } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { animateValue } from '@/utils/animateValue';
 
 const CarCost: React.FC = () => {
   const { state, dispatch } = useFinance();
   const [isTaxesOpen, setIsTaxesOpen] = useState(false);
-  const [isAddonsOpen, setIsAddonsOpen] = useState(false);
-  const [isEditingTaxes, setIsEditingTaxes] = useState(false);
-  const [prevTotal, setPrevTotal] = useState(0);
-  const [editedTaxes, setEditedTaxes] = useState(state.taxesAndFees);
+  const [showTradeIn, setShowTradeIn] = useState(false);
   
-  const subtotal = state.carPrice + 
-    (state.addonsTotal || 0) - 
-    (state.discounts || 0) + 
-    state.taxesAndFees.taxAmount + 
-    state.taxesAndFees.totalFees;
-
-  useEffect(() => {
-    if (prevTotal !== subtotal) {
-      const element = document.getElementById('subtotal-amount');
-      animateValue(element);
-      setPrevTotal(subtotal);
-    }
-  }, [subtotal, prevTotal]);
-
-  useEffect(() => {
-    setEditedTaxes(state.taxesAndFees);
-  }, [state.taxesAndFees]);
-
+  const handleTradeInValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(event.target.value) || 0;
+    dispatch({ 
+      type: 'SET_TRADE_IN', 
+      payload: { value } 
+    });
+  };
+  
+  const handleOwedAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const owedAmount = parseFloat(event.target.value) || 0;
+    dispatch({ 
+      type: 'SET_TRADE_IN', 
+      payload: { owedAmount } 
+    });
+  };
+  
   const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.max(0, Number(e.target.value) || 0);
     dispatch({ type: 'UPDATE_DISCOUNTS', payload: value });
   };
 
-  const handleTaxesChange = (field: keyof typeof editedTaxes) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(0, Number(e.target.value) || 0);
-    setEditedTaxes(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleTaxesToggle = () => {
+    setIsTaxesOpen(!isTaxesOpen);
   };
-
-  const handleSaveTaxes = () => {
-    dispatch({
-      type: 'SET_TAXES_AND_FEES',
-      payload: editedTaxes
-    });
-    setIsEditingTaxes(false);
-  };
-
-  const selectedAddonsCount = Object.keys(state.selectedAddons).length;
 
   return (
-    <section className="bg-white rounded-xl shadow-sm p-6 mb-8 animate-fade-in">
-      <h2 className="text-2xl font-bold text-[#1EAEDB] mb-8">Car Cost</h2>
+    <section className="bg-white rounded-xl shadow-md p-6 mb-6">
+      <h2 className="text-xl font-extrabold mb-6 text-[#1EAEDB]">Car Cost</h2>
       
-      <div className="space-y-6 mb-6">
+      <div className="space-y-6">
+        {/* Base Price */}
         <div className="flex justify-between">
           <span className="text-sm font-semibold text-gray-700">Base Price</span>
           <span className="font-medium">{formatCurrency(state.carPrice)}</span>
         </div>
         
-        <div className="border-l-2 border-[#1EAEDB] pl-4 py-2 space-y-3 bg-[#F7F8FB] rounded-r-lg">
-          <button
-            onClick={() => setIsAddonsOpen(!isAddonsOpen)}
-            className="w-full flex justify-between items-center"
-          >
-            <div>
-              <span className="text-sm font-semibold text-gray-700">Selected Add-ons</span>
-              <span className="ml-2 text-xs text-[#1EAEDB] font-medium">
-                ({selectedAddonsCount} items)
-              </span>
-            </div>
-            <div className="flex items-center">
-              <span className="font-medium text-[#1EAEDB] mr-2">
-                {state.addonsTotal > 0 ? `+${formatCurrency(state.addonsTotal)}` : '$0'}
-              </span>
-              <ChevronDown 
-                className={`w-4 h-4 text-[#1EAEDB] transition-transform ${isAddonsOpen ? 'rotate-180' : ''}`} 
-              />
-            </div>
-          </button>
+        {/* Selected Add-ons List */}
+        {Object.values(state.selectedAddons).length > 0 && (
+          <div className="space-y-2 border-l-2 border-[#1EAEDB] pl-4">
+            <span className="text-sm font-semibold text-gray-700">Selected Add-ons</span>
+            {Object.values(state.selectedAddons).map((addon) => (
+              <div key={addon.id} className="flex justify-between text-sm">
+                <span className="text-gray-600">{addon.name}</span>
+                <span className="font-medium text-[#1EAEDB]">{formatCurrency(addon.price)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {/* Trade-In Section */}
+        <div className="border-t pt-4">
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-sm font-semibold text-gray-700">Trade-In Value</span>
+            <button
+              onClick={() => setShowTradeIn(!showTradeIn)}
+              className="text-sm font-medium text-[#1EAEDB]"
+            >
+              {showTradeIn ? 'Remove' : 'Add Trade-In'}
+            </button>
+          </div>
           
-          {isAddonsOpen && (
-            <div className="pt-2 space-y-2 border-t border-[#E6E8EB] mt-2">
-              {selectedAddonsCount === 0 ? (
-                <div className="text-sm text-gray-500 italic">No add-ons selected</div>
-              ) : (
-                Object.values(state.selectedAddons).map((addon) => (
-                  <div key={addon.id} className="flex justify-between text-sm">
-                    <span className="text-gray-600">{addon.name}</span>
-                    <span className="font-medium text-[#1EAEDB]">{formatCurrency(addon.price)}</span>
+          {showTradeIn && (
+            <div className="space-y-4 animate-fade-in">
+              <div>
+                <Label>Vehicle Value</Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span className="text-gray-500 sm:text-sm">$</span>
                   </div>
-                ))
+                  <Input
+                    type="number"
+                    value={state.tradeIn.value}
+                    onChange={(e) => dispatch({
+                      type: 'SET_TRADE_IN',
+                      payload: { value: parseFloat(e.target.value) || 0 }
+                    })}
+                    className="pl-7"
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <Label>Amount Owed (Optional)</Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span className="text-gray-500 sm:text-sm">$</span>
+                  </div>
+                  <Input
+                    type="number"
+                    value={state.tradeIn.owedAmount}
+                    onChange={(e) => dispatch({
+                      type: 'SET_TRADE_IN',
+                      payload: { owedAmount: parseFloat(e.target.value) || 0 }
+                    })}
+                    className="pl-7"
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+              
+              {(state.tradeIn.value > 0 || state.tradeIn.owedAmount > 0) && (
+                <div className={`
+                  p-3 rounded-md text-sm
+                  ${state.tradeIn.netValue > 0 
+                    ? 'bg-green-50 text-green-800' 
+                    : 'bg-red-50 text-red-800'}
+                `}>
+                  {state.tradeIn.netValue > 0 ? (
+                    <>
+                      <div className="font-medium">
+                        {formatCurrency(state.tradeIn.netValue)} in positive equity
+                      </div>
+                      <div>This amount will be applied to your purchase.</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="font-medium">
+                        {formatCurrency(Math.abs(state.tradeIn.netValue))} in negative equity
+                      </div>
+                      <div>This amount may be added to your new loan.</div>
+                    </>
+                  )}
+                </div>
               )}
             </div>
           )}
         </div>
         
-        {state.discounts > 0 && (
-          <div className="flex justify-between text-green-600">
-            <span className="text-sm font-semibold">Dealer Discount</span>
-            <span className="font-medium">-{formatCurrency(state.discounts)}</span>
-          </div>
-        )}
+        {/* Taxes & Fees Section */}
+        <div className="border rounded-lg">
+          <button
+            onClick={handleTaxesToggle}
+            className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors"
+          >
+            <span className="font-medium text-gray-700">Taxes & Fees</span>
+            <div className="flex items-center">
+              <span className="mr-2 text-[#1EAEDB] font-medium">
+                {formatCurrency(state.taxesAndFees.taxAmount + state.taxesAndFees.totalFees)}
+              </span>
+              <ChevronDown className={`w-5 h-5 transition-transform ${isTaxesOpen ? 'rotate-180' : ''}`} />
+            </div>
+          </button>
+          
+          {isTaxesOpen && (
+            <div className="p-4 border-t space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Sales Tax ({state.taxesAndFees.taxRate}%)</span>
+                <span className="font-medium">{formatCurrency(state.taxesAndFees.taxAmount)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Registration Fee</span>
+                <span className="font-medium">{formatCurrency(state.taxesAndFees.registrationFee)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Documentation Fee</span>
+                <span className="font-medium">{formatCurrency(state.taxesAndFees.documentFee)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Other Fees</span>
+                <span className="font-medium">{formatCurrency(state.taxesAndFees.otherFees)}</span>
+              </div>
+            </div>
+          )}
+        </div>
         
+        {/* Dealer Discount */}
         <div className="space-y-2">
-          <Label htmlFor="discount" className="text-sm font-semibold text-gray-700">
-            Add Dealer Discount
-          </Label>
+          <Label>Dealer Discount</Label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <span className="text-gray-500 sm:text-sm">$</span>
             </div>
             <Input
-              id="discount"
               type="number"
               value={state.discounts || ''}
-              onChange={handleDiscountChange}
+              onChange={(e) => dispatch({
+                type: 'UPDATE_DISCOUNTS',
+                payload: parseFloat(e.target.value) || 0
+              })}
               className="pl-7"
               placeholder="0"
-              min="0"
             />
           </div>
-          <p className="text-sm text-[#8E9196]">Any negotiated discount or dealership incentives.</p>
+          <p className="text-sm text-gray-500">Any negotiated discount or dealership incentives.</p>
         </div>
-      </div>
-      
-      <div className="border rounded-lg mb-6">
-        <button
-          onClick={() => setIsTaxesOpen(!isTaxesOpen)}
-          className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors"
-        >
-          <span className="font-medium text-gray-700">Taxes & Fees</span>
-          <div className="flex items-center">
-            <span className="mr-2 text-[#1EAEDB] font-medium">
-              {formatCurrency(state.taxesAndFees.taxAmount + state.taxesAndFees.totalFees)}
-            </span>
-            <ChevronDown className={`w-5 h-5 transition-transform ${isTaxesOpen ? 'rotate-180' : ''}`} />
-          </div>
-        </button>
         
-        {isTaxesOpen && (
-          <div className="p-4 border-t space-y-3">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Sales Tax ({state.taxesAndFees.taxRate}%)</span>
-              <span className="font-medium">{formatCurrency(state.taxesAndFees.taxAmount)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Registration Fee</span>
-              <span className="font-medium">{formatCurrency(state.taxesAndFees.registrationFee)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Documentation Fee</span>
-              <span className="font-medium">{formatCurrency(state.taxesAndFees.documentFee)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Other Fees</span>
-              <span className="font-medium">{formatCurrency(state.taxesAndFees.otherFees)}</span>
-            </div>
-            <Button 
-              variant="secondary"
-              size="sm"
-              className="w-full mt-3"
-              onClick={() => setIsEditingTaxes(true)}
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              Edit Taxes & Fees
-            </Button>
-          </div>
-        )}
-      </div>
-      
-      <Dialog open={isEditingTaxes} onOpenChange={setIsEditingTaxes}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Taxes & Fees</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label>Registration Fee</Label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <Input
-                  type="number"
-                  value={editedTaxes.registrationFee}
-                  onChange={handleTaxesChange('registrationFee')}
-                  className="pl-7"
-                  min="0"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <Label>Documentation Fee</Label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <Input
-                  type="number"
-                  value={editedTaxes.documentFee}
-                  onChange={handleTaxesChange('documentFee')}
-                  className="pl-7"
-                  min="0"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <Label>Other Fees</Label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <Input
-                  type="number"
-                  value={editedTaxes.otherFees}
-                  onChange={handleTaxesChange('otherFees')}
-                  className="pl-7"
-                  min="0"
-                />
-              </div>
-            </div>
-            
-            <Button onClick={handleSaveTaxes} className="w-full">
-              Save Changes
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-      
-      <div className="flex justify-between pt-4 border-t">
-        <span className="text-lg font-bold text-gray-900">Subtotal</span>
-        <span id="subtotal-amount" className="text-xl font-bold text-[#1EAEDB] transition-all">
-          {formatCurrency(subtotal)}
-        </span>
+        {/* Subtotal */}
+        <div className="flex justify-between pt-4 border-t">
+          <span className="text-lg font-bold text-gray-900">Subtotal</span>
+          <span id="subtotal-amount" className="text-xl font-bold text-[#1EAEDB]">
+            {formatCurrency(state.totalCost)}
+          </span>
+        </div>
       </div>
     </section>
   );

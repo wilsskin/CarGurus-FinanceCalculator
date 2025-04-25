@@ -33,7 +33,6 @@ const PaymentTypeSelector: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Tab change handler
   const handleTabChange = (newType: string) => {
     if (newType !== paymentType) {
       dispatch({ type: "SET_PAYMENT_TYPE", payload: newType as PaymentType });
@@ -41,7 +40,7 @@ const PaymentTypeSelector: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 mb-8">
+    <div className="mb-8">
       <h2 className="text-xl font-bold mb-6 text-[#1EAEDB]">How Are You Paying?</h2>
       <Tabs
         value={paymentType}
