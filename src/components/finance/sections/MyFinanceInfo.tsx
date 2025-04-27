@@ -2,7 +2,6 @@ import React from 'react';
 import { useFinance } from '@/context/finance';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { formatCurrency } from '@/utils/financeCalculator';
 import AdjustmentSuggestions from '../AdjustmentSuggestions';
 
 const creditScoreRanges = [
@@ -27,14 +26,6 @@ const MyFinanceInfo: React.FC = () => {
     dispatch({
       type: 'SET_LOAN_DETAILS',
       payload: { downPayment: value }
-    });
-  };
-
-  const handlePaymentGoalChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(event.target.value) || 0;
-    dispatch({
-      type: 'SET_LOAN_DETAILS',
-      payload: { monthlyPaymentGoal: value }
     });
   };
 
@@ -112,23 +103,6 @@ const MyFinanceInfo: React.FC = () => {
           <p className="text-sm text-gray-500">
             {state.loanDetails.downPayment > 0 && `${Math.round((state.loanDetails.downPayment / state.carPrice) * 100)}% of vehicle price`}
           </p>
-        </div>
-
-        {/* Monthly Payment Goal */}
-        <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-gray-700">
-            Monthly Payment Goal
-          </label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-            <Input
-              type="number"
-              value={state.loanDetails.monthlyPaymentGoal || ''}
-              onChange={handlePaymentGoalChange}
-              className="pl-8"
-              placeholder="Enter target monthly payment"
-            />
-          </div>
         </div>
       </div>
       
