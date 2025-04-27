@@ -32,12 +32,12 @@ const MyFinanceInfo: React.FC = () => {
   };
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-4">
       <h2 className="text-xl font-bold text-[#1EAEDB]">My Finance Info</h2>
       
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Credit Score Field */}
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <label className="text-sm font-semibold text-gray-700">
             Credit Score
           </label>
@@ -58,29 +58,9 @@ const MyFinanceInfo: React.FC = () => {
           </Select>
         </div>
         
-        {/* Down Payment Field */}
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-gray-700">
-            Down Payment
-          </label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-            <Input
-              type="number"
-              value={state.loanDetails.downPayment || ''}
-              onChange={handleDownPaymentChange}
-              className="pl-8"
-              placeholder="Enter down payment"
-            />
-          </div>
-          <p className="text-sm text-gray-500">
-            {state.loanDetails.downPayment > 0 && `${Math.round((state.loanDetails.downPayment / state.carPrice) * 100)}% of vehicle price`}
-          </p>
-        </div>
-        
         {/* Loan Term */}
         {state.paymentType !== 'cash' && (
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <label className="block text-sm font-semibold text-gray-700">
               Loan Term
             </label>
@@ -106,6 +86,26 @@ const MyFinanceInfo: React.FC = () => {
             </div>
           </div>
         )}
+        
+        {/* Down Payment Field */}
+        <div className="space-y-1.5">
+          <label className="text-sm font-semibold text-gray-700">
+            Down Payment
+          </label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+            <Input
+              type="number"
+              value={state.loanDetails.downPayment || ''}
+              onChange={handleDownPaymentChange}
+              className="pl-8"
+              placeholder="Enter down payment"
+            />
+          </div>
+          <p className="text-sm text-gray-500">
+            {state.loanDetails.downPayment > 0 && `${Math.round((state.loanDetails.downPayment / state.carPrice) * 100)}% of vehicle price`}
+          </p>
+        </div>
       </div>
       
       <AdjustmentSuggestions />
