@@ -1,9 +1,7 @@
-
 import React, { useEffect, useState } from "react";
 import { useFinance } from "../../context/finance";
 import { PaymentType } from "../../types/financeTypes";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
-
 const paymentTabs = [{
   value: "dealer",
   label: "Dealer",
@@ -17,7 +15,6 @@ const paymentTabs = [{
   label: "Cash",
   description: "Cash payment simplifies the process"
 }] as const;
-
 const PaymentTypeSelector: React.FC = () => {
   const {
     state,
@@ -27,14 +24,12 @@ const PaymentTypeSelector: React.FC = () => {
     paymentType
   } = state;
   const [animationDelay, setAnimationDelay] = useState(true);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimationDelay(false);
     }, 400);
     return () => clearTimeout(timer);
   }, []);
-
   const handleTabChange = (newType: string) => {
     if (newType !== paymentType) {
       dispatch({
@@ -43,7 +38,6 @@ const PaymentTypeSelector: React.FC = () => {
       });
     }
   };
-
   return <div className="mb-8">
       <h2 className="text-xl font-bold mb-6 text-[#1EAEDB]">How Are You Paying?</h2>
       <Tabs value={paymentType} onValueChange={handleTabChange} className="w-full" data-testid="PaymentTabs">
@@ -59,13 +53,10 @@ const PaymentTypeSelector: React.FC = () => {
             </TabsTrigger>)}
         </TabsList>
         
-        {paymentTabs.map(tab => (
-          <TabsContent key={tab.value} value={tab.value} className="mt-2 text-gray-600 text-sm">
-            <p>{tab.description}</p>
-          </TabsContent>
-        ))}
+        {paymentTabs.map(tab => <TabsContent key={tab.value} value={tab.value} className="mt-2 text-gray-600 text-sm">
+            
+          </TabsContent>)}
       </Tabs>
     </div>;
 };
-
 export default PaymentTypeSelector;
