@@ -20,27 +20,47 @@ const SummaryBanner: React.FC = () => {
 
   // Calculate estimate completion percentage based on all relevant fields
   const calculateEstimateCompletion = () => {
-    if (paymentType === 'cash') return 100;
+    if (paymentType === 'cash') {
+      // For cash payments, consider taxes and fees
+      let completionScore = 0;
+      const requiredFields = [
+        { value: state.carPrice > 0, weight: 25 },
+        { value: state.zipCode.length === 5, weight: 15 },
+        { value: state.taxesAndFees.taxRate > 0, weight: 15 },
+        { value: state.taxesAndFees.registrationFee > 0, weight: 10 },
+        { value: state.taxesAndFees.documentFee > 0, weight: 10 },
+        { value: state.taxesAndFees.dealerFee > 0, weight: 10 },
+        { value: Object.keys(state.selectedAddons).length > 0, weight: 15 }
+      ];
+      
+      requiredFields.forEach(field => {
+        if (field.value) completionScore += field.weight;
+      });
+      
+      return Math.min(90, completionScore); // Cap at 90% for cash payments
+    }
     
     let completionScore = 0;
-    let totalItems = 0;
     
-    // Required fields with weights
+    // Required fields with weights for financing
     const requiredFields = [
-      { value: state.carPrice > 0, weight: 30 },
-      { value: state.loanDetails.termMonths > 0, weight: 25 },
-      { value: state.loanDetails.downPayment > 0, weight: 25 },
-      { value: state.loanDetails.interestRate > 0, weight: 20 }
+      { value: state.carPrice > 0, weight: 20 },
+      { value: state.loanDetails.termMonths > 0, weight: 15 },
+      { value: state.loanDetails.downPayment > 0, weight: 15 },
+      { value: state.loanDetails.interestRate > 0, weight: 15 },
+      { value: state.zipCode.length === 5, weight: 10 },
+      { value: state.taxesAndFees.taxRate > 0, weight: 5 },
+      { value: state.taxesAndFees.registrationFee > 0, weight: 5 },
+      { value: state.taxesAndFees.documentFee > 0, weight: 5 },
+      { value: state.creditScore !== undefined, weight: 5 },
+      { value: Object.keys(state.selectedAddons).length > 0, weight: 5 }
     ];
     
     requiredFields.forEach(field => {
-      if (field.value) {
-        completionScore += field.weight;
-      }
-      totalItems += field.weight;
+      if (field.value) completionScore += field.weight;
     });
     
-    return Math.round((completionScore / totalItems) * 100);
+    return Math.min(95, completionScore); // Cap at 95% even with all fields filled
   };
 
   const completionPercentage = calculateEstimateCompletion();
