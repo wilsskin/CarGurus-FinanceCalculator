@@ -1,9 +1,7 @@
 import React from 'react';
 import { useFinance } from '@/context/finance';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import LockButton from '../LockButton';
 import AdjustmentSuggestions from '../AdjustmentSuggestions';
-import { LockableField } from '@/types/financeTypes';
 
 const creditScoreRanges = [
   { label: 'Excellent (720+)', value: '720' },
@@ -14,14 +12,6 @@ const creditScoreRanges = [
 
 const MyFinanceInfo: React.FC = () => {
   const { state, dispatch } = useFinance();
-  
-  const handleLockToggle = (field: LockableField, value: number) => {
-    if (state.lockedField === field) {
-      dispatch({ type: 'LOCK_FIELD', payload: null });
-    } else {
-      dispatch({ type: 'LOCK_FIELD', payload: { field, value } });
-    }
-  };
 
   const handleCreditScoreChange = (value: string) => {
     dispatch({ 
@@ -41,15 +31,10 @@ const MyFinanceInfo: React.FC = () => {
             <label className="text-sm font-semibold text-gray-700">
               Credit Score
             </label>
-            <LockButton
-              isLocked={state.lockedField === 'creditScore'}
-              onToggle={() => handleLockToggle('creditScore', state.creditScore || 0)}
-            />
           </div>
           <Select
             value={state.creditScore?.toString()}
             onValueChange={handleCreditScoreChange}
-            disabled={state.lockedField === 'creditScore'}
           >
             <SelectTrigger className="w-full font-medium">
               <SelectValue placeholder="Select score" />
@@ -93,30 +78,6 @@ const MyFinanceInfo: React.FC = () => {
           </div>
         )}
       </div>
-      
-      {/* Down Payment */}
-      {state.paymentType !== 'cash' && (
-        <div className="space-y-2">
-          <label className="block text-sm font-semibold text-gray-700">
-            Down Payment
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span className="text-gray-500 sm:text-sm">$</span>
-            </div>
-            <input
-              type="number"
-              value={state.loanDetails.downPayment}
-              onChange={(e) => dispatch({
-                type: 'SET_LOAN_DETAILS',
-                payload: { downPayment: parseFloat(e.target.value) || 0 }
-              })}
-              className="block w-full pl-7 py-3 border border-gray-300 rounded-lg focus:ring-[#1EAEDB] focus:border-[#1EAEDB] font-medium"
-              placeholder="Enter down payment"
-            />
-          </div>
-        </div>
-      )}
       
       <AdjustmentSuggestions />
     </section>

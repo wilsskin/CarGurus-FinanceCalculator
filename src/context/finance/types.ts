@@ -1,5 +1,5 @@
 
-import { PaymentType, LoanDetails, TradeInInfo, TaxesAndFees, LockableField, AddonItem } from '../../types/financeTypes';
+import { PaymentType, LoanDetails, TradeInInfo, TaxesAndFees, AddonItem } from '../../types/financeTypes';
 
 export type FinanceAction = 
   | { type: 'SET_CAR_PRICE'; payload: number }
@@ -13,5 +13,4 @@ export type FinanceAction =
   | { type: 'UPDATE_DISCOUNTS'; payload: number }
   | { type: 'UPDATE_SELECTED_ADDONS'; payload: Record<string, AddonItem> }
   | { type: 'UPDATE_CALCULATIONS' }
-  | { type: 'RESET_FORM' }
-  | { type: 'LOCK_FIELD'; payload: { field: LockableField; value: number; } | null };
+  | { type: 'RESET_FORM' };

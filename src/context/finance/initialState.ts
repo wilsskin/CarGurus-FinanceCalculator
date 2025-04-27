@@ -1,4 +1,3 @@
-
 import { FinanceCalculatorState } from '../../types/financeTypes';
 
 // Default values
@@ -34,10 +33,8 @@ export const initialState: FinanceCalculatorState = {
   zipCode: DEFAULT_ZIP_CODE,
   monthlyPayment: 0,
   totalCost: 0,
-  estimateAccuracy: 60, // Starting estimate accuracy
-  addonsTotal: 0,       // Initialize addonsTotal
-  discounts: 0,          // Initialize discounts
-  lockedField: null,
-  lockedValue: null,
-  selectedAddons: {}     // Initialize selectedAddons as an empty object
+  estimateAccuracy: 60,
+  addonsTotal: 0,
+  discounts: 0,
+  selectedAddons: {}
 };

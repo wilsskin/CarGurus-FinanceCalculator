@@ -30,8 +30,6 @@ export interface AddonItem {
   included?: boolean;
 }
 
-export type LockableField = 'monthlyPayment' | 'totalCost' | 'carPrice' | 'creditScore' | 'downPayment' | 'termMonths';
-
 export interface FinanceCalculatorState {
   carPrice: number;
   paymentType: PaymentType;
@@ -45,7 +43,5 @@ export interface FinanceCalculatorState {
   addonsTotal: number;
   discounts: number;
   creditScore?: number;
-  lockedField: LockableField | null;
-  lockedValue: number | null;
   selectedAddons: Record<string, AddonItem>;
 }
