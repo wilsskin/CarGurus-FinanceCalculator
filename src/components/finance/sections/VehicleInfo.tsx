@@ -4,6 +4,7 @@ import { formatCurrency } from '@/utils/financeCalculator';
 import { ChevronDown } from 'lucide-react';
 import { AddonItem } from '@/types/financeTypes';
 import CustomAddonForm from '../addons/CustomAddonForm';
+
 const defaultFeatures: AddonItem[] = [{
   id: 'basic-audio',
   name: 'Basic Audio System',
@@ -15,6 +16,7 @@ const defaultFeatures: AddonItem[] = [{
   price: 0,
   included: true
 }];
+
 const optionalAddOns: AddonItem[] = [{
   id: 'leather',
   name: 'Leather Seats',
@@ -28,15 +30,15 @@ const optionalAddOns: AddonItem[] = [{
   name: 'Window Tinting',
   price: 400
 }];
+
 const VehicleInfo: React.FC = () => {
-  const {
-    state,
-    dispatch
-  } = useFinance();
+  const { state, dispatch } = useFinance();
   const [isAddOnsOpen, setIsAddOnsOpen] = useState(false);
   const [customAddons, setCustomAddons] = useState<AddonItem[]>([]);
+  
   const selectedAddonsCount = Object.keys(state.selectedAddons).length;
   const selectedAddonsTotal = Object.values(state.selectedAddons).reduce((sum, item) => sum + item.price, 0);
+
   const handleAddOnToggle = (addOn: AddonItem) => {
     const newSelectedAddons = {
       ...state.selectedAddons
@@ -55,20 +57,27 @@ const VehicleInfo: React.FC = () => {
       payload: newSelectedAddons
     });
   };
+
   const handleCustomAddonAdd = (addon: AddonItem) => {
     setCustomAddons([...customAddons, addon]);
     handleAddOnToggle(addon);
   };
-  return <section className="mb-6">
+
+  return (
+    <section className="mb-6">
       <h2 className="text-xl font-bold text-[#1EAEDB] mb-4">Vehicle Info</h2>
       
       <div className="flex gap-4 mb-4">
-        <div className="w-1/3 aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-          <span className="text-gray-400">Vehicle Image</span>
+        <div className="w-1/3 aspect-video bg-gray-100 rounded-lg overflow-hidden">
+          <img 
+            src="/lovable-uploads/30e6bd69-7f65-45ee-b3a6-8cb91ded05ac.png"
+            alt="2022 Toyota RAV4"
+            className="w-full h-full object-cover"
+          />
         </div>
         
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900">2024 Sample Vehicle</h3>
+          <h3 className="text-lg font-semibold text-gray-900">2022 Toyota RAV4</h3>
           <div className="text-sm text-gray-500 mb-2">Preowned • 25,000 miles</div>
           <div className="text-xl font-bold text-[#1EAEDB]">
             {formatCurrency(state.carPrice)}
@@ -116,6 +125,8 @@ const VehicleInfo: React.FC = () => {
             </div>
           </div>}
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default VehicleInfo;
