@@ -10,12 +10,14 @@ import { cn } from '@/lib/utils';
 import LockButton from './LockButton';
 import { LockableField } from '../../types/financeTypes';
 import SimpleBarChart from './SummaryBarChart';
-
 const SummaryAndSave: React.FC = () => {
-  const { state, dispatch } = useFinance();
-  const { 
-    carPrice, 
-    paymentType, 
+  const {
+    state,
+    dispatch
+  } = useFinance();
+  const {
+    carPrice,
+    paymentType,
     loanDetails,
     tradeIn,
     taxesAndFees,
@@ -24,43 +26,43 @@ const SummaryAndSave: React.FC = () => {
     monthlyPayment,
     totalCost
   } = state;
-  
   const handleLockToggle = (field: LockableField, value: number) => {
     if (state.lockedField === field) {
-      dispatch({ type: 'LOCK_FIELD', payload: null });
+      dispatch({
+        type: 'LOCK_FIELD',
+        payload: null
+      });
     } else {
-      dispatch({ type: 'LOCK_FIELD', payload: { field, value } });
+      dispatch({
+        type: 'LOCK_FIELD',
+        payload: {
+          field,
+          value
+        }
+      });
     }
   };
-
   const [isExpanded, setIsExpanded] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [isEditingAPR, setIsEditingAPR] = useState(false);
-
-  const amountFinanced = carPrice + (addonsTotal || 0) - (discounts || 0) + 
-    taxesAndFees.taxAmount + taxesAndFees.totalFees - 
-    loanDetails.downPayment - tradeIn.netValue;
-
-  const financeCharge = (monthlyPayment * loanDetails.termMonths) - amountFinanced;
-
+  const amountFinanced = carPrice + (addonsTotal || 0) - (discounts || 0) + taxesAndFees.taxAmount + taxesAndFees.totalFees - loanDetails.downPayment - tradeIn.netValue;
+  const financeCharge = monthlyPayment * loanDetails.termMonths - amountFinanced;
   const totalLoanCost = monthlyPayment * loanDetails.termMonths;
-
   const handleAPRChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
     dispatch({
       type: 'SET_LOAN_DETAILS',
-      payload: { interestRate: isNaN(value) ? 0 : value }
+      payload: {
+        interestRate: isNaN(value) ? 0 : value
+      }
     });
   };
-
   const handleSave = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
   };
-
   if (paymentType === 'cash') {
-    return (
-      <div className="bg-white rounded-xl shadow-md p-6 mb-28 animate-slide-in font-sans">
+    return <div className="bg-white rounded-xl shadow-md p-6 mb-28 animate-slide-in font-sans">
         <h2 className="text-xl font-extrabold mb-4 text-[#1EAEDB]">Purchase Summary</h2>
         <div className="border rounded-lg p-4 bg-[#F7F8FB] space-y-4">
           <div className="flex justify-between items-center text-lg">
@@ -68,12 +70,9 @@ const SummaryAndSave: React.FC = () => {
             <span className="font-extrabold text-[#1EAEDB]">{formatCurrency(totalCost)}</span>
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="bg-white rounded-xl shadow-md p-6 mb-28 animate-slide-in font-sans">
+  return <div className="bg-white rounded-xl shadow-md p-6 mb-28 animate-slide-in font-sans">
       <h2 className="text-xl font-extrabold mb-4 text-[#1EAEDB]">Finance Summary</h2>
       
       {/* Summary Cards */}
@@ -113,26 +112,10 @@ const SummaryAndSave: React.FC = () => {
         <label className="block text-sm font-semibold text-[#222] mb-2">
           APR (Interest Rate)
         </label>
-        {isEditingAPR ? (
-          <Input
-            type="number"
-            value={loanDetails.interestRate || ''}
-            onChange={handleAPRChange}
-            onBlur={() => setIsEditingAPR(false)}
-            className="max-w-[200px]"
-            placeholder="Enter APR"
-            step="0.1"
-          />
-        ) : (
-          <Button
-            variant="outline"
-            onClick={() => setIsEditingAPR(true)}
-            className="text-left justify-start hover:bg-[#F7F8FB]"
-          >
+        {isEditingAPR ? <Input type="number" value={loanDetails.interestRate || ''} onChange={handleAPRChange} onBlur={() => setIsEditingAPR(false)} className="max-w-[200px]" placeholder="Enter APR" step="0.1" /> : <Button variant="outline" onClick={() => setIsEditingAPR(true)} className="text-left justify-start hover:bg-[#F7F8FB]">
             {loanDetails.interestRate ? `${loanDetails.interestRate}%` : 'Click to set APR'}
-          </Button>
-        )}
-        <p className="text-sm text-[#8E9196] mt-1">Ask your lender or use a rough estimate.</p>
+          </Button>}
+        
       </div>
 
       {/* Cost Breakdown Chart */}
@@ -142,15 +125,9 @@ const SummaryAndSave: React.FC = () => {
       </div>
 
       {/* Receipt Block */}
-      <div className={cn(
-        "border rounded-lg overflow-hidden transition-all duration-300",
-        isExpanded ? "h-auto" : "h-24"
-      )}>
+      <div className={cn("border rounded-lg overflow-hidden transition-all duration-300", isExpanded ? "h-auto" : "h-24")}>
         {/* Header/Toggle */}
-        <button 
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full p-4 flex justify-between items-center bg-[#F7F8FB] hover:bg-gray-100 transition-colors"
-        >
+        <button onClick={() => setIsExpanded(!isExpanded)} className="w-full p-4 flex justify-between items-center bg-[#F7F8FB] hover:bg-gray-100 transition-colors">
           <span className="font-semibold text-[#222]">Payment Details</span>
           <span className="text-[#1EAEDB]">{isExpanded ? 'Hide' : 'Show'}</span>
         </button>
@@ -196,10 +173,7 @@ const SummaryAndSave: React.FC = () => {
               <span className="text-xl font-extrabold text-[#1EAEDB]">
                 {formatCurrency(monthlyPayment)}
               </span>
-              <LockButton
-                isLocked={state.lockedField === 'monthlyPayment'}
-                onToggle={() => handleLockToggle('monthlyPayment', monthlyPayment)}
-              />
+              <LockButton isLocked={state.lockedField === 'monthlyPayment'} onToggle={() => handleLockToggle('monthlyPayment', monthlyPayment)} />
             </div>
           </div>
           <div className="flex justify-between items-center pt-2">
@@ -208,34 +182,21 @@ const SummaryAndSave: React.FC = () => {
               <span className="text-xl font-extrabold text-[#1EAEDB]">
                 {formatCurrency(totalCost)}
               </span>
-              <LockButton
-                isLocked={state.lockedField === 'totalCost'}
-                onToggle={() => handleLockToggle('totalCost', totalCost)}
-              />
+              <LockButton isLocked={state.lockedField === 'totalCost'} onToggle={() => handleLockToggle('totalCost', totalCost)} />
             </div>
           </div>
         </div>
       </div>
 
       {/* Payment Tip */}
-      {monthlyPayment > 500 && (
-        <div className="mt-6">
-          <TipCard 
-            tipText="💡 Want a lower monthly payment? Try increasing your down payment or extending your loan term."
-            tipType="info"
-            dismissible={false}
-          />
-        </div>
-      )}
+      {monthlyPayment > 500 && <div className="mt-6">
+          <TipCard tipText="💡 Want a lower monthly payment? Try increasing your down payment or extending your loan term." tipType="info" dismissible={false} />
+        </div>}
 
       {/* Toast */}
-      {showToast && (
-        <div className="fixed bottom-24 left-0 right-0 mx-auto w-4/5 max-w-sm bg-[#1EAEDB] text-white p-3 rounded-lg shadow-lg animate-fade-in flex items-center justify-center z-50">
+      {showToast && <div className="fixed bottom-24 left-0 right-0 mx-auto w-4/5 max-w-sm bg-[#1EAEDB] text-white p-3 rounded-lg shadow-lg animate-fade-in flex items-center justify-center z-50">
           <span className="font-bold">Estimate saved!</span>
-        </div>
-      )}
-    </div>
-  );
+        </div>}
+    </div>;
 };
-
 export default SummaryAndSave;
