@@ -19,26 +19,29 @@ const SummaryBanner: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Calculate estimate completion percentage
+  // Calculate estimate completion percentage based on all relevant fields
   const calculateEstimateCompletion = () => {
     if (paymentType === 'cash') return 100;
     
     let completionScore = 0;
-    let items = 0;
+    let totalItems = 0;
     
-    // Loan term selected
-    if (state.loanDetails.termMonths > 0) {
-      completionScore += 1;
-    }
-    items += 1;
+    // Required fields
+    const requiredFields = [
+      { value: state.carPrice > 0, weight: 30 },
+      { value: state.loanDetails.termMonths > 0, weight: 25 },
+      { value: state.loanDetails.downPayment > 0, weight: 25 },
+      { value: state.loanDetails.interestRate > 0, weight: 20 }
+    ];
     
-    // Down payment entered
-    if (state.loanDetails.downPayment > 0) {
-      completionScore += 1;
-    }
-    items += 1;
+    requiredFields.forEach(field => {
+      if (field.value) {
+        completionScore += field.weight;
+      }
+      totalItems += field.weight;
+    });
     
-    return Math.round((completionScore / items) * 100);
+    return Math.round((completionScore / totalItems) * 100);
   };
 
   const completionPercentage = calculateEstimateCompletion();
@@ -49,12 +52,20 @@ const SummaryBanner: React.FC = () => {
       ${compact ? "fixed top-0 left-0 right-0" : "relative"}
     `}>
       <div className="max-w-md mx-auto flex flex-col px-3 py-2">
-        <div className="flex items-center justify-between mb-2">
-          {/* Left: Label */}
+        <div className="flex items-center justify-between">
+          {/* Left: Labels */}
           <div className="flex flex-col">
             <span className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}>
               {paymentType === 'cash' ? 'Estimated Taxes & Fees' : 'Estimated Payment'}
             </span>
+            {paymentType !== 'cash' && (
+              <div className="flex items-center gap-2 mt-0.5">
+                <Progress value={completionPercentage} className="h-1.5 w-24" />
+                <span className="text-xs text-[#8E9196]">
+                  Estimate Confidence: {completionPercentage}%
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Right: Payment Info */}
@@ -102,21 +113,15 @@ const SummaryBanner: React.FC = () => {
           </div>
         </div>
 
-        {/* Estimate Confidence Bar */}
-        {paymentType !== 'cash' && (
+        {/* Missing Fields Hint */}
+        {paymentType !== 'cash' && completionPercentage < 100 && (
           <div className="mt-1">
-            <Progress value={completionPercentage} className="h-1.5" />
-            <div className="flex justify-between items-center mt-1">
-              <span className="text-xs text-[#8E9196]">
-                Estimate Confidence: {completionPercentage}%
-              </span>
-              {completionPercentage < 100 && (
-                <span className="text-xs text-[#1EAEDB]">
-                  {!state.loanDetails.termMonths && "Add loan term"}
-                  {!state.loanDetails.downPayment && "Add down payment"}
-                </span>
-              )}
-            </div>
+            <span className="text-xs text-[#1EAEDB]">
+              {!state.carPrice && "Enter vehicle price • "}
+              {!state.loanDetails.termMonths && "Add loan term • "}
+              {!state.loanDetails.downPayment && "Add down payment • "}
+              {!state.loanDetails.interestRate && "Add interest rate"}
+            </span>
           </div>
         )}
       </div>
