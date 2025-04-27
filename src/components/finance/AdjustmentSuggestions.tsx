@@ -81,7 +81,7 @@ const AdjustmentSuggestions: React.FC = () => {
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
           <Input type="number" value={loanDetails.monthlyPaymentGoal || ''} onChange={handlePaymentGoalChange} className="pl-8" placeholder="Enter target monthly payment" />
         </div>
-        <label className="text-sm font-semibold text-gray-700">
+        <label className="text-sm font-semibold text-gray-700 pt-2">
           Suggestions to meet your goal
         </label>
       </div>
