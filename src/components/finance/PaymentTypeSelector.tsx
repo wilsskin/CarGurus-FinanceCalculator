@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useFinance } from "../../context/finance";
 import { PaymentType } from "../../types/financeTypes";
@@ -46,9 +47,9 @@ const PaymentTypeSelector: React.FC = () => {
   return <div className="mb-8">
       <h2 className="text-xl font-bold mb-6 text-[#1EAEDB]">How Are You Paying?</h2>
       <Tabs value={paymentType} onValueChange={handleTabChange} className="w-full" data-testid="PaymentTabs">
-        <TabsList className="w-full grid grid-cols-3 mb-6 bg-[#F5F7F9] py-4 px-2 rounded-lg">
+        <TabsList className="w-full grid grid-cols-3 mb-6 bg-[#F5F7F9] p-0 rounded-lg h-12">
           {paymentTabs.map(tab => <TabsTrigger key={tab.value} value={tab.value} className={`
-                py-3 px-4 rounded-md text-sm font-medium transition-all duration-200
+                h-full rounded-md text-sm font-medium transition-all duration-200
                 ${paymentType === tab.value ? "bg-white text-[#1EAEDB] shadow-sm" : "text-[#555] hover:bg-[#E9F6FB]/50"}
                 ${animationDelay ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}
               `} style={{
