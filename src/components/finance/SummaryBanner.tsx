@@ -4,7 +4,6 @@ import { useFinance } from '../../context/FinanceContext';
 import { formatCurrency } from '../../utils/financeCalculator';
 import { Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
-import { Progress } from '../ui/progress';
 
 const SummaryBanner: React.FC = () => {
   const { state } = useFinance();
@@ -26,7 +25,7 @@ const SummaryBanner: React.FC = () => {
     let completionScore = 0;
     let totalItems = 0;
     
-    // Required fields
+    // Required fields with weights
     const requiredFields = [
       { value: state.carPrice > 0, weight: 30 },
       { value: state.loanDetails.termMonths > 0, weight: 25 },
@@ -46,6 +45,9 @@ const SummaryBanner: React.FC = () => {
 
   const completionPercentage = calculateEstimateCompletion();
 
+  // Generate segments for the progress indicator
+  const segments = [25, 50, 75, 100];
+
   return (
     <div className={`
       w-full transition-all duration-300 border-b border-[#E6E8EB] shadow-sm bg-white z-30
@@ -54,17 +56,28 @@ const SummaryBanner: React.FC = () => {
       <div className="max-w-md mx-auto flex flex-col px-3 py-2">
         <div className="flex items-center justify-between">
           {/* Left: Labels */}
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-1">
             <span className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}>
               {paymentType === 'cash' ? 'Estimated Taxes & Fees' : 'Estimated Payment'}
             </span>
             {paymentType !== 'cash' && (
-              <div className="flex items-center gap-2 mt-0.5">
-                <Progress value={completionPercentage} className="h-1.5 w-24" />
+              <>
                 <span className="text-xs text-[#8E9196]">
                   Estimate Confidence: {completionPercentage}%
                 </span>
-              </div>
+                <div className="flex gap-1 h-1.5">
+                  {segments.map((segment, index) => (
+                    <div
+                      key={segment}
+                      className={`flex-1 rounded-full transition-colors duration-300 ${
+                        completionPercentage >= segment 
+                          ? 'bg-[#1EAEDB]' 
+                          : 'bg-[#E6E8EB]'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </>
             )}
           </div>
 
