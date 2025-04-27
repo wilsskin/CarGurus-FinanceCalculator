@@ -3,6 +3,7 @@ import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
 import { Card } from '../ui/card';
 import { Input } from '../ui/input';
+
 const AdjustmentSuggestions: React.FC = () => {
   const {
     state,
@@ -14,6 +15,7 @@ const AdjustmentSuggestions: React.FC = () => {
     monthlyPayment
   } = state;
   const paymentGoal = loanDetails.monthlyPaymentGoal;
+
   const handlePaymentGoalChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value) || 0;
     dispatch({
@@ -23,6 +25,7 @@ const AdjustmentSuggestions: React.FC = () => {
       }
     });
   };
+
   const suggestions = [];
   if (paymentGoal && monthlyPayment > paymentGoal) {
     // Calculate how much more down payment would be needed
@@ -70,16 +73,17 @@ const AdjustmentSuggestions: React.FC = () => {
       action: 'carPrice'
     });
   }
+
   return <Card className="p-4 bg-[#F7F8FB] border-[#E6E8EB] mt-4">
       <p className="font-medium text-[#1EAEDB] mb-2">🎯 Monthly Payment Goal</p>
       <div className="space-y-3 mb-3">
-        <label className="text-sm font-semibold text-gray-700">
-          Monthly Payment Goal
-        </label>
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
           <Input type="number" value={loanDetails.monthlyPaymentGoal || ''} onChange={handlePaymentGoalChange} className="pl-8" placeholder="Enter target monthly payment" />
         </div>
+        <label className="text-sm font-semibold text-gray-700">
+          Suggestions to meet your goal
+        </label>
       </div>
       {paymentGoal && monthlyPayment > paymentGoal && <p className="text-sm text-[#222] mb-2">
           To reach your goal of {formatCurrency(paymentGoal)}/month (current: {formatCurrency(monthlyPayment)}/month):
@@ -92,4 +96,5 @@ const AdjustmentSuggestions: React.FC = () => {
       </ul>
     </Card>;
 };
+
 export default AdjustmentSuggestions;
