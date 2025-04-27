@@ -8,7 +8,7 @@ import { Progress } from '../ui/progress';
 
 const SummaryBanner: React.FC = () => {
   const { state } = useFinance();
-  const { monthlyPayment, totalCost, paymentType, loanDetails, tradeIn } = state;
+  const { monthlyPayment, totalCost, paymentType } = state;
   const [compact, setCompact] = useState(false);
   
   useEffect(() => {
@@ -27,19 +27,13 @@ const SummaryBanner: React.FC = () => {
     let items = 0;
     
     // Loan term selected
-    if (loanDetails.termMonths > 0) {
+    if (state.loanDetails.termMonths > 0) {
       completionScore += 1;
     }
     items += 1;
     
     // Down payment entered
-    if (loanDetails.downPayment > 0) {
-      completionScore += 1;
-    }
-    items += 1;
-    
-    // Trade-in value entered (optional)
-    if (tradeIn.value > 0) {
+    if (state.loanDetails.downPayment > 0) {
       completionScore += 1;
     }
     items += 1;
@@ -61,21 +55,6 @@ const SummaryBanner: React.FC = () => {
             <span className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}>
               {paymentType === 'cash' ? 'Estimated Taxes & Fees' : 'Estimated Payment'}
             </span>
-            
-            {/* Financial details - always show for non-cash payment types */}
-            {paymentType !== 'cash' && (
-              <div className="text-xs text-[#8E9196] mt-0.5 flex flex-wrap gap-1">
-                <span className="whitespace-nowrap">{loanDetails.termMonths / 12} years</span>
-                <span className="hidden sm:inline">•</span>
-                <span className="whitespace-nowrap">Down Payment: {formatCurrency(loanDetails.downPayment)}</span>
-                {tradeIn.netValue > 0 && (
-                  <>
-                    <span className="hidden sm:inline">•</span>
-                    <span className="whitespace-nowrap">{formatCurrency(tradeIn.netValue)} trade-in</span>
-                  </>
-                )}
-              </div>
-            )}
           </div>
 
           {/* Right: Payment Info */}
@@ -129,13 +108,12 @@ const SummaryBanner: React.FC = () => {
             <Progress value={completionPercentage} className="h-1.5" />
             <div className="flex justify-between items-center mt-1">
               <span className="text-xs text-[#8E9196]">
-                Estimate {completionPercentage}% complete
+                Estimate Confidence: {completionPercentage}%
               </span>
               {completionPercentage < 100 && (
                 <span className="text-xs text-[#1EAEDB]">
-                  {!loanDetails.termMonths && "Add loan term"}
-                  {!loanDetails.downPayment && "Add down payment"}
-                  {!tradeIn.value && "Add trade-in details"}
+                  {!state.loanDetails.termMonths && "Add loan term"}
+                  {!state.loanDetails.downPayment && "Add down payment"}
                 </span>
               )}
             </div>
