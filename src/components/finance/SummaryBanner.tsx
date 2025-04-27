@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { formatCurrency } from '../../utils/financeCalculator';
@@ -18,10 +17,8 @@ const SummaryBanner: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Calculate estimate completion percentage based on all relevant fields
   const calculateEstimateCompletion = () => {
     if (paymentType === 'cash') {
-      // For cash payments, consider taxes and fees
       let completionScore = 0;
       const requiredFields = [
         { value: state.carPrice > 0, weight: 25 },
@@ -37,12 +34,11 @@ const SummaryBanner: React.FC = () => {
         if (field.value) completionScore += field.weight;
       });
       
-      return Math.min(90, completionScore); // Cap at 90% for cash payments
+      return Math.min(90, completionScore);
     }
     
     let completionScore = 0;
     
-    // Required fields with weights for financing
     const requiredFields = [
       { value: state.carPrice > 0, weight: 20 },
       { value: state.loanDetails.termMonths > 0, weight: 15 },
@@ -60,13 +56,10 @@ const SummaryBanner: React.FC = () => {
       if (field.value) completionScore += field.weight;
     });
     
-    return Math.min(95, completionScore); // Cap at 95% even with all fields filled
+    return Math.min(95, completionScore);
   };
 
   const completionPercentage = calculateEstimateCompletion();
-
-  // Generate segments for the progress indicator
-  const segments = [25, 50, 75, 100];
 
   return (
     <div className={`
@@ -75,33 +68,21 @@ const SummaryBanner: React.FC = () => {
     `}>
       <div className="max-w-md mx-auto flex flex-col px-3 py-2">
         <div className="flex items-center justify-between">
-          {/* Left: Labels */}
           <div className="flex flex-col space-y-1">
             <span className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}>
               {paymentType === 'cash' ? 'Estimated Taxes & Fees' : 'Estimated Payment'}
             </span>
-            {paymentType !== 'cash' && (
-              <>
-                <span className="text-xs text-[#8E9196]">
-                  Estimate Confidence: {completionPercentage}%
-                </span>
-                <div className="flex gap-1 h-1.5">
-                  {segments.map((segment, index) => (
-                    <div
-                      key={segment}
-                      className={`flex-1 rounded-full transition-colors duration-300 ${
-                        completionPercentage >= segment 
-                          ? 'bg-[#1EAEDB]' 
-                          : 'bg-[#E6E8EB]'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
+            <span className="text-xs text-[#8E9196]">
+              Estimate Confidence: {completionPercentage}%
+            </span>
+            <div className="w-48 h-1 bg-[#E6E8EB] rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-[#1EAEDB] transition-all duration-300 rounded-full"
+                style={{ width: `${completionPercentage}%` }}
+              />
+            </div>
           </div>
 
-          {/* Right: Payment Info */}
           <div className="flex items-center gap-4">
             {paymentType === 'cash' ? (
               <div className="flex flex-col items-end min-w-[75px]">
@@ -146,7 +127,6 @@ const SummaryBanner: React.FC = () => {
           </div>
         </div>
 
-        {/* Missing Fields Hint */}
         {paymentType !== 'cash' && completionPercentage < 100 && (
           <div className="mt-1">
             <span className="text-xs text-[#1EAEDB]">
