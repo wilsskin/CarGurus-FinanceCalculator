@@ -89,11 +89,9 @@ const VehicleInfo: React.FC = () => {
         <button onClick={() => setIsAddOnsOpen(!isAddOnsOpen)} className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors">
           <div className="flex items-center gap-2">
             <span className="font-medium text-gray-700">Add-ons & Packages</span>
-            {selectedAddonsTotal > 0 && (
-              <span className="font-medium text-[#1EAEDB]">
-                ({formatCurrency(selectedAddonsTotal)})
-              </span>
-            )}
+            <span className="font-medium text-[#1EAEDB]">
+              ({formatCurrency(selectedAddonsTotal)})
+            </span>
           </div>
           <ChevronDown className={`w-5 h-5 transition-transform ${isAddOnsOpen ? 'rotate-180' : ''}`} />
         </button>
