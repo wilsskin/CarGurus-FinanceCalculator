@@ -1,4 +1,3 @@
-
 export type PaymentType = 'dealer' | 'outside' | 'cash';
 
 export interface TradeInInfo {
@@ -21,6 +20,7 @@ export interface LoanDetails {
   downPayment: number;
   termMonths: number;
   interestRate: number;
+  monthlyPaymentGoal?: number;
 }
 
 export interface AddonItem {
