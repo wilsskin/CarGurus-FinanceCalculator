@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useFinance } from "../../context/finance";
 import { PaymentType } from "../../types/financeTypes";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
+
 const paymentTabs = [{
   value: "dealer",
   label: "Dealer",
@@ -15,6 +16,7 @@ const paymentTabs = [{
   label: "Cash",
   description: "Cash payment simplifies the process"
 }] as const;
+
 const PaymentTypeSelector: React.FC = () => {
   const {
     state,
@@ -24,12 +26,14 @@ const PaymentTypeSelector: React.FC = () => {
     paymentType
   } = state;
   const [animationDelay, setAnimationDelay] = useState(true);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimationDelay(false);
     }, 400);
     return () => clearTimeout(timer);
   }, []);
+
   const handleTabChange = (newType: string) => {
     if (newType !== paymentType) {
       dispatch({
@@ -38,10 +42,11 @@ const PaymentTypeSelector: React.FC = () => {
       });
     }
   };
+
   return <div className="mb-8">
       <h2 className="text-xl font-bold mb-6 text-[#1EAEDB]">How Are You Paying?</h2>
       <Tabs value={paymentType} onValueChange={handleTabChange} className="w-full" data-testid="PaymentTabs">
-        <TabsList className="w-full grid grid-cols-3 mb-6 bg-[#F5F7F9] p-1 rounded-lg">
+        <TabsList className="w-full grid grid-cols-3 mb-6 bg-[#F5F7F9] py-2 px-2 rounded-lg">
           {paymentTabs.map(tab => <TabsTrigger key={tab.value} value={tab.value} className={`
                 py-3 px-4 rounded-md text-sm font-medium transition-all duration-200
                 ${paymentType === tab.value ? "bg-white text-[#1EAEDB] shadow-sm" : "text-[#555] hover:bg-[#E9F6FB]/50"}
@@ -59,4 +64,5 @@ const PaymentTypeSelector: React.FC = () => {
       </Tabs>
     </div>;
 };
+
 export default PaymentTypeSelector;
