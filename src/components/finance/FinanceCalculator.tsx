@@ -11,6 +11,7 @@ import SaveAndExport from './sections/SaveAndExport';
 import ScrollToTop from './ScrollToTop';
 import EditButton from './EditButton';
 import EstimatedRange from './sections/EstimatedRange';
+import SimpleBarChart from './SummaryBarChart';
 
 const FinanceCalculator: React.FC = () => {
   return (
