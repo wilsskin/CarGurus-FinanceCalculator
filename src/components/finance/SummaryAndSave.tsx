@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useFinance } from '../../context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
@@ -7,7 +8,6 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { cn } from '@/lib/utils';
-import SimpleBarChart from './SummaryBarChart';
 
 const SummaryAndSave: React.FC = () => {
   const {
@@ -87,8 +87,26 @@ const SummaryAndSave: React.FC = () => {
         )}
       </div>
 
-      {/* Payment Details - Always visible */}
-      <div className="space-y-4">
+      {/* Loan Term & Trade-in Summary */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <Clock className="w-4 h-4 text-[#8E9196]" />
+          <span className="text-sm text-[#222]">
+            {loanDetails.termMonths} month loan term
+          </span>
+        </div>
+        {tradeIn.netValue > 0 && (
+          <div className="flex items-center gap-2">
+            <PiggyBank className="w-4 h-4 text-[#8E9196]" />
+            <span className="text-sm text-[#222]">
+              Trade-in value: {formatCurrency(tradeIn.netValue)}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Payment Details Box */}
+      <div className="border rounded-lg p-4 space-y-4 mb-4">
         {/* Amount Financed */}
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2">
@@ -97,37 +115,43 @@ const SummaryAndSave: React.FC = () => {
           </div>
           <span className="font-medium">{formatCurrency(amountFinanced)}</span>
         </div>
-        <p className="text-sm text-[#8E9196] -mt-2">What you're borrowing after down payment and trade-in.</p>
 
         {/* Finance Charge */}
-        <div className="flex justify-between items-start pt-2">
+        <div className="flex justify-between items-start">
           <div className="flex items-center gap-2">
             <span className="font-semibold">Finance Charge</span>
             <Info className="h-4 w-4 text-[#8E9196]" />
           </div>
           <span className="font-medium">{formatCurrency(financeCharge)}</span>
         </div>
-        <p className="text-sm text-[#8E9196] -mt-2">This is the cost of borrowing the money.</p>
 
         {/* Total Loan Cost */}
-        <div className="flex justify-between items-start pt-2">
+        <div className="flex justify-between items-start">
           <div className="flex items-center gap-2">
             <span className="font-semibold">Total Loan Cost</span>
             <Info className="h-4 w-4 text-[#8E9196]" />
           </div>
           <span className="font-medium">{formatCurrency(totalLoanCost)}</span>
         </div>
-        <p className="text-sm text-[#8E9196] -mt-2">What you'll repay over the life of your loan.</p>
 
-        {/* Highlighted Values */}
-        <div className="border-t p-4 bg-[#F7F8FB] space-y-4 mt-4">
-          <div className="flex justify-between items-center">
+        {/* Down Payment */}
+        <div className="flex justify-between items-start pt-2 border-t">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Down Payment</span>
+            <Info className="h-4 w-4 text-[#8E9196]" />
+          </div>
+          <span className="font-medium">{formatCurrency(loanDetails.downPayment)}</span>
+        </div>
+
+        {/* Monthly Payment and Total Cost */}
+        <div className="pt-4 border-t">
+          <div className="flex justify-between items-center mb-2">
             <span className="text-lg font-bold text-[#222]">Monthly Payment</span>
             <span className="text-xl font-extrabold text-[#1EAEDB]">
               {formatCurrency(monthlyPayment)}
             </span>
           </div>
-          <div className="flex justify-between items-center pt-2">
+          <div className="flex justify-between items-center">
             <span className="text-lg font-bold text-[#222]">Total Cost</span>
             <span className="text-xl font-extrabold text-[#1EAEDB]">
               {formatCurrency(totalCost)}
@@ -138,19 +162,19 @@ const SummaryAndSave: React.FC = () => {
 
       {/* Payment Tip */}
       {monthlyPayment > 500 && (
-        <div className="mt-6">
-          <TipCard 
-            tipText="💡 Want a lower monthly payment? Try increasing your down payment or extending your loan term." 
-            tipType="info" 
-            dismissible={false} 
-          />
-        </div>
+        <TipCard 
+          tipText="💡 Want a lower monthly payment? Try increasing your down payment or extending your loan term." 
+          tipType="info" 
+          dismissible={false} 
+        />
       )}
 
       {/* Toast */}
-      {showToast && <div className="fixed bottom-24 left-0 right-0 mx-auto w-4/5 max-w-sm bg-[#1EAEDB] text-white p-3 rounded-lg shadow-lg animate-fade-in flex items-center justify-center z-50">
+      {showToast && (
+        <div className="fixed bottom-24 left-0 right-0 mx-auto w-4/5 max-w-sm bg-[#1EAEDB] text-white p-3 rounded-lg shadow-lg animate-fade-in flex items-center justify-center z-50">
           <span className="font-bold">Estimate saved!</span>
-        </div>}
+        </div>
+      )}
     </div>;
 };
 
