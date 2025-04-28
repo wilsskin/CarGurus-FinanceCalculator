@@ -76,7 +76,7 @@ const AdjustmentSuggestions: React.FC = () => {
 
   return <Card className="p-4 bg-[#F7F8FB] border-[#E6E8EB] mt-4">
       <p className="font-medium text-[#1EAEDB] mb-2">🎯 Monthly Payment Goal</p>
-      <div className="space-y-3 mb-3">
+      <div className="space-y-4 mb-4">
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
           <Input type="number" value={loanDetails.monthlyPaymentGoal || ''} onChange={handlePaymentGoalChange} className="pl-8" placeholder="Enter target monthly payment" />
