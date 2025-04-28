@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useFinance } from '../../context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
@@ -79,12 +78,7 @@ const SummaryAndSave: React.FC = () => {
               {loanDetails.termMonths} month loan term
             </span>
           </div>}
-        {tradeIn.netValue > 0 && <div className="flex items-center gap-2">
-            <PiggyBank className="w-4 h-4 text-[#8E9196]" />
-            <span className="text-sm text-[#222]">
-              Trade-in value: {formatCurrency(tradeIn.netValue)}
-            </span>
-          </div>}
+        {tradeIn.netValue > 0}
       </div>
 
       {/* Payment Details Box */}
@@ -126,15 +120,13 @@ const SummaryAndSave: React.FC = () => {
         </div>
 
         {/* Trade-In Value - Only display if user has input a trade-in */}
-        {tradeIn.netValue > 0 && (
-          <div className="flex justify-between items-start">
+        {tradeIn.netValue > 0 && <div className="flex justify-between items-start">
             <div className="flex items-center gap-2">
               <span className="font-semibold">Trade-In Value</span>
               <Info className="h-4 w-4 text-[#8E9196]" />
             </div>
             <span className="font-medium">{formatCurrency(tradeIn.netValue)}</span>
-          </div>
-        )}
+          </div>}
 
         {/* Monthly Payment and Total Cost */}
         <div className="pt-4 border-t">
