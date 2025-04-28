@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { cn } from '@/lib/utils';
 import SimpleBarChart from './SummaryBarChart';
+
 const SummaryAndSave: React.FC = () => {
   const {
     state,
@@ -24,12 +25,12 @@ const SummaryAndSave: React.FC = () => {
     monthlyPayment,
     totalCost
   } = state;
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [showToast, setShowToast] = useState(false);
   const [isEditingAPR, setIsEditingAPR] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const amountFinanced = carPrice + (addonsTotal || 0) - (discounts || 0) + taxesAndFees.taxAmount + taxesAndFees.totalFees - loanDetails.downPayment - tradeIn.netValue;
   const financeCharge = monthlyPayment * loanDetails.termMonths - amountFinanced;
   const totalLoanCost = monthlyPayment * loanDetails.termMonths;
+
   const handleAPRChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
     dispatch({
@@ -39,10 +40,12 @@ const SummaryAndSave: React.FC = () => {
       }
     });
   };
+
   const handleSave = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
   };
+
   if (paymentType === 'cash') {
     return <div className="bg-white rounded-xl shadow-md p-6 mb-28 animate-slide-in font-sans">
         <h2 className="text-xl font-extrabold mb-4 text-[#1EAEDB]">Purchase Summary</h2>
@@ -54,101 +57,70 @@ const SummaryAndSave: React.FC = () => {
         </div>
       </div>;
   }
-  return <div className="bg-white rounded-xl shadow-md p-6 mb-28 animate-slide-in font-sans">
+
+  return <div className="bg-white rounded-xl shadow-md p-6 mb-6 animate-slide-in font-sans">
       <h2 className="text-xl font-extrabold mb-4 text-[#1EAEDB]">Finance Summary</h2>
       
-      {/* Summary Cards */}
-      <div className="mb-6">
-        <Card className="bg-[#F7F8FB] border-none">
-          <div className="p-4">
-            <div className="grid grid-cols-3 gap-4">
-              {/* Loan Term */}
-              <div className="flex flex-col items-center p-3 bg-white rounded-lg">
-                <Clock className="w-5 h-5 text-[#1EAEDB] mb-1" />
-                <span className="text-xs text-gray-500">Term</span>
-                <span className="font-semibold text-sm">{loanDetails.termMonths / 12} years</span>
-              </div>
-
-              {/* Down Payment */}
-              <div className="flex flex-col items-center p-3 bg-white rounded-lg">
-                <PiggyBank className="w-5 h-5 text-[#1EAEDB] mb-1" />
-                <span className="text-xs text-gray-500">Down</span>
-                <span className="font-semibold text-sm">${formatCurrency(loanDetails.downPayment)}</span>
-              </div>
-
-              {/* Trade-in Value */}
-              <div className="flex flex-col items-center p-3 bg-white rounded-lg">
-                <WalletIcon className="w-5 h-5 text-[#1EAEDB] mb-1" />
-                <span className="text-xs text-gray-500">Trade-in</span>
-                <span className="font-semibold text-sm">
-                  {tradeIn.netValue > 0 ? `$${formatCurrency(tradeIn.netValue)}` : '-'}
-                </span>
-              </div>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      {/* APR Input */}
+      {/* APR Input - Full width white box */}
       <div className="mb-6">
         <label className="block text-sm font-semibold text-[#222] mb-2">
           APR (Interest Rate)
         </label>
-        {isEditingAPR ? <Input type="number" value={loanDetails.interestRate || ''} onChange={handleAPRChange} onBlur={() => setIsEditingAPR(false)} className="max-w-[200px]" placeholder="Enter APR" step="0.1" /> : <Button variant="outline" onClick={() => setIsEditingAPR(true)} className="text-left justify-start hover:bg-[#F7F8FB]">
+        {isEditingAPR ? (
+          <Input 
+            type="number" 
+            value={loanDetails.interestRate || ''} 
+            onChange={handleAPRChange} 
+            onBlur={() => setIsEditingAPR(false)} 
+            className="w-full"
+            placeholder="Enter APR" 
+            step="0.1" 
+          />
+        ) : (
+          <Button 
+            variant="outline" 
+            onClick={() => setIsEditingAPR(true)} 
+            className="w-full text-left justify-start hover:bg-[#F7F8FB]"
+          >
             {loanDetails.interestRate ? `${loanDetails.interestRate}%` : 'Click to set APR'}
-          </Button>}
-        
+          </Button>
+        )}
       </div>
 
-      {/* Cost Breakdown Chart */}
-      <div className="mb-6">
-        <h3 className="text-sm font-semibold text-[#222] mb-2">Cost Breakdown</h3>
-        <SimpleBarChart />
-      </div>
-
-      {/* Receipt Block */}
-      <div className={cn("border rounded-lg overflow-hidden transition-all duration-300", isExpanded ? "h-auto" : "h-24")}>
-        {/* Header/Toggle */}
-        <button onClick={() => setIsExpanded(!isExpanded)} className="w-full p-4 flex justify-between items-center bg-[#F7F8FB] hover:bg-gray-100 transition-colors">
-          <span className="font-semibold text-[#222]">Payment Details</span>
-          <span className="text-[#1EAEDB]">{isExpanded ? 'Hide' : 'Show'}</span>
-        </button>
-
-        {/* Receipt Content */}
-        <div className="p-4 space-y-4">
-          {/* Amount Financed */}
-          <div className="flex justify-between items-start">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">Amount Financed</span>
-              <Info className="h-4 w-4 text-[#8E9196]" />
-            </div>
-            <span className="font-medium">{formatCurrency(amountFinanced)}</span>
+      {/* Payment Details - Always visible */}
+      <div className="space-y-4">
+        {/* Amount Financed */}
+        <div className="flex justify-between items-start">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Amount Financed</span>
+            <Info className="h-4 w-4 text-[#8E9196]" />
           </div>
-          <p className="text-sm text-[#8E9196] -mt-2">What you're borrowing after down payment and trade-in.</p>
-
-          {/* Finance Charge */}
-          <div className="flex justify-between items-start pt-2">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">Finance Charge</span>
-              <Info className="h-4 w-4 text-[#8E9196]" />
-            </div>
-            <span className="font-medium">{formatCurrency(financeCharge)}</span>
-          </div>
-          <p className="text-sm text-[#8E9196] -mt-2">This is the cost of borrowing the money.</p>
-
-          {/* Total Loan Cost */}
-          <div className="flex justify-between items-start pt-2">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">Total Loan Cost</span>
-              <Info className="h-4 w-4 text-[#8E9196]" />
-            </div>
-            <span className="font-medium">{formatCurrency(totalLoanCost)}</span>
-          </div>
-          <p className="text-sm text-[#8E9196] -mt-2">What you'll repay over the life of your loan.</p>
+          <span className="font-medium">{formatCurrency(amountFinanced)}</span>
         </div>
+        <p className="text-sm text-[#8E9196] -mt-2">What you're borrowing after down payment and trade-in.</p>
 
-        {/* Highlighted Values without Lock Buttons */}
-        <div className="border-t p-4 bg-[#F7F8FB] space-y-4">
+        {/* Finance Charge */}
+        <div className="flex justify-between items-start pt-2">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Finance Charge</span>
+            <Info className="h-4 w-4 text-[#8E9196]" />
+          </div>
+          <span className="font-medium">{formatCurrency(financeCharge)}</span>
+        </div>
+        <p className="text-sm text-[#8E9196] -mt-2">This is the cost of borrowing the money.</p>
+
+        {/* Total Loan Cost */}
+        <div className="flex justify-between items-start pt-2">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Total Loan Cost</span>
+            <Info className="h-4 w-4 text-[#8E9196]" />
+          </div>
+          <span className="font-medium">{formatCurrency(totalLoanCost)}</span>
+        </div>
+        <p className="text-sm text-[#8E9196] -mt-2">What you'll repay over the life of your loan.</p>
+
+        {/* Highlighted Values */}
+        <div className="border-t p-4 bg-[#F7F8FB] space-y-4 mt-4">
           <div className="flex justify-between items-center">
             <span className="text-lg font-bold text-[#222]">Monthly Payment</span>
             <span className="text-xl font-extrabold text-[#1EAEDB]">
@@ -165,9 +137,15 @@ const SummaryAndSave: React.FC = () => {
       </div>
 
       {/* Payment Tip */}
-      {monthlyPayment > 500 && <div className="mt-6">
-          <TipCard tipText="💡 Want a lower monthly payment? Try increasing your down payment or extending your loan term." tipType="info" dismissible={false} />
-        </div>}
+      {monthlyPayment > 500 && (
+        <div className="mt-6">
+          <TipCard 
+            tipText="💡 Want a lower monthly payment? Try increasing your down payment or extending your loan term." 
+            tipType="info" 
+            dismissible={false} 
+          />
+        </div>
+      )}
 
       {/* Toast */}
       {showToast && <div className="fixed bottom-24 left-0 right-0 mx-auto w-4/5 max-w-sm bg-[#1EAEDB] text-white p-3 rounded-lg shadow-lg animate-fade-in flex items-center justify-center z-50">
@@ -175,4 +153,5 @@ const SummaryAndSave: React.FC = () => {
         </div>}
     </div>;
 };
+
 export default SummaryAndSave;

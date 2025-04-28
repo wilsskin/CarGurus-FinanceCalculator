@@ -79,7 +79,7 @@ const CarCost: React.FC = () => {
               </div>)}
           </div>}
         
-        {/* Taxes & Fees Section - With Inline Editing */}
+        {/* Taxes & Fees Section */}
         <div className="space-y-2 border-l-2 border-[#1EAEDB] pl-4">
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold text-gray-700">Taxes & Fees</span>
@@ -147,7 +147,7 @@ const CarCost: React.FC = () => {
         </div>
 
         {/* Custom Fee Section */}
-        <div className="space-y-2">
+        <div className="space-y-2 border-b border-gray-200 pb-6">
           <div className="flex justify-between items-center mb-4">
             <span className="text-sm font-semibold text-gray-700">Additional Fee</span>
             <button 
@@ -197,7 +197,7 @@ const CarCost: React.FC = () => {
           </div>
         </div>
 
-        {/* Trade-In Section - Moved here */}
+        {/* Trade-In Section */}
         <div>
           <div className="flex justify-between items-center mb-4">
             <span className="text-sm font-semibold text-gray-700">Trade-In Value</span>

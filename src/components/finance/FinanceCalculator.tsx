@@ -30,6 +30,10 @@ const FinanceCalculator: React.FC = () => {
           <SummaryAndSave />
           <EstimatedRange />
           <SaveAndExport />
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold text-[#222] mb-4">Cost Breakdown</h3>
+            <SimpleBarChart />
+          </div>
           <ScrollToTop />
         </div>
       </div>
