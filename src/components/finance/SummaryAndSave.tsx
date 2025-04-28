@@ -27,9 +27,18 @@ const SummaryAndSave: React.FC = () => {
   } = state;
   const [isEditingAPR, setIsEditingAPR] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const amountFinanced = carPrice + (addonsTotal || 0) - (discounts || 0) + taxesAndFees.taxAmount + taxesAndFees.totalFees - loanDetails.downPayment - tradeIn.netValue;
-  const financeCharge = monthlyPayment * loanDetails.termMonths - amountFinanced;
-  const totalLoanCost = monthlyPayment * loanDetails.termMonths;
+  
+  // Calculate the amount financed properly (verify calculation)
+  const amountFinanced = carPrice + (addonsTotal || 0) - (discounts || 0) + 
+                       taxesAndFees.taxAmount + taxesAndFees.totalFees - 
+                       loanDetails.downPayment - tradeIn.netValue;
+  
+  // Finance charge is the total cost of the loan minus the amount financed
+  const financeCharge = loanDetails.termMonths && loanDetails.interestRate ? 
+                        (monthlyPayment * loanDetails.termMonths - amountFinanced) : 0;
+  
+  const totalLoanCost = loanDetails.termMonths && loanDetails.interestRate ? 
+                        (monthlyPayment * loanDetails.termMonths) : amountFinanced;
 
   const handleAPRChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
@@ -45,6 +54,9 @@ const SummaryAndSave: React.FC = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
   };
+
+  const noLoanDetailsProvided = 
+    !loanDetails.termMonths || !loanDetails.interestRate || loanDetails.interestRate === 0;
 
   if (paymentType === 'cash') {
     return <div className="bg-white rounded-xl shadow-md p-6 mb-28 animate-slide-in font-sans">
@@ -82,19 +94,21 @@ const SummaryAndSave: React.FC = () => {
             onClick={() => setIsEditingAPR(true)} 
             className="w-full text-left justify-start hover:bg-[#F7F8FB]"
           >
-            {loanDetails.interestRate ? `${loanDetails.interestRate}%` : 'Click to set APR'}
+            {loanDetails.interestRate ? `${loanDetails.interestRate}%` : 'Set APR or select a credit score'}
           </Button>
         )}
       </div>
 
       {/* Loan Term & Trade-in Summary */}
       <div className="mb-6">
-        <div className="flex items-center gap-2 mb-2">
-          <Clock className="w-4 h-4 text-[#8E9196]" />
-          <span className="text-sm text-[#222]">
-            {loanDetails.termMonths} month loan term
-          </span>
-        </div>
+        {loanDetails.termMonths > 0 && (
+          <div className="flex items-center gap-2 mb-2">
+            <Clock className="w-4 h-4 text-[#8E9196]" />
+            <span className="text-sm text-[#222]">
+              {loanDetails.termMonths} month loan term
+            </span>
+          </div>
+        )}
         {tradeIn.netValue > 0 && (
           <div className="flex items-center gap-2">
             <PiggyBank className="w-4 h-4 text-[#8E9196]" />
@@ -122,7 +136,7 @@ const SummaryAndSave: React.FC = () => {
             <span className="font-semibold">Finance Charge</span>
             <Info className="h-4 w-4 text-[#8E9196]" />
           </div>
-          <span className="font-medium">{formatCurrency(financeCharge)}</span>
+          <span className="font-medium">{noLoanDetailsProvided ? 'N/A' : formatCurrency(financeCharge)}</span>
         </div>
 
         {/* Total Loan Cost */}
@@ -131,7 +145,7 @@ const SummaryAndSave: React.FC = () => {
             <span className="font-semibold">Total Loan Cost</span>
             <Info className="h-4 w-4 text-[#8E9196]" />
           </div>
-          <span className="font-medium">{formatCurrency(totalLoanCost)}</span>
+          <span className="font-medium">{noLoanDetailsProvided ? formatCurrency(amountFinanced) : formatCurrency(totalLoanCost)}</span>
         </div>
 
         {/* Down Payment */}
@@ -148,7 +162,7 @@ const SummaryAndSave: React.FC = () => {
           <div className="flex justify-between items-center mb-2">
             <span className="text-lg font-bold text-[#222]">Monthly Payment</span>
             <span className="text-xl font-extrabold text-[#1EAEDB]">
-              {formatCurrency(monthlyPayment)}
+              {noLoanDetailsProvided ? 'Fill loan details' : formatCurrency(monthlyPayment)}
             </span>
           </div>
           <div className="flex justify-between items-center">
@@ -161,7 +175,14 @@ const SummaryAndSave: React.FC = () => {
       </div>
 
       {/* Payment Tip */}
-      {monthlyPayment > 500 && (
+      {noLoanDetailsProvided && (
+        <TipCard 
+          tipText="💡 To calculate your monthly payment, please complete your loan details: term, down payment, and APR." 
+          tipType="info" 
+          dismissible={false} 
+        />
+      )}
+      {!noLoanDetailsProvided && monthlyPayment > 500 && (
         <TipCard 
           tipText="💡 Want a lower monthly payment? Try increasing your down payment or extending your loan term." 
           tipType="info" 

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useFinance } from '@/context/finance';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -54,6 +55,9 @@ const MyFinanceInfo: React.FC = () => {
               ))}
             </SelectContent>
           </Select>
+          <p className="text-xs text-gray-500">
+            Your credit score helps us suggest an appropriate APR for your loan.
+          </p>
         </div>
         
         {/* Loan Term */}
@@ -82,6 +86,9 @@ const MyFinanceInfo: React.FC = () => {
                 </button>
               ))}
             </div>
+            <p className="text-xs text-gray-500">
+              Select a term to calculate your estimated monthly payment.
+            </p>
           </div>
         )}
         
@@ -101,7 +108,9 @@ const MyFinanceInfo: React.FC = () => {
             />
           </div>
           <p className="text-sm text-gray-500">
-            {state.loanDetails.downPayment > 0 && `${Math.round((state.loanDetails.downPayment / state.carPrice) * 100)}% of vehicle price`}
+            {state.loanDetails.downPayment > 0 && state.carPrice > 0 && 
+              `${Math.round((state.loanDetails.downPayment / state.carPrice) * 100)}% of vehicle price`
+            }
           </p>
         </div>
       </div>

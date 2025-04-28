@@ -5,7 +5,7 @@ import {
   calculateLoanAmount,
   calculateTotalLoanCost
 } from '../../../utils/financeCalculator';
-import { DEFAULT_INTEREST_RATE, DEFAULT_ZIP_CODE } from '../initialState';
+import { DEFAULT_ZIP_CODE } from '../initialState';
 
 export const calculationsReducer = (state: FinanceCalculatorState): FinanceCalculatorState => {
   // Skip detailed calculations if payment type is cash
@@ -32,23 +32,33 @@ export const calculationsReducer = (state: FinanceCalculatorState): FinanceCalcu
     state.taxesAndFees.totalFees
   );
   
-  // Calculate monthly payment
-  const monthlyPayment = calculateMonthlyPayment(
-    loanAmount,
-    state.loanDetails.interestRate,
-    state.loanDetails.termMonths
-  );
+  // Only calculate monthly payment if we have all necessary inputs
+  let monthlyPayment = 0;
+  if (state.loanDetails.termMonths > 0 && state.loanDetails.interestRate > 0) {
+    monthlyPayment = calculateMonthlyPayment(
+      loanAmount,
+      state.loanDetails.interestRate,
+      state.loanDetails.termMonths
+    );
+  }
   
   // Calculate total cost
-  const totalLoanCost = calculateTotalLoanCost(monthlyPayment, state.loanDetails.termMonths);
-  const totalCost = totalLoanCost + state.loanDetails.downPayment;
+  let totalCost = state.loanDetails.downPayment;
+  if (monthlyPayment > 0 && state.loanDetails.termMonths > 0) {
+    const totalLoanCost = calculateTotalLoanCost(monthlyPayment, state.loanDetails.termMonths);
+    totalCost += totalLoanCost;
+  } else {
+    // If we can't calculate monthly payments, just show the total amount to finance
+    totalCost += loanAmount;
+  }
   
   // Calculate estimate accuracy based on filled fields
   let estimateAccuracy = 60; // Base accuracy
   
   // Improve accuracy as more fields are filled with meaningful values
   if (state.loanDetails.downPayment > 0) estimateAccuracy += 5;
-  if (state.loanDetails.interestRate !== DEFAULT_INTEREST_RATE) estimateAccuracy += 10;
+  if (state.loanDetails.interestRate > 0) estimateAccuracy += 10;
+  if (state.loanDetails.termMonths > 0) estimateAccuracy += 10;
   if (state.tradeIn.value > 0) estimateAccuracy += 5;
   if (state.zipCode !== DEFAULT_ZIP_CODE) estimateAccuracy += 5;
   if (state.paymentType === 'outside') estimateAccuracy += 5;
