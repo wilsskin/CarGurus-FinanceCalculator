@@ -88,7 +88,7 @@ const CarCost: React.FC = () => {
           </div>
           
           <div className="flex justify-between items-center text-sm">
-            <span className="text-gray-600">Sales Tax Rate</span>
+            <span className="text-gray-600">Sales Tax Rate ({state.taxesAndFees.taxRate}%)</span>
             {editingTaxes ? (
               <div className="relative w-24">
                 <Input
@@ -102,7 +102,7 @@ const CarCost: React.FC = () => {
                 />
               </div>
             ) : (
-              <span className="font-medium text-[#1EAEDB]">{state.taxesAndFees.taxRate}%</span>
+              <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.taxAmount)}</span>
             )}
           </div>
 
