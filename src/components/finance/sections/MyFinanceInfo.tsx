@@ -4,6 +4,7 @@ import { useFinance } from '@/context/finance';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import AdjustmentSuggestions from '../AdjustmentSuggestions';
+
 const creditScoreRanges = [{
   label: 'Excellent (720+)',
   value: '720'
@@ -17,6 +18,7 @@ const creditScoreRanges = [{
   label: 'Poor (Below 630)',
   value: '629'
 }];
+
 const MyFinanceInfo: React.FC = () => {
   const {
     state,
@@ -66,7 +68,7 @@ const MyFinanceInfo: React.FC = () => {
         </div>
         
         {/* Loan Term */}
-        {state.paymentType !== 'cash' && <div className="space-y-1.5">
+        <div className="space-y-1.5">
             <label className="block text-sm font-semibold text-gray-700">
               Loan Term
             </label>
@@ -84,7 +86,7 @@ const MyFinanceInfo: React.FC = () => {
                 </button>)}
             </div>
             
-          </div>}
+          </div>
         
         {/* Down Payment Field */}
         <div className="space-y-1.5">
