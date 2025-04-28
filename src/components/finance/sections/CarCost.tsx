@@ -6,11 +6,9 @@ import { Label } from '@/components/ui/label';
 import { Pencil } from 'lucide-react';
 
 const CarCost: React.FC = () => {
-  const {
-    state,
-    dispatch
-  } = useFinance();
+  const { state, dispatch } = useFinance();
   const [showTradeIn, setShowTradeIn] = useState(false);
+  const [editingTaxes, setEditingTaxes] = useState(false);
 
   const handleTradeInValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value) || 0;
@@ -40,6 +38,23 @@ const CarCost: React.FC = () => {
     });
   };
 
+  const handleTaxRateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const taxRate = parseFloat(event.target.value) || 0;
+    const taxAmount = (state.carPrice * taxRate) / 100;
+    dispatch({
+      type: 'SET_TAXES_AND_FEES',
+      payload: { taxRate, taxAmount }
+    });
+  };
+
+  const handleFeeChange = (fee: keyof typeof state.taxesAndFees, value: string) => {
+    const numValue = parseFloat(value) || 0;
+    dispatch({
+      type: 'SET_TAXES_AND_FEES',
+      payload: { [fee]: numValue }
+    });
+  };
+
   return <section className="bg-white rounded-xl shadow-md p-6 mb-6">
       <h2 className="text-xl font-extrabold mb-6 text-[#1EAEDB]">Car Cost</h2>
       
@@ -59,29 +74,70 @@ const CarCost: React.FC = () => {
               </div>)}
           </div>}
         
-        {/* Taxes & Fees Section - Redesigned */}
+        {/* Taxes & Fees Section - With Inline Editing */}
         <div className="space-y-2 border-l-2 border-[#1EAEDB] pl-4">
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold text-gray-700">Taxes & Fees</span>
             <button 
-              onClick={() => window.location.href = '/#taxes-and-fees'} 
+              onClick={() => setEditingTaxes(!editingTaxes)} 
               className="p-1.5 rounded-full hover:bg-[#E9F6FB] transition-colors"
               aria-label="Edit taxes and fees"
             >
               <Pencil className="w-4 h-4 text-[#1EAEDB]" />
             </button>
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Sales Tax ({state.taxesAndFees.taxRate}%)</span>
-            <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.taxAmount)}</span>
+          
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-gray-600">Sales Tax Rate</span>
+            {editingTaxes ? (
+              <div className="relative w-24">
+                <Input
+                  type="number"
+                  value={state.taxesAndFees.taxRate}
+                  onChange={handleTaxRateChange}
+                  className="h-8 px-2 text-right"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                />
+              </div>
+            ) : (
+              <span className="font-medium text-[#1EAEDB]">{state.taxesAndFees.taxRate}%</span>
+            )}
           </div>
-          <div className="flex justify-between text-sm">
+
+          <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600">Registration Fee</span>
-            <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.registrationFee)}</span>
+            {editingTaxes ? (
+              <div className="relative w-24">
+                <Input
+                  type="number"
+                  value={state.taxesAndFees.registrationFee}
+                  onChange={(e) => handleFeeChange('registrationFee', e.target.value)}
+                  className="h-8 px-2 text-right"
+                  min="0"
+                />
+              </div>
+            ) : (
+              <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.registrationFee)}</span>
+            )}
           </div>
-          <div className="flex justify-between text-sm">
+
+          <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600">Documentation Fee</span>
-            <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.documentFee)}</span>
+            {editingTaxes ? (
+              <div className="relative w-24">
+                <Input
+                  type="number"
+                  value={state.taxesAndFees.documentFee}
+                  onChange={(e) => handleFeeChange('documentFee', e.target.value)}
+                  className="h-8 px-2 text-right"
+                  min="0"
+                />
+              </div>
+            ) : (
+              <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.documentFee)}</span>
+            )}
           </div>
         </div>
 
