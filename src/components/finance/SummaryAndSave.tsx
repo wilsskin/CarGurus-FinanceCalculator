@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useFinance } from '../../context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
@@ -66,7 +67,7 @@ const SummaryAndSave: React.FC = () => {
           APR (Interest Rate)
         </label>
         {isEditingAPR ? <Input type="number" value={loanDetails.interestRate || ''} onChange={handleAPRChange} onBlur={() => setIsEditingAPR(false)} className="w-full" placeholder="Enter APR" step="0.1" /> : <Button variant="outline" onClick={() => setIsEditingAPR(true)} className="w-full text-left justify-start hover:bg-[#F7F8FB]">
-            {loanDetails.interestRate ? `${loanDetails.interestRate}%` : 'Set APR or select a credit score'}
+            {loanDetails.interestRate ? `${loanDetails.interestRate}%` : 'Set APR'}
           </Button>}
       </div>
 
@@ -123,6 +124,17 @@ const SummaryAndSave: React.FC = () => {
           </div>
           <span className="font-medium">{formatCurrency(loanDetails.downPayment)}</span>
         </div>
+
+        {/* Trade-In Value - Only display if user has input a trade-in */}
+        {tradeIn.netValue > 0 && (
+          <div className="flex justify-between items-start">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">Trade-In Value</span>
+              <Info className="h-4 w-4 text-[#8E9196]" />
+            </div>
+            <span className="font-medium">{formatCurrency(tradeIn.netValue)}</span>
+          </div>
+        )}
 
         {/* Monthly Payment and Total Cost */}
         <div className="pt-4 border-t">

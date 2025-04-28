@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useFinance } from '@/context/finance';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -21,6 +22,12 @@ const MyFinanceInfo: React.FC = () => {
     state,
     dispatch
   } = useFinance();
+
+  // Don't render this section if payment type is cash
+  if (state.paymentType === 'cash') {
+    return null;
+  }
+
   const handleCreditScoreChange = (value: string) => {
     dispatch({
       type: 'SET_CREDIT_SCORE',

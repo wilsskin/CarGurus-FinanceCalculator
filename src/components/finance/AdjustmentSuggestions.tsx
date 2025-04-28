@@ -51,27 +51,11 @@ const AdjustmentSuggestions: React.FC = () => {
       text: `Look for vehicles around ${formatCurrency(suggestedPrice)} to meet your monthly payment goal`,
       action: 'carPrice'
     });
-  } else if (paymentGoal) {
-    // Show suggestions when payment goal is set but not exceeded
+  } else if (paymentGoal && monthlyPayment <= paymentGoal) {
+    // The user has met their monthly payment goal
     suggestions.push({
-      text: `Increase your down payment to ${formatCurrency(loanDetails.downPayment + 2000)}`,
-      action: 'downPayment'
-    });
-
-    // Suggest term adjustment if not at max
-    if (loanDetails.termMonths < 84) {
-      const suggestedTerm = Math.min(84, loanDetails.termMonths + 12);
-      suggestions.push({
-        text: `Extend your loan term to ${suggestedTerm / 12} years`,
-        action: 'termMonths'
-      });
-    }
-
-    // Suggest price adjustment
-    const suggestedPrice = carPrice - 2000;
-    suggestions.push({
-      text: `Look for vehicles around ${formatCurrency(suggestedPrice)}`,
-      action: 'carPrice'
+      text: `You hit your monthly goal!`,
+      action: 'goalAchieved'
     });
   }
 
