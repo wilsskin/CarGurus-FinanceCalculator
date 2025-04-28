@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
-import { ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+
 const CarCost: React.FC = () => {
   const {
     state,
     dispatch
   } = useFinance();
-  const [isTaxesOpen, setIsTaxesOpen] = useState(false);
   const [showTradeIn, setShowTradeIn] = useState(false);
+
   const handleTradeInValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value) || 0;
     dispatch({
@@ -36,9 +36,7 @@ const CarCost: React.FC = () => {
       payload: value
     });
   };
-  const handleTaxesToggle = () => {
-    setIsTaxesOpen(!isTaxesOpen);
-  };
+
   return <section className="bg-white rounded-xl shadow-md p-6 mb-6">
       <h2 className="text-xl font-extrabold mb-6 text-[#1EAEDB]">Car Cost</h2>
       
@@ -58,6 +56,27 @@ const CarCost: React.FC = () => {
               </div>)}
           </div>}
         
+        {/* Taxes & Fees Section - Redesigned */}
+        <div className="space-y-2 border-l-2 border-[#1EAEDB] pl-4">
+          <span className="text-sm font-semibold text-gray-700">Taxes & Fees</span>
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Sales Tax ({state.taxesAndFees.taxRate}%)</span>
+            <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.taxAmount)}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Registration Fee</span>
+            <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.registrationFee)}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Documentation Fee</span>
+            <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.documentFee)}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Other Fees</span>
+            <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.otherFees)}</span>
+          </div>
+        </div>
+
         {/* Trade-In Section */}
         <div className="border-t pt-4">
           <div className="flex justify-between items-center mb-4">
@@ -117,38 +136,6 @@ const CarCost: React.FC = () => {
             </div>}
         </div>
         
-        {/* Taxes & Fees Section */}
-        <div className="border rounded-lg">
-          <button onClick={handleTaxesToggle} className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors">
-            <span className="font-medium text-gray-700">Taxes & Fees</span>
-            <div className="flex items-center">
-              <span className="mr-2 text-[#1EAEDB] font-medium">
-                {formatCurrency(state.taxesAndFees.taxAmount + state.taxesAndFees.totalFees)}
-              </span>
-              <ChevronDown className={`w-5 h-5 transition-transform ${isTaxesOpen ? 'rotate-180' : ''}`} />
-            </div>
-          </button>
-          
-          {isTaxesOpen && <div className="p-4 border-t space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Sales Tax ({state.taxesAndFees.taxRate}%)</span>
-                <span className="font-medium">{formatCurrency(state.taxesAndFees.taxAmount)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Registration Fee</span>
-                <span className="font-medium">{formatCurrency(state.taxesAndFees.registrationFee)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Documentation Fee</span>
-                <span className="font-medium">{formatCurrency(state.taxesAndFees.documentFee)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Other Fees</span>
-                <span className="font-medium">{formatCurrency(state.taxesAndFees.otherFees)}</span>
-              </div>
-            </div>}
-        </div>
-        
         {/* Dealer Discount */}
         <div className="space-y-2">
           <Label>Dealer Discount</Label>
@@ -174,4 +161,5 @@ const CarCost: React.FC = () => {
       </div>
     </section>;
 };
+
 export default CarCost;
