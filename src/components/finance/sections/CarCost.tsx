@@ -9,6 +9,7 @@ const CarCost: React.FC = () => {
   const { state, dispatch } = useFinance();
   const [showTradeIn, setShowTradeIn] = useState(false);
   const [editingTaxes, setEditingTaxes] = useState(false);
+  const [showCustomFee, setShowCustomFee] = useState(false);
 
   const handleTradeInValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value) || 0;
@@ -53,6 +54,10 @@ const CarCost: React.FC = () => {
       type: 'SET_TAXES_AND_FEES',
       payload: { [fee]: numValue }
     });
+  };
+
+  const handleCustomFeeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleFeeChange('otherFees', event.target.value);
   };
 
   return <section className="bg-white rounded-xl shadow-md p-6 mb-6">
@@ -139,6 +144,40 @@ const CarCost: React.FC = () => {
               <span className="font-medium text-[#1EAEDB]">{formatCurrency(state.taxesAndFees.documentFee)}</span>
             )}
           </div>
+        </div>
+
+        {/* Custom Fee Section */}
+        <div className="space-y-2">
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-sm font-semibold text-gray-700">Additional Fee</span>
+            <button 
+              onClick={() => setShowCustomFee(!showCustomFee)} 
+              className="text-sm font-medium text-[#1EAEDB]"
+            >
+              {showCustomFee ? 'Remove' : 'Add Fee'}
+            </button>
+          </div>
+          
+          {showCustomFee && (
+            <div className="space-y-4 animate-fade-in">
+              <div>
+                <Label>Fee Amount</Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span className="text-gray-500 sm:text-sm">$</span>
+                  </div>
+                  <Input
+                    type="number"
+                    value={state.taxesAndFees.otherFees}
+                    onChange={handleCustomFeeChange}
+                    className="pl-7"
+                    placeholder="0"
+                    min="0"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Trade-In Section */}
