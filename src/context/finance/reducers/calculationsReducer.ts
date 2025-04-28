@@ -10,11 +10,13 @@ import { DEFAULT_ZIP_CODE } from '../initialState';
 export const calculationsReducer = (state: FinanceCalculatorState): FinanceCalculatorState => {
   // Skip detailed calculations if payment type is cash
   if (state.paymentType === 'cash') {
+    // For cash payments, total cost is simply the sum of car price, taxes, fees, 
+    // and add-ons minus discounts and trade-in value
     return {
       ...state,
       monthlyPayment: 0,
-      totalCost: state.carPrice + state.taxesAndFees.taxAmount + state.taxesAndFees.totalFees - 
-                 state.tradeIn.netValue + (state.addonsTotal || 0) - (state.discounts || 0),
+      totalCost: state.carPrice + state.taxesAndFees.taxAmount + state.taxesAndFees.totalFees + 
+                 (state.addonsTotal || 0) - (state.discounts || 0) - state.tradeIn.netValue,
       estimateAccuracy: 95 // Cash is pretty accurate
     };
   }

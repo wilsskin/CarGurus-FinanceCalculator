@@ -60,6 +60,15 @@ const CarCost: React.FC = () => {
     handleFeeChange('otherFees', event.target.value);
   };
 
+  const calculateSubtotal = () => {
+    return state.carPrice + 
+           (state.addonsTotal || 0) + 
+           state.taxesAndFees.taxAmount + 
+           state.taxesAndFees.totalFees - 
+           (state.discounts || 0) - 
+           state.tradeIn.netValue;
+  };
+
   return <section className="bg-white rounded-xl shadow-md p-6 mb-6">
       <h2 className="text-xl font-extrabold mb-6 text-[#1EAEDB]">Car Cost</h2>
       
@@ -271,7 +280,7 @@ const CarCost: React.FC = () => {
         <div className="flex justify-between pt-4 border-t">
           <span className="text-lg font-bold text-gray-900">Subtotal</span>
           <span id="subtotal-amount" className="text-xl font-bold text-[#1EAEDB]">
-            {formatCurrency(state.totalCost)}
+            {formatCurrency(calculateSubtotal())}
           </span>
         </div>
       </div>

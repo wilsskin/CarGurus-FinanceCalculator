@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useFinance } from '@/context/finance';
 import { formatCurrency } from '@/utils/financeCalculator';
@@ -50,8 +51,8 @@ const AdjustmentSuggestions: React.FC = () => {
       text: `Look for vehicles around ${formatCurrency(suggestedPrice)} to meet your monthly payment goal`,
       action: 'carPrice'
     });
-  } else {
-    // Always show some helpful suggestions
+  } else if (paymentGoal) {
+    // Show suggestions when payment goal is set but not exceeded
     suggestions.push({
       text: `Increase your down payment to ${formatCurrency(loanDetails.downPayment + 2000)}`,
       action: 'downPayment'
@@ -83,7 +84,9 @@ const AdjustmentSuggestions: React.FC = () => {
         </div>
         <div className="pt-3">
           <label className="text-sm font-semibold text-gray-700">
-            Suggestions to meet your goal
+            {!paymentGoal ? 
+              "Enter a target monthly payment to review suggestions" : 
+              "Suggestions to meet your goal"}
           </label>
         </div>
       </div>
