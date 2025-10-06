@@ -68,7 +68,7 @@ export default {
 					'purple-light': '#D6BCFA',
 					'gray-soft': '#F1F0FB',
 					'gray-neutral': '#8E9196',
-					'blue-bright': '#1EAEDB',
+					'blue-bright': '#0578BB',
 					'blue-soft': '#D3E4FD',
 				}
 			},

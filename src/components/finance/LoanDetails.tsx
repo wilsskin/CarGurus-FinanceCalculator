@@ -128,7 +128,7 @@ const LoanDetails: React.FC = () => {
   // CarGurus style rounded boxes, modern toggles, larger tap area
   return (
     <div className="bg-white rounded-xl shadow p-6 mb-6 animate-slide-in">
-      <h2 className="text-xl font-bold mb-4 text-[#1EAEDB]">Loan Details</h2>
+      <h2 className="text-xl font-bold mb-4 text-[#0578BB]">Loan Details</h2>
 
       {downPaymentPercent < 20 && monthlySavings > 20 && loanDetails.downPayment > 0 && (
         <TipCard
@@ -152,7 +152,7 @@ const LoanDetails: React.FC = () => {
                 type="number"
                 value={loanDetails.downPayment || ''}
                 onChange={handleDownPaymentChange}
-                className="block w-full pl-7 pr-12 py-3 border border-[#E6E8EB] rounded-xl focus:ring-[#1EAEDB] focus:border-[#1EAEDB] font-semibold bg-[#F7F8FB] text-base transition"
+                className="block w-full pl-7 pr-12 py-3 border border-[#E6E8EB] rounded-xl focus:ring-[#0578BB] focus:border-[#0578BB] font-semibold bg-[#F7F8FB] text-base transition"
                 placeholder="0"
                 min="0"
                 max={carPrice}
@@ -164,7 +164,7 @@ const LoanDetails: React.FC = () => {
                 type="number"
                 value={downPaymentPercent || ''}
                 onChange={handleDownPaymentPercentChange}
-                className="block w-full pr-8 py-3 border border-[#E6E8EB] rounded-xl focus:ring-[#1EAEDB] focus:border-[#1EAEDB] font-semibold bg-[#F7F8FB] text-base transition"
+                className="block w-full pr-8 py-3 border border-[#E6E8EB] rounded-xl focus:ring-[#0578BB] focus:border-[#0578BB] font-semibold bg-[#F7F8FB] text-base transition"
                 placeholder="0"
                 min="0"
                 max="100"
@@ -193,7 +193,7 @@ const LoanDetails: React.FC = () => {
                 value={months.toString()}
                 className={`px-4 py-3 rounded-xl text-base font-semibold w-full transition min-w-[60px]
                   ${loanDetails.termMonths === months
-                      ? 'bg-[#1EAEDB] text-white shadow'
+                      ? 'bg-[#0578BB] text-white shadow'
                       : 'bg-[#F5F7F9] text-[#222] border border-[#D5D8DF]'
                   }
                 `}
@@ -220,7 +220,7 @@ const LoanDetails: React.FC = () => {
               type="number"
               value={localAPR}
               onChange={handleAPRChange}
-              className="block w-full pr-20 py-3 border border-[#E6E8EB] rounded-xl focus:ring-[#1EAEDB] focus:border-[#1EAEDB] font-semibold bg-[#F7F8FB] text-base transition"
+              className="block w-full pr-20 py-3 border border-[#E6E8EB] rounded-xl focus:ring-[#0578BB] focus:border-[#0578BB] font-semibold bg-[#F7F8FB] text-base transition"
               placeholder="e.g. 7.9"
               step="0.1"
               min="0"
@@ -228,7 +228,7 @@ const LoanDetails: React.FC = () => {
             />
             {creditScore && !aprManuallyEdited && (
               <div className="absolute top-1/2 right-3 -translate-y-1/2 flex items-center space-x-2 text-xs">
-                <span className="bg-[#E9F6FB] text-[#1EAEDB] px-2 py-1 rounded font-bold">
+                <span className="bg-[#E9F6FB] text-[#0578BB] px-2 py-1 rounded font-bold">
                   Suggested: {localAPR}%
                 </span>
               </div>

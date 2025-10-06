@@ -38,7 +38,7 @@ const EstimatedRange: React.FC = () => {
             {paymentType !== 'cash' && (
               <Card className="p-4">
                 <div className="text-sm text-[#8E9196] mb-2">Monthly Payment Range</div>
-                <div className="text-lg font-bold text-[#1EAEDB]">
+                <div className="text-lg font-bold text-[#0578BB]">
                   {canCalculateRange ? 
                     `${formatCurrency(minMonthly)} – ${formatCurrency(maxMonthly)}` : 
                     'Complete loan details first'}
@@ -48,7 +48,7 @@ const EstimatedRange: React.FC = () => {
 
             <Card className={`p-4 ${paymentType === 'cash' ? 'md:col-span-2' : ''}`}>
               <div className="text-sm text-[#8E9196] mb-2">Total Cost Range</div>
-              <div className="text-lg font-bold text-[#1EAEDB]">
+              <div className="text-lg font-bold text-[#0578BB]">
                 {formatCurrency(minEstimate)} – {formatCurrency(maxEstimate)}
               </div>
             </Card>

@@ -21,7 +21,7 @@ const CostBreakdownChart: React.FC = () => {
     {
       name: 'Vehicle Price',
       amount: carPrice,
-      fill: '#1EAEDB'
+      fill: '#0578BB'
     },
     {
       name: 'Add-ons',
@@ -78,7 +78,7 @@ const CostBreakdownChart: React.FC = () => {
     {
       name: 'Vehicle Price',
       value: carPrice,
-      fill: '#1EAEDB',
+      fill: '#0578BB',
       isNegative: false
     }
   ];

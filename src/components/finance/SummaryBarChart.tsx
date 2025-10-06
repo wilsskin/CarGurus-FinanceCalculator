@@ -13,7 +13,7 @@ const SimpleBarChart: React.FC = () => {
     { 
       label: 'Vehicle Price', 
       value: carPrice, 
-      color: '#1EAEDB',  // Primary blue
+      color: '#0578BB',  // Primary blue
       isNegative: false 
     },
     { 
@@ -63,7 +63,7 @@ const SimpleBarChart: React.FC = () => {
     components.push({
       label: 'Vehicle Price',
       value: carPrice,
-      color: '#1EAEDB',
+      color: '#0578BB',
       isNegative: false
     });
   }
@@ -85,7 +85,7 @@ const SimpleBarChart: React.FC = () => {
             >
               <div className="opacity-0 group-hover:opacity-100 absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-white px-3 py-2 rounded-lg shadow-lg text-sm whitespace-nowrap z-10 transition-opacity border border-gray-100">
                 <div className="font-medium text-gray-800">{component.label}</div>
-                <div className="text-[#1EAEDB] font-bold">
+                <div className="text-[#0578BB] font-bold">
                   {formatCurrency(Math.abs(component.value))}
                 </div>
               </div>

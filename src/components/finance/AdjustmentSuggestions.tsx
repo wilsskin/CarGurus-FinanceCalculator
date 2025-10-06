@@ -60,7 +60,7 @@ const AdjustmentSuggestions: React.FC = () => {
   }
 
   return <Card className="p-4 bg-[#F7F8FB] border-[#E6E8EB] mt-4">
-      <p className="font-medium text-[#1EAEDB] mb-2">🎯 Monthly Payment Goal</p>
+      <p className="font-medium text-[#0578BB] mb-2">🎯 Monthly Payment Goal</p>
       <div className="space-y-4">
         <div className="relative h-10">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
@@ -79,7 +79,7 @@ const AdjustmentSuggestions: React.FC = () => {
         </p>}
       <ul className="space-y-2">
         {suggestions.map((suggestion, index) => <li key={index} className="text-sm text-[#222] flex items-center gap-2">
-            <span className="text-[#1EAEDB]">•</span>
+            <span className="text-[#0578BB]">•</span>
             {suggestion.text}
           </li>)}
       </ul>

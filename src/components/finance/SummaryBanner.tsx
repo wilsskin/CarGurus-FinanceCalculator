@@ -77,7 +77,7 @@ const SummaryBanner: React.FC = () => {
             </span>
             <div className="w-48 h-1 bg-[#E6E8EB] rounded-full overflow-hidden">
               <div 
-                className="h-full bg-[#1EAEDB] transition-all duration-300 rounded-full"
+                className="h-full bg-[#0578BB] transition-all duration-300 rounded-full"
                 style={{ width: `${completionPercentage}%` }}
               />
             </div>
@@ -89,7 +89,7 @@ const SummaryBanner: React.FC = () => {
                 <span className="text-[10px] text-[#8E9196] font-semibold leading-tight">
                   Total with Tax
                 </span>
-                <span className="font-extrabold text-[#1EAEDB] text-lg leading-tight">
+                <span className="font-extrabold text-[#0578BB] text-lg leading-tight">
                   {formatCurrency(totalCost)}
                 </span>
               </div>
@@ -99,7 +99,7 @@ const SummaryBanner: React.FC = () => {
                   <span className="text-[10px] text-[#8E9196] font-semibold leading-tight">
                     Monthly
                   </span>
-                  <span className={`font-extrabold text-[#1EAEDB] ${compact ? "text-base" : "text-lg"} leading-tight`}>
+                  <span className={`font-extrabold text-[#0578BB] ${compact ? "text-base" : "text-lg"} leading-tight`}>
                     {formatCurrency(monthlyPayment)}
                   </span>
                 </div>
@@ -129,7 +129,7 @@ const SummaryBanner: React.FC = () => {
 
         {paymentType !== 'cash' && completionPercentage < 100 && (
           <div className="mt-1">
-            <span className="text-xs text-[#1EAEDB]">
+            <span className="text-xs text-[#0578BB]">
               {!state.carPrice && "Enter vehicle price • "}
               {!state.loanDetails.termMonths && "Add loan term • "}
               {!state.loanDetails.downPayment && "Add down payment • "}

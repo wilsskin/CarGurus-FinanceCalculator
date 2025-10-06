@@ -46,7 +46,7 @@ const MyFinanceInfo: React.FC = () => {
     });
   };
   return <section className="space-y-4">
-      <h2 className="text-xl font-bold text-[#1EAEDB]">My Finance Info</h2>
+      <h2 className="text-xl font-bold text-[#0578BB]">My Finance Info</h2>
       
       <div className="space-y-4">
         {/* Credit Score Field */}
@@ -80,7 +80,7 @@ const MyFinanceInfo: React.FC = () => {
             }
           })} className={`
                     py-2 px-1 rounded-lg text-sm font-medium transition-colors
-                    ${state.loanDetails.termMonths === months ? 'bg-[#1EAEDB] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                    ${state.loanDetails.termMonths === months ? 'bg-[#0578BB] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
                   `}>
                   {months / 12}yr
                 </button>)}

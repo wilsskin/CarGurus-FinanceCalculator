@@ -48,17 +48,17 @@ const SummaryAndSave: React.FC = () => {
   const noLoanDetailsProvided = !loanDetails.termMonths || !loanDetails.interestRate || loanDetails.interestRate === 0;
   if (paymentType === 'cash') {
     return <div className="bg-white rounded-xl shadow-md p-6 mb-28 animate-slide-in font-sans">
-        <h2 className="text-xl font-extrabold mb-4 text-[#1EAEDB]">Purchase Summary</h2>
+        <h2 className="text-xl font-extrabold mb-4 text-[#0578BB]">Purchase Summary</h2>
         <div className="border rounded-lg p-4 bg-[#F7F8FB] space-y-4">
           <div className="flex justify-between items-center text-lg">
             <span className="font-bold text-[#222]">Total Cost</span>
-            <span className="font-extrabold text-[#1EAEDB]">{formatCurrency(totalCost)}</span>
+            <span className="font-extrabold text-[#0578BB]">{formatCurrency(totalCost)}</span>
           </div>
         </div>
       </div>;
   }
   return <div className="bg-white rounded-xl shadow-md p-6 mb-6 animate-slide-in font-sans">
-      <h2 className="text-xl font-extrabold mb-4 text-[#1EAEDB]">Finance Summary</h2>
+      <h2 className="text-xl font-extrabold mb-4 text-[#0578BB]">Finance Summary</h2>
       
       {/* APR Input - Full width white box */}
       <div className="mb-6">
@@ -132,13 +132,13 @@ const SummaryAndSave: React.FC = () => {
         <div className="pt-4 border-t">
           <div className="flex justify-between items-center mb-2">
             <span className="text-lg font-bold text-[#222]">Monthly Payment</span>
-            <span className="text-xl font-extrabold text-[#1EAEDB]">
+            <span className="text-xl font-extrabold text-[#0578BB]">
               {noLoanDetailsProvided ? 'Fill loan details' : formatCurrency(monthlyPayment)}
             </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-lg font-bold text-[#222]">Total Cost</span>
-            <span className="text-xl font-extrabold text-[#1EAEDB]">
+            <span className="text-xl font-extrabold text-[#0578BB]">
               {formatCurrency(totalCost)}
             </span>
           </div>
@@ -150,7 +150,7 @@ const SummaryAndSave: React.FC = () => {
       {!noLoanDetailsProvided && monthlyPayment > 500 && <TipCard tipText="💡 Want a lower monthly payment? Try increasing your down payment or extending your loan term." tipType="info" dismissible={false} />}
 
       {/* Toast */}
-      {showToast && <div className="fixed bottom-24 left-0 right-0 mx-auto w-4/5 max-w-sm bg-[#1EAEDB] text-white p-3 rounded-lg shadow-lg animate-fade-in flex items-center justify-center z-50">
+      {showToast && <div className="fixed bottom-24 left-0 right-0 mx-auto w-4/5 max-w-sm bg-[#0578BB] text-white p-3 rounded-lg shadow-lg animate-fade-in flex items-center justify-center z-50">
           <span className="font-bold">Estimate saved!</span>
         </div>}
     </div>;
