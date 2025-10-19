@@ -66,7 +66,7 @@ const SummaryBanner: React.FC = () => {
       w-full transition-all duration-300 border-b border-[#E6E8EB] shadow-sm bg-white z-30
       ${compact ? "fixed top-0 left-0 right-0" : "relative"}
     `}>
-      <div className="max-w-md mx-auto flex flex-col px-3 py-2">
+      <div className="max-w-md mx-auto flex flex-col px-4 py-2">
         <div className="flex items-center justify-between">
           <div className="flex flex-col space-y-1">
             <span className={`font-extrabold text-[#101325] whitespace-nowrap ${compact ? 'text-xs' : 'text-sm'}`}>
@@ -113,17 +113,7 @@ const SummaryBanner: React.FC = () => {
                 </div>
               </>
             )}
-            
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Info className="w-4 h-4 text-[#8E9196]" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="text-xs">This is an estimate based on the info you've entered. Actual pricing may vary.</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+          
           </div>
         </div>
 

@@ -95,21 +95,21 @@ const CarCost: React.FC = () => {
             <span className="text-gray-600">Sales Tax Rate ({state.taxesAndFees.taxRate}%)</span>
             {editingTaxes ? <div className="relative w-24">
                 <Input type="number" value={state.taxesAndFees.taxRate} onChange={handleTaxRateChange} className="h-8 px-2 text-right" min="0" max="100" step="0.1" />
-              </div> : <span className="font-medium text-[#0578BB]">{formatCurrency(state.taxesAndFees.taxAmount)}</span>}
+              </div> : <span className="font-medium text-black">{formatCurrency(state.taxesAndFees.taxAmount)}</span>}
           </div>
 
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600">Registration Fee</span>
             {editingTaxes ? <div className="relative w-24">
                 <Input type="number" value={state.taxesAndFees.registrationFee} onChange={e => handleFeeChange('registrationFee', e.target.value)} className="h-8 px-2 text-right" min="0" />
-              </div> : <span className="font-medium text-[#0578BB]">{formatCurrency(state.taxesAndFees.registrationFee)}</span>}
+              </div> : <span className="font-medium text-black">{formatCurrency(state.taxesAndFees.registrationFee)}</span>}
           </div>
 
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600">Documentation Fee</span>
             {editingTaxes ? <div className="relative w-24">
                 <Input type="number" value={state.taxesAndFees.documentFee} onChange={e => handleFeeChange('documentFee', e.target.value)} className="h-8 px-2 text-right" min="0" />
-              </div> : <span className="font-medium text-[#0578BB]">{formatCurrency(state.taxesAndFees.documentFee)}</span>}
+              </div> : <span className="font-medium text-black">{formatCurrency(state.taxesAndFees.documentFee)}</span>}
           </div>
         </div>
 
