@@ -70,7 +70,7 @@ const VehicleInfo: React.FC = () => {
       <div className="flex gap-4 mb-4">
         <div className="w-1/3 aspect-video bg-gray-100 rounded-lg overflow-hidden">
           <img 
-            src="/lovable-uploads/30e6bd69-7f65-45ee-b3a6-8cb91ded05ac.png"
+            src="public/lovable-uploads/car-image.png"
             alt="2022 Toyota RAV4"
             className="w-full h-full object-cover"
           />
