@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { FinanceProvider } from '../../context/finance';
+import PageHeader from './PageHeader';
 import SummaryBanner from './SummaryBanner';
 import PaymentTypeSelector from './PaymentTypeSelector';
 import VehicleInfo from './sections/VehicleInfo';
@@ -19,27 +19,55 @@ const FinanceCalculatorContent: React.FC = () => {
   const { paymentType } = state;
   
   return (
-    <div className="min-h-screen bg-finance-gray-soft pb-28">
-      <div className="py-4 bg-white border-b border-[#E6E8EB] mb-4">
-        <SummaryBanner />
-      </div>
-      <div className="max-w-md mx-auto px-4 space-y-6">
-        <EditButton />
-        <div className="space-y-4">
+    <div className="min-h-screen bg-background pb-28">
+      <PageHeader />
+      <SummaryBanner />
+      
+      {/* Vehicle & Payment Type Section */}
+      <div className="bg-background py-8">
+        <div className="mx-auto max-w-md px-4 space-y-5">
+          <EditButton />
           <VehicleInfo />
           <PaymentTypeSelector />
         </div>
-        {paymentType !== 'cash' && <MyFinanceInfo />}
-        <CarCost />
-        <SummaryAndSave />
-        {paymentType !== 'cash' && <EstimatedRange />}
-        <SaveAndExport />
-        <div className="mt-8">
-          <h3 className="text-lg font-semibold text-[#222] mb-4">Cost Breakdown</h3>
-          <SimpleBarChart />
-        </div>
-        <ScrollToTop />
       </div>
+      
+      {/* Finance Info Section */}
+      {paymentType !== 'cash' && (
+        <div className="bg-section-light py-8 border-y border-border">
+          <div className="mx-auto max-w-md px-4">
+            <MyFinanceInfo />
+          </div>
+        </div>
+      )}
+      
+      {/* Car Cost Section */}
+      <div className="bg-background py-8">
+        <div className="mx-auto max-w-md px-4">
+          <CarCost />
+        </div>
+      </div>
+      
+      {/* Summary Section */}
+      <div className="bg-section-light py-8 border-y border-border">
+        <div className="mx-auto max-w-md px-4 space-y-6">
+          <SummaryAndSave />
+          {paymentType !== 'cash' && <EstimatedRange />}
+        </div>
+      </div>
+      
+      {/* Export & Breakdown Section */}
+      <div className="bg-background py-8">
+        <div className="mx-auto max-w-md px-4 space-y-6">
+          <SaveAndExport />
+          <div>
+            <h3 className="mb-4">Cost Breakdown</h3>
+            <SimpleBarChart />
+          </div>
+        </div>
+      </div>
+      
+      <ScrollToTop />
     </div>
   );
 };

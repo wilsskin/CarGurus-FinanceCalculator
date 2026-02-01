@@ -1,6 +1,5 @@
-
-import React, { useState, useEffect } from 'react';
-import { useToast } from "@/hooks/use-toast";
+import React, { useEffect } from 'react';
+import { toast } from "@/components/ui/sonner";
 
 interface SectionFeedbackProps {
   message: string;
@@ -13,23 +12,16 @@ const SectionFeedback: React.FC<SectionFeedbackProps> = ({
   visible, 
   onHide 
 }) => {
-  const { toast } = useToast();
-  
   useEffect(() => {
-    // Only show toast when visible prop changes to true
     if (visible && message) {
-      // Use the toast system instead of a custom component
-      toast({
-        title: message,
+      toast.info(message, {
         duration: 3000,
-        onOpenChange: (open) => {
-          if (!open && onHide) onHide();
-        }
+        onDismiss: onHide,
+        onAutoClose: onHide,
       });
     }
-  }, [visible, message, toast, onHide]);
+  }, [visible, message, onHide]);
   
-  // This component no longer renders anything directly
   return null;
 };
 

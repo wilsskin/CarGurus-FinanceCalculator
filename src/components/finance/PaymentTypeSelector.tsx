@@ -1,41 +1,19 @@
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useFinance } from "../../context/finance";
 import { PaymentType } from "../../types/financeTypes";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
+import { SegmentedControl, SegmentedControlItem } from "../ui/segmented-control";
 
-const paymentTabs = [{
-  value: "dealer",
-  label: "Dealer",
-  description: "Dealer financing may offer special rates"
-}, {
-  value: "outside",
-  label: "Outside Loan",
-  description: "Outside loans often have competitive rates"
-}, {
-  value: "cash",
-  label: "Cash",
-  description: "Cash payment simplifies the process"
-}] as const;
+const paymentOptions = [
+  { value: "dealer", label: "Dealer Financing" },
+  { value: "outside", label: "Outside Loan" },
+  { value: "cash", label: "Cash" }
+] as const;
 
 const PaymentTypeSelector: React.FC = () => {
-  const {
-    state,
-    dispatch
-  } = useFinance();
-  const {
-    paymentType
-  } = state;
-  const [animationDelay, setAnimationDelay] = useState(true);
+  const { state, dispatch } = useFinance();
+  const { paymentType } = state;
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setAnimationDelay(false);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleTabChange = (newType: string) => {
+  const handleTypeChange = (newType: string) => {
     if (newType !== paymentType) {
       dispatch({
         type: "SET_PAYMENT_TYPE",
@@ -44,26 +22,21 @@ const PaymentTypeSelector: React.FC = () => {
     }
   };
 
-  return <div className="mb-8">
-      <h2 className="text-xl font-bold mb-6 text-[#0578BB]">How Are You Paying?</h2>
-      <Tabs value={paymentType} onValueChange={handleTabChange} className="w-full" data-testid="PaymentTabs">
-        <TabsList className="w-full grid grid-cols-3 mb-6 bg-[#F5F7F9] p-0 rounded-lg h-12">
-          {paymentTabs.map(tab => <TabsTrigger key={tab.value} value={tab.value} className={`
-                h-full rounded-md text-sm font-medium transition-all duration-200
-                ${paymentType === tab.value ? "bg-white text-[#0578BB] shadow-sm" : "text-[#555] hover:bg-[#E9F6FB]/50"}
-                ${animationDelay ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}
-              `} style={{
-          transitionDelay: `${animationDelay ? 90 : 0}ms`
-        }} aria-label={tab.label}>
-              {tab.label}
-            </TabsTrigger>)}
-        </TabsList>
-        
-        {paymentTabs.map(tab => <TabsContent key={tab.value} value={tab.value} className="mt-2 text-gray-600 text-sm">
-            
-          </TabsContent>)}
-      </Tabs>
-    </div>;
+  return (
+    <section>
+      <h2 className="mb-4">How Are You Paying?</h2>
+      <SegmentedControl 
+        value={paymentType} 
+        onValueChange={handleTypeChange}
+      >
+        {paymentOptions.map(option => (
+          <SegmentedControlItem key={option.value} value={option.value}>
+            <span className="text-xs font-semibold">{option.label}</span>
+          </SegmentedControlItem>
+        ))}
+      </SegmentedControl>
+    </section>
+  );
 };
 
 export default PaymentTypeSelector;

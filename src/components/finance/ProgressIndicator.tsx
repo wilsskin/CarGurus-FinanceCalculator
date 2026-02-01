@@ -16,17 +16,17 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
 
   return (
     <div className="mb-6 font-bold text-base">
-      <div className="flex justify-between items-center mb-1">
-        <span className="text-[#0578BB]">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-primary">
           {labels && labels[currentStep - 1]}
         </span>
-        <span className="text-xs text-[#8E9196] font-normal">
+        <span className="text-xs text-muted-foreground font-normal">
           {currentStep} of {steps} completed
         </span>
       </div>
-      <div className="h-2 bg-[#E9F6FB] rounded-full overflow-hidden">
+      <div className="h-2 bg-accent rounded-full overflow-hidden">
         <div
-          className="h-full bg-[#0578BB] transition-all duration-500 ease-out"
+          className="h-full bg-primary transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
         ></div>
       </div>

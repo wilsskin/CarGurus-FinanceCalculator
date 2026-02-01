@@ -12,7 +12,7 @@ export default {
 	theme: {
 		container: {
 			center: true,
-			padding: '2rem',
+			padding: '1rem', // 16px mobile gutter
 			screens: {
 				'2xl': '1400px'
 			}
@@ -52,33 +52,33 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				},
-				finance: {
-					purple: '#9b87f5',
-					'purple-dark': '#7E69AB',
-					'purple-light': '#D6BCFA',
-					'gray-soft': '#F1F0FB',
-					'gray-neutral': '#8E9196',
-					'blue-bright': '#0578BB',
-					'blue-soft': '#D3E4FD',
+				section: {
+					light: 'hsl(var(--section-light))',
+					dark: 'hsl(var(--section-dark))'
 				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				// CarGurus specific
+				'cg': '8px',
+				'cg-lg': '12px',
+				'pill': '24px',
 			},
 			fontFamily: {
-				sans: ['"Open Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+				sans: ['Mulish', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+			},
+			fontSize: {
+				// CarGurus typography scale
+				'price-lg': ['36px', { lineHeight: '1.1', fontWeight: '700' }],
+				'price-md': ['24px', { lineHeight: '1.2', fontWeight: '700' }],
+				'price-sm': ['18px', { lineHeight: '1.3', fontWeight: '600' }],
+				'body-lg': ['18px', { lineHeight: '1.6', fontWeight: '400' }],
+				'body': ['16px', { lineHeight: '1.5', fontWeight: '400' }],
+				'body-sm': ['14px', { lineHeight: '1.5', fontWeight: '400' }],
+				'caption': ['12px', { lineHeight: '1.4', fontWeight: '500' }],
+				'label': ['14px', { lineHeight: '1.4', fontWeight: '500' }],
 			},
 			keyframes: {
 				'accordion-down': {

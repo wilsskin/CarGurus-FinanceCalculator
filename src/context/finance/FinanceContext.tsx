@@ -32,14 +32,15 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [
     state.carPrice, 
     state.paymentType, 
+    state.creditScore,
     state.loanDetails.downPayment,
     state.loanDetails.termMonths,
     state.loanDetails.interestRate,
     state.tradeIn.netValue,
     state.taxesAndFees.taxAmount,
     state.taxesAndFees.totalFees,
-    state.addonsTotal,    // Add this to trigger recalculation when add-ons change
-    state.discounts       // Add this to trigger recalculation when discounts change
+    state.addonsTotal,
+    state.discounts
   ]);
   
   return (

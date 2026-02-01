@@ -1,9 +1,18 @@
-
 import React, { useState, useEffect } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { formatCurrency, calculateMonthlyPayment } from '../../utils/financeCalculator';
 import TipCard from './TipCard';
-import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
+import { SegmentedControl, SegmentedControlItem } from '../ui/segmented-control';
+import { Input } from '../ui/input';
+import { FieldGroup, FieldLabel, FieldHelper } from '@/components/layout';
+
+const loanTermOptions = [
+  { months: 36, label: '3 yr' },
+  { months: 48, label: '4 yr' },
+  { months: 60, label: '5 yr' },
+  { months: 72, label: '6 yr' },
+  { months: 84, label: '7 yr' }
+];
 
 const LoanDetails: React.FC = () => {
   const { state, dispatch } = useFinance();
@@ -12,7 +21,7 @@ const LoanDetails: React.FC = () => {
   const [downPaymentPercent, setDownPaymentPercent] = useState(
     carPrice > 0 && loanDetails.downPayment > 0 ? Math.round((loanDetails.downPayment / carPrice) * 100) : 0
   );
-  const [localAPR, setLocalAPR] = useState('');
+  const [localAPR, setLocalAPR] = useState(loanDetails.interestRate?.toString() || '');
   const [aprManuallyEdited, setAprManuallyEdited] = useState(false);
 
   useEffect(() => {
@@ -73,10 +82,10 @@ const LoanDetails: React.FC = () => {
     });
   };
 
-  const handleTermChange = (months: number) => {
+  const handleTermChange = (value: string) => {
     dispatch({
       type: 'SET_LOAN_DETAILS',
-      payload: { termMonths: months }
+      payload: { termMonths: parseInt(value) }
     });
   };
 
@@ -92,8 +101,6 @@ const LoanDetails: React.FC = () => {
   if (paymentType === 'cash') {
     return null;
   }
-
-  const termOptions = [36, 48, 60, 72, 84];
 
   // Only calculate payment impact if we have necessary values
   const calculatePaymentImpact = () => {
@@ -125,10 +132,9 @@ const LoanDetails: React.FC = () => {
 
   const { increaseAmount, monthlySavings } = calculatePaymentImpact();
 
-  // CarGurus style rounded boxes, modern toggles, larger tap area
   return (
-    <div className="bg-white rounded-xl shadow p-6 mb-6 animate-slide-in">
-      <h2 className="text-xl font-bold mb-4 text-[#0578BB]">Loan Details</h2>
+    <section className="space-y-5">
+      <h2>Loan Details</h2>
 
       {downPaymentPercent < 20 && monthlySavings > 20 && loanDetails.downPayment > 0 && (
         <TipCard
@@ -137,112 +143,88 @@ const LoanDetails: React.FC = () => {
         />
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-5">
         {/* Down payment */}
-        <div>
-          <label className="block text-sm font-semibold text-[#222] mb-1">
-            Down Payment
-          </label>
-          <div className="flex items-center">
+        <FieldGroup>
+          <FieldLabel>Down Payment</FieldLabel>
+          <div className="flex items-center gap-3">
             <div className="relative flex-1">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-gray-400 sm:text-sm">$</span>
-              </div>
-              <input
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">$</span>
+              <Input
                 type="number"
                 value={loanDetails.downPayment || ''}
                 onChange={handleDownPaymentChange}
-                className="block w-full pl-7 pr-12 py-3 border border-[#E6E8EB] rounded-xl focus:ring-[#0578BB] focus:border-[#0578BB] font-semibold bg-[#F7F8FB] text-base transition"
+                className="pl-8"
                 placeholder="0"
-                min="0"
+                min={0}
                 max={carPrice}
               />
             </div>
-            <div className="mx-4 text-[#8E9196]">or</div>
+            <span className="text-muted-foreground text-sm font-medium">or</span>
             <div className="relative w-24">
-              <input
+              <Input
                 type="number"
                 value={downPaymentPercent || ''}
                 onChange={handleDownPaymentPercentChange}
-                className="block w-full pr-8 py-3 border border-[#E6E8EB] rounded-xl focus:ring-[#0578BB] focus:border-[#0578BB] font-semibold bg-[#F7F8FB] text-base transition"
+                className="pr-8 text-right"
                 placeholder="0"
-                min="0"
-                max="100"
+                min={0}
+                max={100}
               />
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <span className="text-gray-400 sm:text-sm">%</span>
-              </div>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">%</span>
             </div>
           </div>
           {carPrice > 0 && loanDetails.downPayment > 0 && (
-            <div className="mt-1 text-sm text-[#8E9196] font-normal">
+            <FieldHelper>
               {downPaymentPercent}% of {formatCurrency(carPrice)}
-            </div>
+            </FieldHelper>
           )}
-        </div>
+        </FieldGroup>
 
-        {/* Loan term modern toggle buttons */}
-        <div>
-          <label className="block text-sm font-semibold mb-2 text-[#222]">
-            Loan Term
-          </label>
-          <ToggleGroup type="single" value={loanDetails.termMonths ? loanDetails.termMonths.toString() : ''} onValueChange={v => v && handleTermChange(Number(v))} className="flex gap-2 w-full">
-            {termOptions.map(months => (
-              <ToggleGroupItem
-                key={months}
-                value={months.toString()}
-                className={`px-4 py-3 rounded-xl text-base font-semibold w-full transition min-w-[60px]
-                  ${loanDetails.termMonths === months
-                      ? 'bg-[#0578BB] text-white shadow'
-                      : 'bg-[#F5F7F9] text-[#222] border border-[#D5D8DF]'
-                  }
-                `}
-                aria-label={`${months / 12} years`}
-              >
-                {(months / 12).toFixed(0)} yr
-              </ToggleGroupItem>
+        {/* Loan term - Segmented Control */}
+        <FieldGroup>
+          <FieldLabel>Loan Term</FieldLabel>
+          <SegmentedControl 
+            value={loanDetails.termMonths?.toString() || ''} 
+            onValueChange={handleTermChange}
+          >
+            {loanTermOptions.map(term => (
+              <SegmentedControlItem key={term.months} value={term.months.toString()}>
+                <div className="flex flex-col items-center leading-tight">
+                  <span className="text-sm font-semibold">{term.label}</span>
+                  <span className="text-xs opacity-80">{term.months} mo</span>
+                </div>
+              </SegmentedControlItem>
             ))}
-          </ToggleGroup>
-          {!loanDetails.termMonths && (
-            <p className="mt-1 text-xs text-[#8E9196]">
-              Please select a loan term to calculate your monthly payment
-            </p>
-          )}
-        </div>
+          </SegmentedControl>
+        </FieldGroup>
 
-        {/* Interest rate / APR, editable with suggestions based on credit score */}
-        <div>
-          <label className="block text-sm font-semibold mb-1 text-[#222]">
+        {/* Interest rate / APR */}
+        <FieldGroup>
+          <FieldLabel>
             {paymentType === 'dealer' ? 'Estimated APR' : 'Interest Rate'}
-          </label>
+          </FieldLabel>
           <div className="relative">
-            <input
+            <Input
               type="number"
               value={localAPR}
               onChange={handleAPRChange}
-              className="block w-full pr-20 py-3 border border-[#E6E8EB] rounded-xl focus:ring-[#0578BB] focus:border-[#0578BB] font-semibold bg-[#F7F8FB] text-base transition"
+              className="pr-12"
               placeholder="e.g. 7.9"
-              step="0.1"
-              min="0"
-              max="25"
+              step={0.1}
+              min={0}
+              max={25}
             />
-            {creditScore && !aprManuallyEdited && (
-              <div className="absolute top-1/2 right-3 -translate-y-1/2 flex items-center space-x-2 text-xs">
-                <span className="bg-[#E9F6FB] text-[#0578BB] px-2 py-1 rounded font-bold">
-                  Suggested: {localAPR}%
-                </span>
-              </div>
-            )}
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">%</span>
           </div>
-          {/* Info text about APR */}
-          <div className="mt-1 text-xs text-[#8E9196] font-normal">
+          <FieldHelper>
             {creditScore 
               ? "Based on your credit score. You can edit the APR."
               : "Enter your credit score above to get a suggested rate."}
-          </div>
-        </div>
+          </FieldHelper>
+        </FieldGroup>
       </div>
-    </div>
+    </section>
   );
 };
 

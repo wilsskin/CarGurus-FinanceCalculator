@@ -2,6 +2,23 @@
  * Finance calculator utility functions
  */
 
+// Get suggested interest rate based on credit score and financing source
+export const getInterestRateForCreditScore = (
+  creditScore: number,
+  paymentType: 'dealer' | 'outside'
+): number => {
+  if (creditScore >= 720) {
+    return paymentType === 'dealer' ? 5.9 : 4.9;
+  }
+  if (creditScore >= 690) {
+    return paymentType === 'dealer' ? 6.9 : 5.9;
+  }
+  if (creditScore >= 630) {
+    return paymentType === 'dealer' ? 8.9 : 7.9;
+  }
+  return paymentType === 'dealer' ? 11.9 : 10.9;
+};
+
 // Calculate monthly payment for a loan
 export const calculateMonthlyPayment = (
   loanAmount: number,

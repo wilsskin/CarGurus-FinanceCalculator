@@ -64,11 +64,9 @@ const VehicleInfo: React.FC = () => {
   };
 
   return (
-    <section className="mb-6">
-      <h2 className="text-xl font-bold text-[#0578BB] mb-4">Vehicle Info</h2>
-      
-      <div className="flex gap-4 mb-4">
-        <div className="w-1/3 aspect-video bg-gray-100 rounded-lg overflow-hidden">
+    <section>
+      <div className="flex gap-4 mb-5">
+        <div className="w-28 h-20 bg-muted rounded-cg overflow-hidden flex-shrink-0">
           <img 
             src="public/lovable-uploads/car-image.png"
             alt="2022 Toyota RAV4"
@@ -76,54 +74,74 @@ const VehicleInfo: React.FC = () => {
           />
         </div>
         
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900">2022 Toyota RAV4</h3>
-          <div className="text-sm text-gray-500 mb-2">Preowned • 25,000 miles</div>
-          <div className="text-xl font-bold text-[#0578BB]">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-foreground truncate">2022 Toyota RAV4</h3>
+          <div className="text-body-sm text-muted-foreground mb-1">Preowned • 25,000 miles</div>
+          <div className="text-price-md text-foreground">
             {formatCurrency(state.carPrice)}
           </div>
         </div>
       </div>
       
-      <div className="border rounded-lg overflow-hidden">
-        <button onClick={() => setIsAddOnsOpen(!isAddOnsOpen)} className="w-full h-12 px-5 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors">
+      <div className="border border-border rounded-cg overflow-hidden">
+        <button 
+          onClick={() => setIsAddOnsOpen(!isAddOnsOpen)} 
+          className="w-full h-14 px-4 flex items-center justify-between bg-background hover:bg-accent transition-colors"
+        >
           <div className="flex items-center gap-2">
-            <span className="font-medium text-gray-700">Add-ons & Packages</span>
-            <span className="font-medium text-[#0578BB]">
-              ({formatCurrency(selectedAddonsTotal)})
-            </span>
+            <span className="font-semibold text-foreground">Add-ons & Packages</span>
+            {selectedAddonsTotal > 0 && (
+              <span className="font-semibold text-primary">
+                +{formatCurrency(selectedAddonsTotal)}
+              </span>
+            )}
           </div>
-          <ChevronDown className={`w-5 h-5 transition-transform ${isAddOnsOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ${isAddOnsOpen ? 'rotate-180' : ''}`} />
         </button>
         
-        {isAddOnsOpen && <div className="p-4 border-t">
-            {selectedAddonsCount > 0 && <div className="text-sm font-medium text-[#0578BB] mb-4 pb-3 border-b">
-                Selected Add-ons: {selectedAddonsCount} items — {formatCurrency(selectedAddonsTotal)}
-              </div>}
+        {isAddOnsOpen && (
+          <div className="p-4 border-t border-border bg-section-light">
+            {selectedAddonsCount > 0 && (
+              <div className="text-body-sm font-semibold text-primary mb-4 pb-4 border-b border-border">
+                {selectedAddonsCount} selected — {formatCurrency(selectedAddonsTotal)}
+              </div>
+            )}
             
             <div className="mb-6">
-              <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Included Features</h4>
-              {defaultFeatures.map(feature => <div key={feature.id} className="flex items-center py-2 px-1">
-                  <span className="text-sm text-gray-600">{feature.name}</span>
-                  <span className="ml-auto text-sm text-gray-400">Included</span>
-                </div>)}
+              <h4 className="text-caption font-semibold text-muted-foreground uppercase tracking-wider mb-3">Included Features</h4>
+              {defaultFeatures.map(feature => (
+                <div key={feature.id} className="flex items-center py-2">
+                  <span className="text-body-sm text-muted-foreground">{feature.name}</span>
+                  <span className="ml-auto text-caption text-muted-foreground">Included</span>
+                </div>
+              ))}
             </div>
             
             <div>
-              <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Available Add-ons</h4>
-              {[...optionalAddOns, ...customAddons].map(addOn => <label key={addOn.id} className="flex items-center py-2 px-1 cursor-pointer group">
-                  <input type="checkbox" checked={!!state.selectedAddons[addOn.id]} onChange={() => handleAddOnToggle(addOn)} className="rounded border-gray-300 text-[#0578BB] focus:ring-[#0578BB]" />
-                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-900">
+              <h4 className="text-caption font-semibold text-muted-foreground uppercase tracking-wider mb-3">Available Add-ons</h4>
+              {[...optionalAddOns, ...customAddons].map(addOn => (
+                <label key={addOn.id} className="flex items-center py-3 cursor-pointer group border-b border-border last:border-b-0">
+                  <input 
+                    type="checkbox" 
+                    checked={!!state.selectedAddons[addOn.id]} 
+                    onChange={() => handleAddOnToggle(addOn)} 
+                    className="w-5 h-5 rounded border-input text-primary focus:ring-primary focus:ring-offset-0" 
+                  />
+                  <span className="ml-3 text-body-sm font-medium text-foreground">
                     {addOn.name}
                   </span>
-                  <span className="ml-auto text-sm font-medium text-gray-700">
-                    {formatCurrency(addOn.price)}
+                  <span className="ml-auto text-body-sm font-semibold text-foreground">
+                    +{formatCurrency(addOn.price)}
                   </span>
-                </label>)}
+                </label>
+              ))}
               
-              <CustomAddonForm onAdd={handleCustomAddonAdd} />
+              <div className="mt-4">
+                <CustomAddonForm onAdd={handleCustomAddonAdd} />
+              </div>
             </div>
-          </div>}
+          </div>
+        )}
       </div>
     </section>
   );

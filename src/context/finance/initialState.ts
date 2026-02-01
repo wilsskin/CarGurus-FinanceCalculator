@@ -1,19 +1,20 @@
-
 import { FinanceCalculatorState } from '../../types/financeTypes';
 
-// Default values
-export const DEFAULT_CAR_PRICE = 25000;
+// Default values - Preset for average car buyer
+export const DEFAULT_CAR_PRICE = 35000;
 export const DEFAULT_ZIP_CODE = '90210';
-export const DEFAULT_TERM_MONTHS = 0;  // Changed from 60 to 0
-export const DEFAULT_INTEREST_RATE = 0; // Changed from 5.9 to 0
-export const DEFAULT_DOWN_PAYMENT_PERCENT = 0; // Changed from 10 to 0
+export const DEFAULT_TERM_MONTHS = 60;  // Most popular: 5 years
+export const DEFAULT_INTEREST_RATE = 6.9; // Based on Good credit (690-719)
+export const DEFAULT_DOWN_PAYMENT = 3500; // 10% of car price
+export const DEFAULT_CREDIT_SCORE = 690; // Good credit - average buyer
 
-// Initial state
+// Initial state with sensible defaults for average car buyer
 export const initialState: FinanceCalculatorState = {
   carPrice: DEFAULT_CAR_PRICE,
   paymentType: 'dealer',
+  creditScore: DEFAULT_CREDIT_SCORE,
   loanDetails: {
-    downPayment: 0, // Changed from DEFAULT_CAR_PRICE * (DEFAULT_DOWN_PAYMENT_PERCENT / 100)
+    downPayment: DEFAULT_DOWN_PAYMENT,
     termMonths: DEFAULT_TERM_MONTHS,
     interestRate: DEFAULT_INTEREST_RATE
   },
@@ -23,8 +24,8 @@ export const initialState: FinanceCalculatorState = {
     netValue: 0
   },
   taxesAndFees: {
-    taxRate: 0,
-    taxAmount: 0,
+    taxRate: 8.5, // Average US sales tax
+    taxAmount: DEFAULT_CAR_PRICE * 0.085,
     registrationFee: 300,
     documentFee: 100,
     dealerFee: 250,
@@ -34,7 +35,7 @@ export const initialState: FinanceCalculatorState = {
   zipCode: DEFAULT_ZIP_CODE,
   monthlyPayment: 0,
   totalCost: 0,
-  estimateAccuracy: 60,
+  estimateAccuracy: 75,
   addonsTotal: 0,
   discounts: 0,
   selectedAddons: {}

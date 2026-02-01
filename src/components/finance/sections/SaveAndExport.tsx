@@ -1,28 +1,28 @@
-
 import React from 'react';
 import { Save, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const SaveAndExport: React.FC = () => {
   return (
-    <div className="space-y-4 mb-20 animate-fade-in">
-      <button
-        onClick={() => {}} // Will be implemented later
-        className="w-full py-3 px-4 bg-[#0578BB] text-white rounded-lg font-medium hover:bg-[#1997BE] transition-colors flex items-center justify-center"
+    <div className="space-y-3">
+      <Button
+        onClick={() => {}}
+        className="w-full"
       >
-        <Save className="w-5 h-5 mr-2" />
+        <Save className="w-5 h-5" />
         Save Estimate
-      </button>
+      </Button>
       
-      <button
-        onClick={() => {}} // Will be implemented later
-        className="w-full py-3 px-4 border-2 border-[#0578BB] text-[#0578BB] rounded-lg font-medium hover:bg-[#E9F6FB] transition-colors flex items-center justify-center"
+      <Button
+        onClick={() => {}}
+        variant="outline"
+        className="w-full"
       >
-        <Download className="w-5 h-5 mr-2" />
+        <Download className="w-5 h-5" />
         Export Estimate
-      </button>
+      </Button>
     </div>
   );
 };
 
 export default SaveAndExport;
-

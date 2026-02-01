@@ -69,9 +69,9 @@ const SimpleBarChart: React.FC = () => {
   }
 
   return (
-    <Card className="p-4 bg-[#F7F8FB] border-[#E6E8EB] mb-4">
+    <Card className="p-4 bg-muted border-border mb-4">
       <div className="space-y-4">
-        <div className="h-12 flex rounded-lg overflow-hidden border border-gray-200">
+        <div className="h-12 flex rounded-lg overflow-hidden border border-border">
           {components.map((component, index) => (
             <div
               key={component.label}
@@ -83,9 +83,9 @@ const SimpleBarChart: React.FC = () => {
               }}
               className="h-full relative group cursor-pointer"
             >
-              <div className="opacity-0 group-hover:opacity-100 absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-white px-3 py-2 rounded-lg shadow-lg text-sm whitespace-nowrap z-10 transition-opacity border border-gray-100">
-                <div className="font-medium text-gray-800">{component.label}</div>
-                <div className="text-[#0578BB] font-bold">
+              <div className="opacity-0 group-hover:opacity-100 absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-card px-3 py-2 rounded-lg shadow-lg text-sm whitespace-nowrap z-10 transition-opacity border border-border">
+                <div className="font-medium text-foreground">{component.label}</div>
+                <div className="text-primary font-bold">
                   {formatCurrency(Math.abs(component.value))}
                 </div>
               </div>
@@ -95,12 +95,12 @@ const SimpleBarChart: React.FC = () => {
         
         <div className="flex flex-wrap gap-4 justify-center text-xs">
           {components.map((component, index) => (
-            <div key={index} className="flex items-center gap-1.5">
+            <div key={index} className="flex items-center gap-2">
               <div 
                 className="w-4 h-4 rounded-sm" 
                 style={{ backgroundColor: component.color }}
               />
-              <span className="text-[#222] font-medium">
+              <span className="text-foreground font-medium">
                 {component.label} {component.isNegative ? '(-)' : ''}
               </span>
             </div>

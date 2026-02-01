@@ -59,27 +59,27 @@ const AdjustmentSuggestions: React.FC = () => {
     });
   }
 
-  return <Card className="p-4 bg-[#F7F8FB] border-[#E6E8EB] mt-4">
-      <p className="font-medium text-[#0578BB] mb-2">🎯 Monthly Payment Goal</p>
+  return <Card className="p-4 bg-muted border-border mt-4">
+      <p className="font-medium text-foreground mb-2">🎯 Monthly Payment Goal</p>
       <div className="space-y-4">
         <div className="relative h-10">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
           <Input type="number" value={loanDetails.monthlyPaymentGoal || ''} onChange={handlePaymentGoalChange} className="pl-8 h-full" placeholder="Enter target monthly payment" />
         </div>
-        <div className="pt-3">
-          <label className="text-sm font-semibold text-gray-700">
+        <div className="pt-4">
+          <label className="text-sm font-semibold text-muted-foreground">
             {!paymentGoal ? 
               "Enter a target monthly payment to review suggestions" : 
               "Suggestions to meet your goal"}
           </label>
         </div>
       </div>
-      {paymentGoal && monthlyPayment > paymentGoal && <p className="text-sm text-[#222] mb-2">
+      {paymentGoal && monthlyPayment > paymentGoal && <p className="text-sm text-foreground mb-2">
           To reach your goal of {formatCurrency(paymentGoal)}/month (current: {formatCurrency(monthlyPayment)}/month):
         </p>}
       <ul className="space-y-2">
-        {suggestions.map((suggestion, index) => <li key={index} className="text-sm text-[#222] flex items-center gap-2">
-            <span className="text-[#0578BB]">•</span>
+        {suggestions.map((suggestion, index) => <li key={index} className="text-sm text-foreground flex items-center gap-2">
+            <span className="text-primary">•</span>
             {suggestion.text}
           </li>)}
       </ul>

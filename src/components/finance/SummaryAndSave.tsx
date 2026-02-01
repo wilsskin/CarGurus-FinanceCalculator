@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import { useFinance } from '../../context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
 import TipCard from './TipCard';
-import { Info, Clock, PiggyBank, WalletIcon } from 'lucide-react';
+import { Info, Clock } from 'lucide-react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { Card } from '../ui/card';
-import { cn } from '@/lib/utils';
+import { toast } from '@/components/ui/sonner';
+
 const SummaryAndSave: React.FC = () => {
-  const {
-    state,
-    dispatch
-  } = useFinance();
+  const { state, dispatch } = useFinance();
   const {
     carPrice,
     paymentType,
@@ -24,121 +21,129 @@ const SummaryAndSave: React.FC = () => {
     totalCost
   } = state;
   const [isEditingAPR, setIsEditingAPR] = useState(false);
-  const [showToast, setShowToast] = useState(false);
 
-  // Calculate the amount financed properly (verify calculation)
+  // Calculate the amount financed properly
   const amountFinanced = carPrice + (addonsTotal || 0) - (discounts || 0) + taxesAndFees.taxAmount + taxesAndFees.totalFees - loanDetails.downPayment - tradeIn.netValue;
 
   // Finance charge is the total cost of the loan minus the amount financed
   const financeCharge = loanDetails.termMonths && loanDetails.interestRate ? monthlyPayment * loanDetails.termMonths - amountFinanced : 0;
   const totalLoanCost = loanDetails.termMonths && loanDetails.interestRate ? monthlyPayment * loanDetails.termMonths : amountFinanced;
+
   const handleAPRChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
     dispatch({
       type: 'SET_LOAN_DETAILS',
-      payload: {
-        interestRate: isNaN(value) ? 0 : value
-      }
+      payload: { interestRate: isNaN(value) ? 0 : value }
     });
   };
-  const handleSave = () => {
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-  };
+
   const noLoanDetailsProvided = !loanDetails.termMonths || !loanDetails.interestRate || loanDetails.interestRate === 0;
+
   if (paymentType === 'cash') {
-    return <div className="bg-white rounded-xl shadow-md p-6 mb-28 animate-slide-in font-sans">
-        <h2 className="text-xl font-extrabold mb-4 text-[#0578BB]">Purchase Summary</h2>
-        <div className="border rounded-lg p-4 bg-[#F7F8FB] space-y-4">
-          <div className="flex justify-between items-center text-lg">
-            <span className="font-bold text-[#222]">Total Cost</span>
-            <span className="font-extrabold text-[#0578BB]">{formatCurrency(totalCost)}</span>
+    return (
+      <section className="space-y-5">
+        <h2>Purchase Summary</h2>
+        <div className="bg-background rounded-cg-lg border border-border p-5">
+          <div className="flex justify-between items-center">
+            <span className="text-lg font-bold text-foreground">Total Cost</span>
+            <span className="text-price-md text-primary">{formatCurrency(totalCost)}</span>
           </div>
         </div>
-      </div>;
+      </section>
+    );
   }
-  return <div className="bg-white rounded-xl shadow-md p-6 mb-6 animate-slide-in font-sans">
-      <h2 className="text-xl font-extrabold mb-4 text-[#0578BB]">Finance Summary</h2>
+
+  return (
+    <section className="space-y-5">
+      <h2>Finance Summary</h2>
       
-      {/* APR Input - Full width white box */}
-      <div className="mb-6">
-        <label className="block text-sm font-semibold text-[#222] mb-2">
+      {/* APR Input */}
+      <div>
+        <label className="block text-label font-medium text-foreground mb-2">
           APR (Interest Rate)
         </label>
-        {isEditingAPR ? <Input type="number" value={loanDetails.interestRate || ''} onChange={handleAPRChange} onBlur={() => setIsEditingAPR(false)} className="w-full" placeholder="Enter APR" step="0.1" /> : <Button variant="outline" onClick={() => setIsEditingAPR(true)} className="w-full text-left justify-start hover:bg-[#F7F8FB]">
+        {isEditingAPR ? (
+          <div className="relative">
+            <Input 
+              type="number" 
+              value={loanDetails.interestRate || ''} 
+              onChange={handleAPRChange} 
+              onBlur={() => setIsEditingAPR(false)} 
+              className="pr-8" 
+              placeholder="Enter APR" 
+              step="0.1"
+              autoFocus
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">%</span>
+          </div>
+        ) : (
+          <Button 
+            variant="outline" 
+            onClick={() => setIsEditingAPR(true)} 
+            className="w-full text-left justify-start"
+          >
             {loanDetails.interestRate ? `${loanDetails.interestRate}%` : 'Set APR'}
-          </Button>}
+          </Button>
+        )}
       </div>
 
-      {/* Loan Term & Trade-in Summary */}
-      <div className="mb-6">
-        {loanDetails.termMonths > 0 && <div className="flex items-center gap-2 mb-2">
-            <Clock className="w-4 h-4 text-[#8E9196]" />
-            <span className="text-sm text-[#222]">
-              {loanDetails.termMonths} month loan term
+      {/* Loan Term Summary */}
+      {loanDetails.termMonths > 0 && (
+        <div className="flex items-center gap-2 py-2">
+          <Clock className="w-4 h-4 text-muted-foreground" />
+          <span className="text-body-sm text-muted-foreground">
+            {loanDetails.termMonths} month loan term
+          </span>
+        </div>
+      )}
+
+      {/* Payment Details - Receipt Style */}
+      <div className="bg-background rounded-cg-lg border border-border overflow-hidden">
+        {/* Line Items */}
+        <div className="divide-y divide-border">
+          <div className="flex justify-between items-center px-4 py-4">
+            <span className="text-body-sm text-muted-foreground">Amount Financed</span>
+            <span className="text-body-sm font-medium text-foreground">{formatCurrency(amountFinanced)}</span>
+          </div>
+
+          <div className="flex justify-between items-center px-4 py-4">
+            <span className="text-body-sm text-muted-foreground">Interest Charge</span>
+            <span className="text-body-sm font-medium text-foreground">
+              {noLoanDetailsProvided ? '—' : formatCurrency(financeCharge)}
             </span>
-          </div>}
-        {tradeIn.netValue > 0}
-      </div>
-
-      {/* Payment Details Box */}
-      <div className="border rounded-lg p-4 space-y-4 mb-4">
-        {/* Amount Financed */}
-        <div className="flex justify-between items-start">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold">Amount Financed</span>
-            <Info className="h-4 w-4 text-[#8E9196]" />
           </div>
-          <span className="font-medium">{formatCurrency(amountFinanced)}</span>
-        </div>
 
-        {/* Finance Charge */}
-        <div className="flex justify-between items-start">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold">Interest Charge</span>
-            <Info className="h-4 w-4 text-[#8E9196]" />
+          <div className="flex justify-between items-center px-4 py-4">
+            <span className="text-body-sm text-muted-foreground">Total Loan Cost</span>
+            <span className="text-body-sm font-medium text-foreground">
+              {noLoanDetailsProvided ? formatCurrency(amountFinanced) : formatCurrency(totalLoanCost)}
+            </span>
           </div>
-          <span className="font-medium">{noLoanDetailsProvided ? 'N/A' : formatCurrency(financeCharge)}</span>
-        </div>
 
-        {/* Total Loan Cost */}
-        <div className="flex justify-between items-start">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold">Total Loan Cost</span>
-            <Info className="h-4 w-4 text-[#8E9196]" />
+          <div className="flex justify-between items-center px-4 py-4">
+            <span className="text-body-sm text-muted-foreground">Down Payment</span>
+            <span className="text-body-sm font-medium text-foreground">{formatCurrency(loanDetails.downPayment)}</span>
           </div>
-          <span className="font-medium">{noLoanDetailsProvided ? formatCurrency(amountFinanced) : formatCurrency(totalLoanCost)}</span>
-        </div>
 
-        {/* Down Payment */}
-        <div className="flex justify-between items-start pt-2 border-t">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold">Down Payment</span>
-            <Info className="h-4 w-4 text-[#8E9196]" />
-          </div>
-          <span className="font-medium">{formatCurrency(loanDetails.downPayment)}</span>
-        </div>
-
-        {/* Trade-In Value - Only display if user has input a trade-in */}
-        {tradeIn.netValue > 0 && <div className="flex justify-between items-start">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">Trade-In Value</span>
-              <Info className="h-4 w-4 text-[#8E9196]" />
+          {tradeIn.netValue > 0 && (
+            <div className="flex justify-between items-center px-4 py-4">
+              <span className="text-body-sm text-muted-foreground">Trade-In Value</span>
+              <span className="text-body-sm font-medium text-green-600">{formatCurrency(tradeIn.netValue)}</span>
             </div>
-            <span className="font-medium">{formatCurrency(tradeIn.netValue)}</span>
-          </div>}
+          )}
+        </div>
 
-        {/* Monthly Payment and Total Cost */}
-        <div className="pt-4 border-t">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-lg font-bold text-[#222]">Monthly Payment</span>
-            <span className="text-xl font-extrabold text-[#0578BB]">
-              {noLoanDetailsProvided ? 'Fill loan details' : formatCurrency(monthlyPayment)}
+        {/* Monthly Payment - Large Display */}
+        <div className="bg-section-light px-4 py-5 border-t-2 border-foreground/10">
+          <div className="flex justify-between items-baseline mb-3">
+            <span className="text-label font-bold text-foreground">Monthly Payment</span>
+            <span className="text-price-lg text-foreground">
+              {noLoanDetailsProvided ? '—' : formatCurrency(monthlyPayment)}
             </span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-lg font-bold text-[#222]">Total Cost</span>
-            <span className="text-xl font-extrabold text-[#0578BB]">
+          <div className="flex justify-between items-baseline">
+            <span className="text-label font-bold text-foreground">Total Cost</span>
+            <span className="text-price-md text-primary">
               {formatCurrency(totalCost)}
             </span>
           </div>
@@ -146,13 +151,22 @@ const SummaryAndSave: React.FC = () => {
       </div>
 
       {/* Payment Tip */}
-      {noLoanDetailsProvided && <TipCard tipText="💡 To calculate your monthly payment, please complete your loan details: term, down payment, and APR." tipType="info" dismissible={false} />}
-      {!noLoanDetailsProvided && monthlyPayment > 500 && <TipCard tipText="💡 Want a lower monthly payment? Try increasing your down payment or extending your loan term." tipType="info" dismissible={false} />}
-
-      {/* Toast */}
-      {showToast && <div className="fixed bottom-24 left-0 right-0 mx-auto w-4/5 max-w-sm bg-[#0578BB] text-white p-3 rounded-lg shadow-lg animate-fade-in flex items-center justify-center z-50">
-          <span className="font-bold">Estimate saved!</span>
-        </div>}
-    </div>;
+      {noLoanDetailsProvided && (
+        <TipCard 
+          tipText="To calculate your monthly payment, please complete your loan details: term, down payment, and APR." 
+          tipType="info" 
+          dismissible={false} 
+        />
+      )}
+      {!noLoanDetailsProvided && monthlyPayment > 500 && (
+        <TipCard 
+          tipText="Want a lower monthly payment? Try increasing your down payment or extending your loan term." 
+          tipType="info" 
+          dismissible={false} 
+        />
+      )}
+    </section>
+  );
 };
+
 export default SummaryAndSave;

@@ -1,29 +1,27 @@
-
 import React from 'react';
 import { useFinance } from '@/context/finance';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { SegmentedControl, SegmentedControlItem } from "@/components/ui/segmented-control";
 import AdjustmentSuggestions from '../AdjustmentSuggestions';
+import { FieldGroup, FieldLabel, FieldHelper } from '@/components/layout';
 
-const creditScoreRanges = [{
-  label: 'Excellent (720+)',
-  value: '720'
-}, {
-  label: 'Good (690-719)',
-  value: '690'
-}, {
-  label: 'Fair (630-689)',
-  value: '630'
-}, {
-  label: 'Poor (Below 630)',
-  value: '629'
-}];
+const creditScoreRanges = [
+  { label: 'Excellent', range: '720+', value: '720' },
+  { label: 'Good', range: '690-719', value: '690' },
+  { label: 'Fair', range: '630-689', value: '630' },
+  { label: 'Poor', range: '<630', value: '629' }
+];
+
+const loanTermOptions = [
+  { months: 36, label: '3 yr' },
+  { months: 48, label: '4 yr' },
+  { months: 60, label: '5 yr' },
+  { months: 72, label: '6 yr' },
+  { months: 84, label: '7 yr' }
+];
 
 const MyFinanceInfo: React.FC = () => {
-  const {
-    state,
-    dispatch
-  } = useFinance();
+  const { state, dispatch } = useFinance();
 
   // Don't render this section if payment type is cash
   if (state.paymentType === 'cash') {
@@ -36,74 +34,87 @@ const MyFinanceInfo: React.FC = () => {
       payload: parseInt(value)
     });
   };
+
+  const handleLoanTermChange = (value: string) => {
+    dispatch({
+      type: 'SET_LOAN_DETAILS',
+      payload: { termMonths: parseInt(value) }
+    });
+  };
+
   const handleDownPaymentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value) || 0;
     dispatch({
       type: 'SET_LOAN_DETAILS',
-      payload: {
-        downPayment: value
-      }
+      payload: { downPayment: value }
     });
   };
-  return <section className="space-y-4">
-      <h2 className="text-xl font-bold text-[#0578BB]">My Finance Info</h2>
+
+  return (
+    <section className="space-y-5">
+      <h2>My Finance Info</h2>
       
-      <div className="space-y-4">
-        {/* Credit Score Field */}
-        <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-gray-700">
-            Credit Score
-          </label>
-          <Select value={state.creditScore?.toString()} onValueChange={handleCreditScoreChange}>
-            <SelectTrigger className="w-full font-medium">
-              <SelectValue placeholder="Select score" />
-            </SelectTrigger>
-            <SelectContent>
-              {creditScoreRanges.map(range => <SelectItem key={range.value} value={range.value}>
-                  {range.label}
-                </SelectItem>)}
-            </SelectContent>
-          </Select>
-          
-        </div>
+      <div className="space-y-5">
+        {/* Credit Score - Segmented Control */}
+        <FieldGroup>
+          <FieldLabel>Credit Score</FieldLabel>
+          <SegmentedControl 
+            value={state.creditScore?.toString() || ''} 
+            onValueChange={handleCreditScoreChange}
+          >
+            {creditScoreRanges.map(range => (
+              <SegmentedControlItem key={range.value} value={range.value}>
+                <div className="flex flex-col items-center leading-tight">
+                  <span className="text-sm font-semibold">{range.label}</span>
+                  <span className="text-xs opacity-80">{range.range}</span>
+                </div>
+              </SegmentedControlItem>
+            ))}
+          </SegmentedControl>
+        </FieldGroup>
         
-        {/* Loan Term */}
-        <div className="space-y-1.5">
-            <label className="block text-sm font-semibold text-gray-700">
-              Loan Term
-            </label>
-            <div className="grid grid-cols-5 gap-2">
-              {[36, 48, 60, 72, 84].map(months => <button key={months} onClick={() => dispatch({
-            type: 'SET_LOAN_DETAILS',
-            payload: {
-              termMonths: months
-            }
-          })} className={`
-                    py-2 px-1 rounded-lg text-sm font-medium transition-colors
-                    ${state.loanDetails.termMonths === months ? 'bg-[#0578BB] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
-                  `}>
-                  {months / 12}yr
-                </button>)}
-            </div>
-            
-          </div>
+        {/* Loan Term - Segmented Control */}
+        <FieldGroup>
+          <FieldLabel>Loan Term</FieldLabel>
+          <SegmentedControl 
+            value={state.loanDetails.termMonths?.toString() || ''} 
+            onValueChange={handleLoanTermChange}
+          >
+            {loanTermOptions.map(term => (
+              <SegmentedControlItem key={term.months} value={term.months.toString()}>
+                <div className="flex flex-col items-center leading-tight">
+                  <span className="text-sm font-semibold">{term.label}</span>
+                  <span className="text-xs opacity-80">{term.months} mo</span>
+                </div>
+              </SegmentedControlItem>
+            ))}
+          </SegmentedControl>
+        </FieldGroup>
         
-        {/* Down Payment Field */}
-        <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-gray-700">
-            Down Payment
-          </label>
+        {/* Down Payment - Input Field */}
+        <FieldGroup>
+          <FieldLabel>Down Payment</FieldLabel>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-            <Input type="number" value={state.loanDetails.downPayment || ''} onChange={handleDownPaymentChange} className="pl-8" placeholder="Enter down payment" />
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">$</span>
+            <Input 
+              type="number" 
+              value={state.loanDetails.downPayment || ''} 
+              onChange={handleDownPaymentChange} 
+              className="pl-8" 
+              placeholder="0" 
+            />
           </div>
-          <p className="text-sm text-gray-500">
-            {state.loanDetails.downPayment > 0 && state.carPrice > 0 && `${Math.round(state.loanDetails.downPayment / state.carPrice * 100)}% of vehicle price`}
-          </p>
-        </div>
+          {state.loanDetails.downPayment > 0 && state.carPrice > 0 && (
+            <FieldHelper>
+              {Math.round(state.loanDetails.downPayment / state.carPrice * 100)}% of vehicle price
+            </FieldHelper>
+          )}
+        </FieldGroup>
       </div>
       
       <AdjustmentSuggestions />
-    </section>;
+    </section>
+  );
 };
+
 export default MyFinanceInfo;
