@@ -28,51 +28,54 @@ const SummaryAndSave: React.FC = () => {
 
   return (
     <section className="space-y-5">
-      <div className="flex items-center gap-2">
-        <h3>Finance Summary</h3>
-        {loanDetails.termMonths > 0 && (
-          <span className="text-body-sm text-muted-foreground">
-            {loanDetails.termMonths}-month loan term
-          </span>
-        )}
-      </div>
+      <h3>Finance Summary</h3>
 
-      {/* Amount to Finance - Two-column layout: price column + label column */}
-      <div className="space-y-2 text-body-sm">
-        <div className="flex items-center gap-3">
-          <span className="min-w-[5.5rem] text-right font-medium text-foreground">{formatCurrency(carSubtotal)}</span>
-          <span className="font-medium text-foreground">Car Subtotal</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="min-w-[5.5rem] text-right font-medium text-foreground">− {formatCurrency(loanDetails.downPayment)}</span>
-          <span className="text-muted-foreground">Down Payment</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="min-w-[5.5rem] text-right font-medium text-foreground">− {formatCurrency(tradeIn.netValue)}</span>
-          <span className="text-muted-foreground">Trade-In</span>
-        </div>
-        <div className="flex items-center gap-3 pt-2 border-t border-border">
-          <span className="min-w-[5.5rem] text-right font-bold text-foreground text-body">{formatCurrency(amountFinanced)}</span>
-          <span className="font-bold text-foreground text-body">Amount to Finance</span>
-        </div>
-      </div>
-
-      {/* White Card - Finance Amount, Interest, Loan Cost */}
-      <div className="bg-background rounded-cg-lg border border-border overflow-hidden">
-        <div className="divide-y divide-border">
-          <div className="flex justify-between items-center px-4 py-4">
-            <span className="text-body-sm font-medium text-foreground">Finance Amount</span>
-            <span className="text-body-sm font-medium text-foreground">{formatCurrency(amountFinanced)}</span>
+      {/* Amount to Finance - Three columns + Finance Amount row */}
+      <div className="bg-white/50 rounded-cg-lg border border-border overflow-hidden">
+        <div className="px-4 py-4">
+          {/* Three columns: Car Total | Down Payment | Trade-In */}
+          <div className="flex gap-8">
+            <div className="flex flex-col gap-1">
+              <span className="text-body-sm font-medium text-foreground">Car Subtotal</span>
+              <span className="text-[14px] font-medium text-foreground tabular-nums">{formatCurrency(carSubtotal)}</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-body-sm font-medium text-muted-foreground">Down Payment</span>
+              <span className="text-body-sm text-muted-foreground tabular-nums">− {formatCurrency(loanDetails.downPayment)}</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-body-sm font-medium text-muted-foreground">Trade-In</span>
+              <span className="text-body-sm text-muted-foreground tabular-nums">− {formatCurrency(tradeIn.netValue)}</span>
+            </div>
           </div>
 
-          <div className="flex justify-between items-center px-4 py-4">
-            <div>
-              <span className="text-body-sm font-medium text-foreground">Interest Charge </span>
-              <span className="text-caption text-muted-foreground">(APR × term × finance amount)</span>
+          {/* Finance Amount row - label left, amount right + loan term & APR */}
+          <div className="flex flex-col gap-1 pt-4 mt-4 border-t border-border">
+            <div className="flex justify-between items-center">
+              <span className="text-body-sm font-medium text-foreground">Amount to Finance</span>
+              <span className="text-body-sm font-medium text-foreground tabular-nums">{formatCurrency(amountFinanced)}</span>
             </div>
-            <span className="text-body-sm font-medium text-foreground">
-              {noLoanDetailsProvided ? '—' : formatCurrency(financeCharge)}
+            <span className="text-body-sm text-muted-foreground">
+              {[
+                loanDetails.termMonths > 0 && `${loanDetails.termMonths} mo`,
+                loanDetails.interestRate != null && loanDetails.interestRate > 0 && `${loanDetails.interestRate}% APR`
+              ].filter(Boolean).join(' · ') || '—'}
             </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Interest Charge, Loan Cost + Monthly Payment/Total Cost */}
+      <div className="rounded-cg-lg border border-border overflow-hidden">
+        <div className="divide-y divide-border bg-white/50">
+          <div className="flex flex-col gap-1 px-4 py-4">
+            <div className="flex justify-between items-center">
+              <span className="text-body-sm font-medium text-foreground">Interest Charge</span>
+              <span className="text-body-sm font-medium text-foreground">
+                {noLoanDetailsProvided ? '—' : formatCurrency(financeCharge)}
+              </span>
+            </div>
+            <span className="text-body-sm text-muted-foreground">Finance amount x term x APR</span>
           </div>
 
           <div className="flex justify-between items-center px-4 py-4">
@@ -83,16 +86,16 @@ const SummaryAndSave: React.FC = () => {
           </div>
         </div>
 
-        {/* Monthly Payment + Total Cost - Same style, both black */}
-        <div className="bg-section-light px-4 py-5 border-t border-border">
-          <div className="flex justify-between items-baseline mb-3">
-            <span className="text-label font-bold text-foreground">Monthly Payment</span>
+        {/* Monthly Payment + Total Cost - White to draw focus */}
+        <div className="bg-background px-4 py-5 border-t border-border">
+          <div className="flex justify-between items-baseline mb-4">
+            <span className="text-body-lg font-medium text-foreground">Monthly Payment</span>
             <span className="text-price-md font-bold text-foreground">
               {noLoanDetailsProvided ? '—' : formatCurrency(monthlyPayment)}
             </span>
           </div>
           <div className="flex justify-between items-baseline">
-            <span className="text-label font-bold text-foreground">Total Cost</span>
+            <span className="text-body-lg font-medium text-foreground">Total Cost</span>
             <span className="text-price-md font-bold text-foreground">
               {noLoanDetailsProvided ? '—' : formatCurrency(totalCost)}
             </span>

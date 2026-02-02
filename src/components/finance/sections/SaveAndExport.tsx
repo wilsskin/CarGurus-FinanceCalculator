@@ -1,5 +1,5 @@
 import React from 'react';
-import { Save, Download } from 'lucide-react';
+import { Heart, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const SaveAndExport: React.FC = () => {
@@ -9,7 +9,7 @@ const SaveAndExport: React.FC = () => {
         onClick={() => {}}
         className="w-full"
       >
-        <Save className="w-5 h-5" />
+        <Heart className="w-5 h-5" />
         Save Estimate
       </Button>
       
@@ -18,8 +18,8 @@ const SaveAndExport: React.FC = () => {
         variant="outline"
         className="w-full"
       >
-        <Download className="w-5 h-5" />
-        Export Estimate
+        <ExternalLink className="w-5 h-5" />
+        Share Estimate
       </Button>
     </div>
   );

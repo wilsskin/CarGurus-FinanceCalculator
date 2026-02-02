@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFinance } from '@/context/finance';
-import { Info } from 'lucide-react';
 import { formatCurrency } from '@/utils/financeCalculator';
+import SaveAndExport from './SaveAndExport';
 
 const EstimatedRange: React.FC = () => {
   const { state } = useFinance();
@@ -24,24 +24,21 @@ const EstimatedRange: React.FC = () => {
 
   return (
     <section className="space-y-4">
-      <div className="flex items-center gap-2">
-        <h4>Estimated Ranges</h4>
-        <Info className="w-4 h-4 text-muted-foreground" />
-      </div>
+      <h3>Estimated Ranges</h3>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-background rounded-cg border border-border p-4">
-          <div className="text-caption text-muted-foreground mb-1">Monthly Range</div>
-          <div className="text-price-sm text-foreground">
+        <div className="bg-background rounded-cg-lg border border-border py-5 px-4 min-h-[115px]">
+          <div className="text-body-sm text-muted-foreground mb-2">Monthly Range</div>
+          <div className="text-price-sm text-foreground tabular-nums whitespace-nowrap">
             {canCalculateRange ? 
               `${formatCurrency(minMonthly)} – ${formatCurrency(maxMonthly)}` : 
               '—'}
           </div>
         </div>
 
-        <div className="bg-background rounded-cg border border-border p-4">
-          <div className="text-caption text-muted-foreground mb-1">Total Range</div>
-          <div className="text-price-sm text-foreground">
+        <div className="bg-background rounded-cg-lg border border-border py-5 px-4 min-h-[115px]">
+          <div className="text-body-sm text-muted-foreground mb-2">Total Range</div>
+          <div className="text-price-sm text-foreground tabular-nums whitespace-nowrap">
             {formatCurrency(minEstimate)} – {formatCurrency(maxEstimate)}
           </div>
         </div>
@@ -49,14 +46,25 @@ const EstimatedRange: React.FC = () => {
 
       <div className="text-body-sm text-muted-foreground">
         <p className="mb-2">Range may vary based on:</p>
-        <ul className="list-disc pl-5 space-y-1">
+        <ul className="space-y-1.5">
           {loanDetails.interestRate > 0 && (
-            <li>Final interest rate approval</li>
+            <li className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground shrink-0" aria-hidden="true" />
+              <span>Final interest rate approval</span>
+            </li>
           )}
-          <li>Available dealer incentives</li>
-          <li>Taxes and fees</li>
+          <li className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground shrink-0" aria-hidden="true" />
+            <span>Available dealer incentives</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground shrink-0" aria-hidden="true" />
+            <span>Taxes and fees</span>
+          </li>
         </ul>
       </div>
+
+      <SaveAndExport />
     </section>
   );
 };

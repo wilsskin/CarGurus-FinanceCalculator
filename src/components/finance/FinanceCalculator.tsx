@@ -6,10 +6,7 @@ import VehicleInfo from './sections/VehicleInfo';
 import MyFinanceInfo from './sections/MyFinanceInfo';
 import CarCost from './sections/CarCost';
 import SummaryAndSave from './SummaryAndSave';
-import SaveAndExport from './sections/SaveAndExport';
-import ScrollToTop from './ScrollToTop';
 import EstimatedRange from './sections/EstimatedRange';
-import SimpleBarChart from './SummaryBarChart';
 
 const FinanceCalculatorContent: React.FC = () => {
   return (
@@ -40,24 +37,17 @@ const FinanceCalculatorContent: React.FC = () => {
       
       {/* Summary Section */}
       <div className="bg-section-light py-8">
-        <div className="mx-auto max-w-md px-4 space-y-6">
+        <div className="mx-auto max-w-md px-4">
           <SummaryAndSave />
+        </div>
+      </div>
+      
+      {/* Estimated Range Section - white background like Car Cost */}
+      <div className="bg-background py-8">
+        <div className="mx-auto max-w-md px-4">
           <EstimatedRange />
         </div>
       </div>
-      
-      {/* Export & Breakdown Section */}
-      <div className="bg-background py-8">
-        <div className="mx-auto max-w-md px-4 space-y-6">
-          <SaveAndExport />
-          <div>
-            <h4 className="mb-4">Cost Breakdown</h4>
-            <SimpleBarChart />
-          </div>
-        </div>
-      </div>
-      
-      <ScrollToTop />
     </div>
   );
 };

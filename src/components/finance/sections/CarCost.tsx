@@ -208,7 +208,7 @@ const CarCost: React.FC = () => {
 
         {/* Car Subtotal - Receipt style, above Trade-In */}
         <div className="flex justify-between items-center py-3 border-b border-border">
-          <span className="text-body-lg font-bold text-foreground">Car Subtotal</span>
+          <span className="text-body-lg font-medium text-foreground">Car Subtotal</span>
           <span id="subtotal-amount" className="text-price-md text-foreground font-bold">
             {formatCurrency(calculateCarCostTotal())}
           </span>
