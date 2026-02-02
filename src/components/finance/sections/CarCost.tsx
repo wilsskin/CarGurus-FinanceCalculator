@@ -64,7 +64,7 @@ const CarCost: React.FC = () => {
       
       <div className="space-y-4">
         {/* Base Price */}
-        <div className="flex justify-between items-center py-3 border-b border-border text-body-sm">
+        <div className="flex justify-between items-center py-3 border-b border-border text-body">
           <span className="font-medium text-foreground">Base Price</span>
           <span className="font-medium text-foreground">{formatCurrency(state.carPrice)}</span>
         </div>
@@ -74,10 +74,10 @@ const CarCost: React.FC = () => {
           {editingTaxes ? (
             <div className="space-y-4 animate-fade-in">
               <div className="flex justify-between items-center">
-                <span className="text-label font-medium text-foreground">Taxes & Fees</span>
+                <span className="text-body font-medium text-foreground">Taxes & Fees</span>
                 <button
                   onClick={() => setEditingTaxes(false)}
-                  className="text-body-sm font-semibold text-primary"
+                  className="text-body font-semibold text-primary"
                 >
                   Done
                 </button>
@@ -85,7 +85,7 @@ const CarCost: React.FC = () => {
               
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-body-sm text-muted-foreground">Sales Tax (%)</span>
+                  <span className="text-body text-muted-foreground">Sales Tax (%)</span>
                   <div className="relative w-28">
                     <Input 
                       type="number" 
@@ -101,7 +101,7 @@ const CarCost: React.FC = () => {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-body-sm text-muted-foreground">Registration Fee</span>
+                  <span className="text-body text-muted-foreground">Registration Fee</span>
                   <div className="relative w-28">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
                     <Input 
@@ -129,7 +129,7 @@ const CarCost: React.FC = () => {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-body-sm text-muted-foreground">Dealer Fee</span>
+                  <span className="text-body text-muted-foreground">Dealer Fee</span>
                   <div className="relative w-28">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
                     <Input 
@@ -159,7 +159,7 @@ const CarCost: React.FC = () => {
                       </div>
                       <button
                         onClick={handleRemoveAdditionalFee}
-                        className="text-body-sm font-semibold text-primary"
+                        className="text-body font-semibold text-primary"
                       >
                         Remove
                       </button>
@@ -171,7 +171,7 @@ const CarCost: React.FC = () => {
                   <div className="flex justify-end">
                     <button
                       onClick={handleAddFeeClick}
-                      className="text-body-sm font-semibold text-primary"
+                      className="text-body font-semibold text-primary"
                     >
                       Add Fee
                     </button>
@@ -182,22 +182,22 @@ const CarCost: React.FC = () => {
           ) : (
             <>
               <div className="flex justify-between items-center">
-                <span className="text-label font-medium text-foreground">Taxes and Fees</span>
+                <span className="text-body font-medium text-foreground">Taxes and Fees</span>
                 <button
                   onClick={() => setEditingTaxes(true)}
-                  className="text-body-sm font-semibold text-primary"
+                  className="text-body font-semibold text-primary"
                 >
                   Edit
                 </button>
               </div>
               <div className="mt-3 space-y-2">
                 {taxFeeLineItems.map(item => (
-                  <div key={item.label} className="flex justify-between text-body-sm">
+                  <div key={item.label} className="flex justify-between text-body">
                     <span className="text-muted-foreground">{item.label}</span>
                     <span className="font-medium text-foreground">{formatCurrency(item.value)}</span>
                   </div>
                 ))}
-                <div className="flex justify-between text-body-sm">
+                <div className="flex justify-between text-body">
                   <span className="font-bold text-muted-foreground">Estimated Tax</span>
                   <span className="font-bold text-foreground">{formatCurrency(taxesAndFees.taxAmount + taxesAndFees.totalFees)}</span>
                 </div>
@@ -219,7 +219,7 @@ const CarCost: React.FC = () => {
           <div className="flex justify-end">
             <button 
               onClick={() => setShowTradeIn(!showTradeIn)} 
-              className="text-body-sm font-semibold text-primary"
+              className="text-body font-semibold text-primary"
             >
               {showTradeIn ? 'Remove' : 'Add Trade-In'}
             </button>

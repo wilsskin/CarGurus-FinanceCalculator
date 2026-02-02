@@ -21,9 +21,14 @@ const SummaryBanner: React.FC = () => {
   return (
     <div 
       className={`
-        w-full bg-background border-b border-border transition-all duration-300 z-50
-        ${isSticky ? 'fixed top-0 left-0 right-0 shadow-sm' : ''}
+        w-full bg-background border-b border-border z-50
+        ${isSticky ? 'fixed left-0 right-0 shadow-sm animate-banner-reveal' : 'transition-shadow duration-200 ease-out'}
       `}
+      style={isSticky ? { 
+        top: 'env(safe-area-inset-top, 0px)',
+        WebkitTransform: 'translateZ(0)',
+        transform: 'translateZ(0)',
+      } : undefined}
     >
       <div className="mx-auto max-w-md px-4 py-3">
         <div className="flex items-center justify-between">

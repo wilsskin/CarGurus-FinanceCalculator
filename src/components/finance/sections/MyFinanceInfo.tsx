@@ -130,7 +130,7 @@ const MyFinanceInfo: React.FC = () => {
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">%</span>
           </div>
-            <FieldHelper className="text-[12px] font-normal opacity-80 text-muted-foreground">Based on current rates</FieldHelper>
+            <FieldHelper className="text-[12px] font-normal opacity-80 text-muted-foreground">Based on credit score and current rates</FieldHelper>
         </FieldGroup>
       </div>
       

@@ -36,26 +36,26 @@ const SummaryAndSave: React.FC = () => {
           {/* Three columns: Car Total | Down Payment | Trade-In */}
           <div className="flex gap-8">
             <div className="flex flex-col gap-1">
-              <span className="text-body-sm font-medium text-foreground">Car Subtotal</span>
-              <span className="text-[14px] font-medium text-foreground tabular-nums">{formatCurrency(carSubtotal)}</span>
+              <span className="text-body font-medium text-foreground">Car Subtotal</span>
+              <span className="text-body font-medium text-foreground tabular-nums">{formatCurrency(carSubtotal)}</span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-body-sm font-medium text-muted-foreground">Down Payment</span>
-              <span className="text-body-sm text-muted-foreground tabular-nums">− {formatCurrency(loanDetails.downPayment)}</span>
+              <span className="text-body font-medium text-muted-foreground">Down Payment</span>
+              <span className="text-body text-muted-foreground tabular-nums">− {formatCurrency(loanDetails.downPayment)}</span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-body-sm font-medium text-muted-foreground">Trade-In</span>
-              <span className="text-body-sm text-muted-foreground tabular-nums">− {formatCurrency(tradeIn.netValue)}</span>
+              <span className="text-body font-medium text-muted-foreground">Trade-In</span>
+              <span className="text-body text-muted-foreground tabular-nums">− {formatCurrency(tradeIn.netValue)}</span>
             </div>
           </div>
 
           {/* Finance Amount row - label left, amount right + loan term & APR */}
           <div className="flex flex-col gap-1 pt-4 mt-4 border-t border-border">
             <div className="flex justify-between items-center">
-              <span className="text-body-sm font-medium text-foreground">Amount to Finance</span>
-              <span className="text-body-sm font-medium text-foreground tabular-nums">{formatCurrency(amountFinanced)}</span>
+              <span className="text-body font-medium text-foreground">Amount to Finance</span>
+              <span className="text-body font-medium text-foreground tabular-nums">{formatCurrency(amountFinanced)}</span>
             </div>
-            <span className="text-body-sm text-muted-foreground">
+            <span className="text-body text-muted-foreground">
               {[
                 loanDetails.termMonths > 0 && `${loanDetails.termMonths} mo`,
                 loanDetails.interestRate != null && loanDetails.interestRate > 0 && `${loanDetails.interestRate}% APR`
@@ -70,17 +70,17 @@ const SummaryAndSave: React.FC = () => {
         <div className="divide-y divide-border bg-white/50">
           <div className="flex flex-col gap-1 px-4 py-4">
             <div className="flex justify-between items-center">
-              <span className="text-body-sm font-medium text-foreground">Interest Charge</span>
-              <span className="text-body-sm font-medium text-foreground">
+              <span className="text-body font-medium text-foreground">Interest Charge</span>
+              <span className="text-body font-medium text-foreground">
                 {noLoanDetailsProvided ? '—' : formatCurrency(financeCharge)}
               </span>
             </div>
-            <span className="text-body-sm text-muted-foreground">Finance amount x term x APR</span>
+            <span className="text-body text-muted-foreground">Finance amount x term x APR</span>
           </div>
 
           <div className="flex justify-between items-center px-4 py-4">
-            <span className="text-body-sm font-medium text-foreground">Loan Cost</span>
-            <span className="text-body-sm font-medium text-foreground">
+            <span className="text-body font-medium text-foreground">Loan Cost</span>
+            <span className="text-body font-medium text-foreground">
               {noLoanDetailsProvided ? '—' : formatCurrency(loanCost)}
             </span>
           </div>

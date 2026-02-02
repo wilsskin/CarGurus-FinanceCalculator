@@ -145,6 +145,16 @@ export default {
 					'50%': {
 						opacity: '0.7'
 					}
+				},
+				'banner-reveal': {
+					'0%': {
+						opacity: '0.9',
+						transform: 'translateY(-6px) translateZ(0)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0) translateZ(0)'
+					}
 				}
 			},
 			animation: {
@@ -154,7 +164,8 @@ export default {
 				'fade-out': 'fade-out 0.3s ease-out',
 				'scale-in': 'scale-in 0.2s ease-out',
 				'slide-in': 'slide-in 0.3s ease-out',
-				'pulse-light': 'pulse-light 2s ease-in-out infinite'
+				'pulse-light': 'pulse-light 2s ease-in-out infinite',
+				'banner-reveal': 'banner-reveal 0.25s ease-out forwards'
 			}
 		}
 	},

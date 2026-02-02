@@ -25,7 +25,7 @@ const VehicleInfo: React.FC = () => {
           <div className="text-caption text-muted-foreground mb-1">
             Used · 25,000 mi
           </div>
-          <div className="text-price-sm font-bold text-foreground mb-2">
+          <div className="text-[20px] font-bold text-foreground mb-2">
             {formatCurrency(state.carPrice)}
           </div>
           <span className="text-caption text-primary font-medium">View details</span>
