@@ -74,7 +74,7 @@ const AdjustmentSuggestions: React.FC = () => {
         </div>
       </div>
       {paymentGoal && monthlyPayment > paymentGoal && <p className="text-sm font-medium text-muted-foreground mb-2">
-        Current: {formatCurrency(monthlyPayment)}/month · Goal: {formatCurrency(paymentGoal)}/month
+        Current: {formatCurrency(monthlyPayment)}/month
         </p>}
       {!goalAchieved && (
         <ul className="space-y-2">

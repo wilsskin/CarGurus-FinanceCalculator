@@ -87,16 +87,16 @@ const CarCost: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-body text-muted-foreground">Sales Tax (%)</span>
                   <div className="relative w-28">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">%</span>
                     <Input 
                       type="number" 
                       value={taxesAndFees.taxRate} 
                       onChange={handleTaxRateChange} 
-                      className="h-10 px-3 text-right text-sm" 
+                      className="h-10 pl-7 pr-3 text-right text-sm" 
                       min="0" 
                       max="100" 
                       step="0.1" 
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">%</span>
                   </div>
                 </div>
 
