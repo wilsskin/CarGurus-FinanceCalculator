@@ -20,15 +20,20 @@ const VehicleInfo: React.FC = () => {
           />
         </div>
         
-        <div className="flex-1 min-w-0 pr-4">
-          <p className="font-medium text-foreground">2022 Toyota RAV4</p>
-          <div className="text-caption text-muted-foreground mb-1">
+        <div className="flex-1 min-w-0 pr-4 flex flex-col">
+          {/* Title + Price: one visual group */}
+          <div className="flex flex-col gap-0.5">
+            <p className="text-body-lg font-semibold leading-tight text-foreground">
+              2022 Toyota RAV4
+            </p>
+            <div className="text-body font-medium text-foreground tabular-nums">
+              {formatCurrency(state.carPrice)}
+            </div>
+          </div>
+          {/* Metadata: detached, secondary */}
+          <div className="mt-2 text-body-sm font-normal text-muted-foreground">
             Used · 25,000 mi
           </div>
-          <div className="text-[20px] font-bold text-foreground mb-0.5">
-            {formatCurrency(state.carPrice)}
-          </div>
-          <span className="text-caption text-primary font-medium">View details</span>
         </div>
       </button>
     </section>
