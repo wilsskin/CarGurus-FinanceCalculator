@@ -68,15 +68,15 @@ FieldLabel.displayName = "FieldLabel";
 /**
  * FieldHelper - Helper text below input (CarGurus style)
  * 
- * - text-body-sm text-muted-foreground
- * - Use for hints and additional context
+ * - text-caption (12px) text-muted-foreground for compact tags
+ * - Use for hints and additional context (e.g. "% of vehicle price", "Based on current rates")
  */
 const FieldHelper = React.forwardRef<HTMLParagraphElement, FieldHelperProps>(
   ({ className, children, ...props }, ref) => {
     return (
       <p
         ref={ref}
-        className={cn("text-body-sm text-muted-foreground mt-1", className)}
+        className={cn("text-caption text-muted-foreground mt-0.5", className)}
         {...props}
       >
         {children}

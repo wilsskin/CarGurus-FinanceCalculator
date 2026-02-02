@@ -8,25 +8,12 @@ import {
 import { DEFAULT_ZIP_CODE } from '../initialState';
 
 export const calculationsReducer = (state: FinanceCalculatorState): FinanceCalculatorState => {
-  // Skip detailed calculations if payment type is cash
-  if (state.paymentType === 'cash') {
-    // For cash payments, total cost is simply the sum of car price, taxes, fees, 
-    // and add-ons minus discounts and trade-in value
-    return {
-      ...state,
-      monthlyPayment: 0,
-      totalCost: state.carPrice + state.taxesAndFees.taxAmount + state.taxesAndFees.totalFees + 
-                 (state.addonsTotal || 0) - (state.discounts || 0) - state.tradeIn.netValue,
-      estimateAccuracy: 95 // Cash is pretty accurate
-    };
-  }
-  
-  // Calculate loan amount - include add-ons in base price for financing
-  const vehiclePriceWithAddons = state.carPrice + (state.addonsTotal || 0) - (state.discounts || 0);
+  // Always assume dealer financing
+  const vehiclePrice = state.carPrice;
   
   // Calculate loan amount
   const loanAmount = calculateLoanAmount(
-    vehiclePriceWithAddons,
+    vehiclePrice,
     state.loanDetails.downPayment,
     state.tradeIn.value,
     state.tradeIn.owedAmount,
@@ -63,7 +50,6 @@ export const calculationsReducer = (state: FinanceCalculatorState): FinanceCalcu
   if (state.loanDetails.termMonths > 0) estimateAccuracy += 10;
   if (state.tradeIn.value > 0) estimateAccuracy += 5;
   if (state.zipCode !== DEFAULT_ZIP_CODE) estimateAccuracy += 5;
-  if (state.paymentType === 'outside') estimateAccuracy += 5;
   if (estimateAccuracy > 95) estimateAccuracy = 95; // Cap at 95%
   
   return {

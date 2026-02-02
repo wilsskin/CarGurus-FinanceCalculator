@@ -23,11 +23,6 @@ const loanTermOptions = [
 const MyFinanceInfo: React.FC = () => {
   const { state, dispatch } = useFinance();
 
-  // Don't render this section if payment type is cash
-  if (state.paymentType === 'cash') {
-    return null;
-  }
-
   const handleCreditScoreChange = (value: string) => {
     dispatch({
       type: 'SET_CREDIT_SCORE',
@@ -50,23 +45,31 @@ const MyFinanceInfo: React.FC = () => {
     });
   };
 
+  const handleAPRChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(event.target.value);
+    dispatch({
+      type: 'SET_LOAN_DETAILS',
+      payload: { interestRate: isNaN(value) ? 0 : value }
+    });
+  };
+
   return (
     <section className="space-y-5">
-      <h2>My Finance Info</h2>
+      <h3>My Finance Info</h3>
       
-      <div className="space-y-5">
+      <div className="space-y-4">
         {/* Credit Score - Segmented Control */}
-        <FieldGroup>
-          <FieldLabel>Credit Score</FieldLabel>
+        <FieldGroup className="space-y-1">
+          <FieldLabel className="text-field-tag text-foreground">Credit Score</FieldLabel>
           <SegmentedControl 
             value={state.creditScore?.toString() || ''} 
             onValueChange={handleCreditScoreChange}
           >
             {creditScoreRanges.map(range => (
               <SegmentedControlItem key={range.value} value={range.value}>
-                <div className="flex flex-col items-center leading-tight">
-                  <span className="text-sm font-semibold">{range.label}</span>
-                  <span className="text-xs opacity-80">{range.range}</span>
+                <div className="flex flex-col items-center leading-tight text-caption">
+                  <span className="font-semibold">{range.label}</span>
+                  <span className="opacity-80">{range.range}</span>
                 </div>
               </SegmentedControlItem>
             ))}
@@ -74,17 +77,17 @@ const MyFinanceInfo: React.FC = () => {
         </FieldGroup>
         
         {/* Loan Term - Segmented Control */}
-        <FieldGroup>
-          <FieldLabel>Loan Term</FieldLabel>
+        <FieldGroup className="space-y-1">
+          <FieldLabel className="text-field-tag text-foreground">Loan Term</FieldLabel>
           <SegmentedControl 
             value={state.loanDetails.termMonths?.toString() || ''} 
             onValueChange={handleLoanTermChange}
           >
             {loanTermOptions.map(term => (
               <SegmentedControlItem key={term.months} value={term.months.toString()}>
-                <div className="flex flex-col items-center leading-tight">
-                  <span className="text-sm font-semibold">{term.label}</span>
-                  <span className="text-xs opacity-80">{term.months} mo</span>
+                <div className="flex flex-col items-center leading-tight text-caption">
+                  <span className="font-semibold">{term.label}</span>
+                  <span className="opacity-80">{term.months} mo</span>
                 </div>
               </SegmentedControlItem>
             ))}
@@ -92,8 +95,8 @@ const MyFinanceInfo: React.FC = () => {
         </FieldGroup>
         
         {/* Down Payment - Input Field */}
-        <FieldGroup>
-          <FieldLabel>Down Payment</FieldLabel>
+        <FieldGroup className="space-y-1">
+          <FieldLabel className="text-field-tag text-foreground">Down Payment</FieldLabel>
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">$</span>
             <Input 
@@ -105,10 +108,29 @@ const MyFinanceInfo: React.FC = () => {
             />
           </div>
           {state.loanDetails.downPayment > 0 && state.carPrice > 0 && (
-            <FieldHelper>
+            <FieldHelper className="text-[12px] font-normal opacity-80 text-muted-foreground">
               {Math.round(state.loanDetails.downPayment / state.carPrice * 100)}% of vehicle price
             </FieldHelper>
           )}
+        </FieldGroup>
+
+        {/* APR - Input Field */}
+        <FieldGroup className="space-y-1">
+          <FieldLabel className="text-field-tag text-foreground">APR (Interest Rate)</FieldLabel>
+          <div className="relative">
+            <Input 
+              type="number" 
+              value={state.loanDetails.interestRate || ''} 
+              onChange={handleAPRChange} 
+              className="pr-8" 
+              placeholder="6.7" 
+              step="0.1"
+              min="0"
+              max="25"
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">%</span>
+          </div>
+            <FieldHelper className="text-[12px] font-normal opacity-80 text-muted-foreground">Based on current rates</FieldHelper>
         </FieldGroup>
       </div>
       

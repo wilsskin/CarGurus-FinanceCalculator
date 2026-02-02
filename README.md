@@ -1,75 +1,56 @@
-# Welcome to your Lovable project
+# CarGurus Finance Calculator
 
-## Project info
+A mobile-first finance calculator for car buyers. Enter personal financing details and get detailed estimates for monthly payments and total cost.
 
-**URL**: https://lovable.dev/projects/055e3920-d317-49e0-bc7a-dd5883fddc6d
+---
 
-## How can I edit this code?
+## What It Does
 
-There are several ways of editing your application.
+- **Payment type:** Dealer financing, outside loan, or cash
+- **Financing inputs:** Credit score, loan term, down payment, APR (auto-suggested from credit score)
+- **Cost breakdown:** Base price, taxes, fees, add-ons, trade-in, discounts
+- **Output:** Estimated monthly payment and total cost in a sticky banner
+- **Export:** Save or share results
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/055e3920-d317-49e0-bc7a-dd5883fddc6d) and start prompting.
+## How It's Built
 
-Changes made via Lovable will be committed automatically to this repo.
+| Layer | Tech |
+|-------|------|
+| **Framework** | React 18 + TypeScript |
+| **Build** | Vite |
+| **Styling** | Tailwind CSS |
+| **UI** | shadcn/ui (Radix primitives) |
+| **State** | React Context + useReducer |
+| **Routing** | React Router |
+| **Deploy** | GitHub Pages |
 
-**Use your preferred IDE**
+### Architecture (High-Level)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+src/
+├── components/     → UI primitives, layout, finance feature components
+├── context/       → FinanceContext (global state, reducers)
+├── pages/         → Index (main app), NotFound
+├── utils/         → Finance math, formatters, animations
+└── types/         → TypeScript interfaces
 ```
 
-**Edit a file directly in GitHub**
+**State flow:** User actions dispatch to reducers → state updates → `UPDATE_CALCULATIONS` runs → monthly payment and total cost recompute.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+**Styling:** Design tokens in `index.css` (HSL variables). CarGurus-aligned typography (Mulish), spacing (16px gutter, 8px rhythm), and components (segmented controls, pill buttons). See `context.md` for full design system.
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
 
-## What technologies are used for this project?
+| Path | Purpose |
+|------|---------|
+| `src/components/ui/` | Buttons, inputs, selects, segmented controls |
+| `src/components/layout/` | FieldGroup, Section |
+| `src/components/finance/` | PageHeader, SummaryBanner, VehicleInfo, CarCost, etc. |
+| `src/context/finance/` | State, reducers, initial values |
+| `context.md` | Design system, conventions, onboarding |
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/055e3920-d317-49e0-bc7a-dd5883fddc6d) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
-
-Updated.
+See `context.md` for more information

@@ -2,18 +2,14 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 
-export default defineConfig(({ mode }) => ({
-  base: "/CarGurus-FinanceCalculator/",   // ✨ important for GitHub Pages
+export default defineConfig(({ command }) => ({
+  base: command === "build" ? "/CarGurus-FinanceCalculator/" : "/",  // Subpath for GitHub Pages, root for local dev
   server: {
-    host: "::",
-    port: 8080,
+    host: "localhost",
+    port: 5173,
   },
-  plugins: [
-    react(),
-    mode === "development" && componentTagger(),
-  ].filter(Boolean),
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

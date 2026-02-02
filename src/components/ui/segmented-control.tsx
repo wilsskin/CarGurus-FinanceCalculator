@@ -57,7 +57,7 @@ const SegmentedControlItem = React.forwardRef<HTMLButtonElement, SegmentedContro
         aria-checked={isActive}
         onClick={() => context.onValueChange(value)}
         className={cn(
-          "flex-1 py-4 px-3 text-sm font-medium transition-all duration-150 border-r border-input last:border-r-0",
+          "flex-1 py-3 px-3 text-sm font-medium transition-all duration-150 border-r border-input last:border-r-0",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
           isActive
             ? "bg-primary text-primary-foreground"

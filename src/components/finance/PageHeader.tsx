@@ -15,7 +15,7 @@ const PageHeader: React.FC = () => {
           </button>
           
           {/* Centered Title */}
-          <h1 className="text-xl font-bold text-foreground">
+          <h1 className="text-body-lg font-semibold text-foreground">
             Finance Calculator
           </h1>
         </div>

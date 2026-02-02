@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useFinance } from '../../context/FinanceContext';
+import { useFinance } from '@/context/finance';
 import { formatCurrency } from '../../utils/financeCalculator';
 import { ChevronLeft } from 'lucide-react';
 
 const SummaryBanner: React.FC = () => {
   const { state } = useFinance();
-  const { monthlyPayment, totalCost, paymentType } = state;
+  const { monthlyPayment, totalCost, loanDetails } = state;
+  const noLoanDetails = !loanDetails.termMonths || !loanDetails.interestRate || loanDetails.interestRate === 0;
   const [isSticky, setIsSticky] = useState(false);
   
   useEffect(() => {
@@ -39,28 +40,20 @@ const SummaryBanner: React.FC = () => {
             )}
             
             {/* Header Text */}
-            <span className="text-sm font-semibold text-foreground">
-              {paymentType === 'cash' ? 'Estimated Total' : 'Estimated Payment'}
+            <span className="text-label font-semibold text-foreground">
+              Estimated Payment
             </span>
           </div>
 
           {/* Right side: Cost values - Compact like CarGurus */}
           <div className="flex items-center gap-2">
-            {paymentType === 'cash' ? (
-              <span className="text-base font-bold text-foreground">
-                {formatCurrency(totalCost)}
-              </span>
-            ) : (
-              <>
-                <span className="text-base font-bold text-foreground">
-                  {formatCurrency(monthlyPayment)}<span className="text-xs font-normal text-muted-foreground">/mo</span>
-                </span>
-                <span className="text-muted-foreground">|</span>
-                <span className="text-base font-bold text-foreground">
-                  {formatCurrency(totalCost)}
-                </span>
-              </>
-            )}
+            <span className="text-price-sm font-bold text-foreground">
+              {noLoanDetails ? '—' : formatCurrency(monthlyPayment)}<span className="text-caption font-normal text-muted-foreground">/mo</span>
+            </span>
+            <span className="text-muted-foreground">|</span>
+            <span className="text-price-sm font-bold text-foreground">
+              {noLoanDetails ? '—' : formatCurrency(totalCost)}
+            </span>
           </div>
         </div>
       </div>

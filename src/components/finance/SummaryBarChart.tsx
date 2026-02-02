@@ -6,22 +6,22 @@ import { Card } from '../ui/card';
 
 const SimpleBarChart: React.FC = () => {
   const { state } = useFinance();
-  const { loanDetails, tradeIn, taxesAndFees, carPrice, monthlyPayment, totalCost, addonsTotal, discounts, paymentType } = state;
+  const { loanDetails, tradeIn, taxesAndFees, carPrice, monthlyPayment } = state;
   
+  const carSubtotal = carPrice + taxesAndFees.taxAmount + taxesAndFees.totalFees;
+  const amountFinanced = carSubtotal - loanDetails.downPayment - tradeIn.netValue;
+
   // Calculate components for the stacked bar
+  const interestValue = loanDetails.termMonths > 0 && loanDetails.interestRate > 0
+    ? (monthlyPayment * loanDetails.termMonths) - amountFinanced
+    : 0;
+
   const components = [
     { 
       label: 'Vehicle Price', 
       value: carPrice, 
       color: '#0578BB',  // Primary blue
       isNegative: false 
-    },
-    { 
-      label: 'Add-ons', 
-      value: addonsTotal, 
-      color: '#33C3F0',  // Light blue
-      isNegative: false,
-      show: addonsTotal > 0
     },
     { 
       label: 'Taxes & Fees', 
@@ -31,17 +31,10 @@ const SimpleBarChart: React.FC = () => {
     },
     { 
       label: 'Interest', 
-      value: paymentType !== 'cash' ? (monthlyPayment * loanDetails.termMonths) - (carPrice - loanDetails.downPayment - tradeIn.netValue) : 0,
+      value: interestValue,
       color: '#888888',  // Medium gray
       isNegative: false,
-      show: paymentType !== 'cash'
-    },
-    { 
-      label: 'Discounts', 
-      value: -discounts, 
-      color: '#ea384c',  // Red for negative values
-      isNegative: true,
-      show: discounts > 0
+      show: interestValue > 0
     },
     { 
       label: 'Trade-in', 
@@ -83,9 +76,9 @@ const SimpleBarChart: React.FC = () => {
               }}
               className="h-full relative group cursor-pointer"
             >
-              <div className="opacity-0 group-hover:opacity-100 absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-card px-3 py-2 rounded-lg shadow-lg text-sm whitespace-nowrap z-10 transition-opacity border border-border">
+              <div className="opacity-0 group-hover:opacity-100 absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-card px-3 py-2 rounded-lg shadow-lg text-body-sm whitespace-nowrap z-10 transition-opacity border border-border">
                 <div className="font-medium text-foreground">{component.label}</div>
-                <div className="text-primary font-bold">
+                <div className="text-body-sm text-primary font-bold">
                   {formatCurrency(Math.abs(component.value))}
                 </div>
               </div>
@@ -93,7 +86,7 @@ const SimpleBarChart: React.FC = () => {
           ))}
         </div>
         
-        <div className="flex flex-wrap gap-4 justify-center text-xs">
+        <div className="flex flex-wrap gap-4 justify-center text-caption">
           {components.map((component, index) => (
             <div key={index} className="flex items-center gap-2">
               <div 
