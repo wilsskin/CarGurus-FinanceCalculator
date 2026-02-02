@@ -64,7 +64,7 @@ const CarCost: React.FC = () => {
       
       <div className="space-y-4">
         {/* Base Price */}
-        <div className="flex justify-between items-center py-3 border-b border-border text-body">
+        <div className="flex justify-between items-center pt-0 pb-3 border-b border-border text-body">
           <span className="font-medium text-foreground">Base Price</span>
           <span className="font-medium text-foreground">{formatCurrency(state.carPrice)}</span>
         </div>

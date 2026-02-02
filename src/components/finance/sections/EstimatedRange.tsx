@@ -23,7 +23,7 @@ const EstimatedRange: React.FC = () => {
   const maxMonthly = canCalculateRange ? Math.ceil(baseMonthly * 1.05) : 0;
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-5">
       <h3>Estimated Ranges</h3>
 
       <div className="grid grid-cols-2 gap-4">
