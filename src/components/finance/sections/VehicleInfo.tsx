@@ -32,7 +32,7 @@ const VehicleInfo: React.FC = () => {
           </div>
           {/* Metadata: detached, secondary */}
           <div className="mt-2 text-body-sm font-normal text-muted-foreground">
-            Used · 25,000 mi
+            Used · 27,500 mi
           </div>
         </div>
       </button>

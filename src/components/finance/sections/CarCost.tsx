@@ -74,7 +74,7 @@ const CarCost: React.FC = () => {
           {editingTaxes ? (
             <div className="space-y-4 animate-fade-in">
               <div className="flex justify-between items-center">
-                <span className="text-body font-medium text-foreground">Taxes & Fees</span>
+                <span className="text-body font-bold text-muted-foreground">Taxes & Fees</span>
                 <button
                   onClick={() => setEditingTaxes(false)}
                   className="text-body font-semibold text-primary"
@@ -115,7 +115,7 @@ const CarCost: React.FC = () => {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-body-sm text-muted-foreground">Documentation Fee</span>
+                  <span className="text-body text-muted-foreground">Documentation Fee</span>
                   <div className="relative w-28">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
                     <Input 
@@ -182,7 +182,7 @@ const CarCost: React.FC = () => {
           ) : (
             <>
               <div className="flex justify-between items-center">
-                <span className="text-body font-medium text-foreground">Taxes and Fees</span>
+                <span className="text-body font-bold text-muted-foreground">Taxes and Fees</span>
                 <button
                   onClick={() => setEditingTaxes(true)}
                   className="text-body font-semibold text-primary"
@@ -194,12 +194,12 @@ const CarCost: React.FC = () => {
                 {taxFeeLineItems.map(item => (
                   <div key={item.label} className="flex justify-between text-body">
                     <span className="text-muted-foreground">{item.label}</span>
-                    <span className="font-medium text-foreground">{formatCurrency(item.value)}</span>
+                    <span className="text-muted-foreground font-normal">{formatCurrency(item.value)}</span>
                   </div>
                 ))}
                 <div className="flex justify-between text-body">
-                  <span className="font-bold text-muted-foreground">Estimated Tax</span>
-                  <span className="font-bold text-foreground">{formatCurrency(taxesAndFees.taxAmount + taxesAndFees.totalFees)}</span>
+                  <span className="font-medium text-foreground">Estimated Tax</span>
+                  <span className="font-medium text-foreground">{formatCurrency(taxesAndFees.taxAmount + taxesAndFees.totalFees)}</span>
                 </div>
               </div>
             </>

@@ -75,7 +75,6 @@ const SummaryAndSave: React.FC = () => {
                 {noLoanDetailsProvided ? '—' : formatCurrency(financeCharge)}
               </span>
             </div>
-            <span className="text-body text-muted-foreground">Finance amount x term x APR</span>
           </div>
 
           <div className="flex justify-between items-center px-4 py-4">
